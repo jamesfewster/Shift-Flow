@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ShiftFlow Functional Prototype</title>
-<link rel="apple-touch-icon" href="IMG_0867.jpeg">
-<link rel="icon" type="image/jpeg" href="IMG_0867.jpeg">
+
+  <title>ShiftFlow</title>
+  <link rel="apple-touch-icon" href="IMG_0867.jpeg">
+  <link rel="icon" type="image/jpeg" href="IMG_0867.jpeg">
+
   <style>
     * {
       box-sizing: border-box;
@@ -15,6 +17,7 @@
     :root {
       --bg: #f5f5f7;
       --card: #ffffff;
+      --panel: #fafafa;
       --text: #111111;
       --muted: #777777;
       --line: #eeeeee;
@@ -27,6 +30,9 @@
       --frog: #ffe3f4;
       --dragon: #ddf8e8;
       --boh: #fff6c8;
+      --danger: #ffe2dc;
+      --success: #ddf8e8;
+      --warning: #fff3cf;
     }
 
     body {
@@ -38,6 +44,7 @@
     body.dark {
       --bg: #111111;
       --card: #1b1b1d;
+      --panel: #242426;
       --text: #f5f5f7;
       --muted: #aaaaaa;
       --line: #333333;
@@ -49,7 +56,7 @@
       margin: 0 auto;
       background: var(--card);
       position: relative;
-      padding-bottom: 96px;
+      padding-bottom: 98px;
     }
 
     .topbar {
@@ -74,6 +81,7 @@
       font-size: 12px;
       font-weight: 800;
       margin-bottom: 12px;
+      gap: 8px;
     }
 
     .title-row {
@@ -114,23 +122,6 @@
       margin-top: 14px;
     }
 
-    .top-btn {
-      border: none;
-      border-radius: 16px;
-      padding: 12px 10px;
-      font-weight: 900;
-      cursor: pointer;
-      background: var(--accent);
-      color: white;
-      font-size: 13px;
-    }
-
-    .top-btn.light {
-      background: #f4f4f4;
-      color: #111;
-      border: 1px solid var(--line);
-    }
-
     .page {
       display: none;
       padding: 16px;
@@ -140,33 +131,23 @@
       display: block;
     }
 
+    .card, .stat, .area-row, .break-card, .audit-item {
+      background: var(--panel);
+      border: 1px solid var(--line);
+    }
+
+    .card {
+      border-radius: 26px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.035);
+    }
+
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
       margin-bottom: 16px;
-    }
-
-    .stat, .card, .area-row, .break-card, .audit-item {
-      background: #fafafa;
-      border: 1px solid var(--line);
-    }
-
-    body.dark .stat,
-    body.dark .card,
-    body.dark .area-row,
-    body.dark input,
-    body.dark textarea,
-    body.dark select,
-    body.dark .break-card,
-    body.dark .audit-item,
-    body.dark .top-btn.light,
-    body.dark .secondary-btn,
-    body.dark .status-btn,
-    body.dark .check-btn,
-    body.dark .photo-box {
-      background: #242426;
-      color: var(--text);
     }
 
     .stat {
@@ -195,7 +176,8 @@
     }
 
     .main-tabs,
-    .sub-tabs {
+    .sub-tabs,
+    .mode-tabs {
       display: flex;
       gap: 10px;
       overflow-x: auto;
@@ -204,12 +186,14 @@
     }
 
     .main-tabs::-webkit-scrollbar,
-    .sub-tabs::-webkit-scrollbar {
+    .sub-tabs::-webkit-scrollbar,
+    .mode-tabs::-webkit-scrollbar {
       display: none;
     }
 
     .area-chip,
-    .sub-chip {
+    .sub-chip,
+    .mode-chip {
       border: none;
       padding: 12px 14px;
       border-radius: 999px;
@@ -219,10 +203,12 @@
       opacity: 0.55;
       cursor: pointer;
       color: #111;
+      background: #f2f2f2;
     }
 
     .area-chip.active,
-    .sub-chip.active {
+    .sub-chip.active,
+    .mode-chip.active {
       opacity: 1;
       box-shadow: 0 8px 20px rgba(0,0,0,0.08);
       transform: translateY(-1px);
@@ -235,6 +221,9 @@
     .frog-bg { background: var(--frog); }
     .dragon-bg { background: var(--dragon); }
     .boh-bg { background: var(--boh); }
+    .danger-bg { background: var(--danger); }
+    .success-bg { background: var(--success); }
+    .warning-bg { background: var(--warning); }
 
     .hero {
       border-radius: 28px;
@@ -257,13 +246,6 @@
       line-height: 1.35;
     }
 
-    .card {
-      border-radius: 26px;
-      padding: 18px;
-      margin-bottom: 14px;
-      box-shadow: 0 10px 28px rgba(0,0,0,0.035);
-    }
-
     label {
       display: block;
       font-size: 13px;
@@ -281,6 +263,15 @@
       padding: 13px;
       font-size: 14px;
       outline: none;
+      color: #111;
+    }
+
+    body.dark input,
+    body.dark textarea,
+    body.dark select {
+      background: #1b1b1d;
+      color: white;
+      border-color: var(--line);
     }
 
     textarea {
@@ -291,12 +282,14 @@
 
     .status-row,
     .check-grid,
-    .two-grid {
+    .two-grid,
+    .three-grid {
       display: grid;
       gap: 9px;
     }
 
-    .status-row {
+    .status-row,
+    .three-grid {
       grid-template-columns: repeat(3, 1fr);
     }
 
@@ -306,14 +299,23 @@
     }
 
     .status-btn,
+    .check-btn,
+    .top-btn,
+    .primary-btn,
+    .secondary-btn,
+    .tiny-btn {
+      cursor: pointer;
+      font-weight: 950;
+      border-radius: 16px;
+    }
+
+    .status-btn,
     .check-btn {
       border: 1px solid var(--line);
-      border-radius: 16px;
-      background: #fafafa;
+      background: var(--panel);
       padding: 12px;
       font-size: 13px;
-      font-weight: 900;
-      cursor: pointer;
+      color: var(--text);
     }
 
     .status-btn.selected,
@@ -323,14 +325,26 @@
       border-color: var(--accent);
     }
 
+    .top-btn {
+      border: none;
+      padding: 12px 10px;
+      background: var(--accent);
+      color: white;
+      font-size: 13px;
+    }
+
+    .top-btn.light,
+    .secondary-btn {
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
     .primary-btn,
     .secondary-btn {
       width: 100%;
-      border-radius: 18px;
       padding: 15px;
       font-size: 15px;
-      font-weight: 950;
-      cursor: pointer;
       margin-top: 14px;
     }
 
@@ -340,17 +354,25 @@
       color: white;
     }
 
-    .secondary-btn {
+    .tiny-btn {
+      border: none;
+      padding: 10px 12px;
+      background: var(--accent);
+      color: white;
+      font-size: 12px;
+    }
+
+    .tiny-btn.light {
+      background: var(--panel);
+      color: var(--text);
       border: 1px solid var(--line);
-      background: #fafafa;
-      color: #111;
     }
 
     .photo-box {
       border: 1px dashed #cfcfcf;
       border-radius: 18px;
       padding: 14px;
-      background: #fafafa;
+      background: var(--panel);
       margin-top: 8px;
     }
 
@@ -408,23 +430,24 @@
     .pill {
       border-radius: 999px;
       border: 1px solid var(--line);
-      background: white;
+      background: var(--card);
       padding: 7px 10px;
       font-size: 11px;
       font-weight: 950;
       white-space: nowrap;
     }
 
-    body.dark .pill {
-      background: #1b1b1d;
-    }
-
     .green-text { color: #167044; }
     .amber-text { color: #a86500; }
     .red-text { color: #b42318; }
+    .blue-text { color: #2d62b7; }
+
+    .summary-output,
+    .panel-hidden {
+      display: none;
+    }
 
     .summary-output {
-      display: none;
       background: #111;
       color: white;
       padding: 18px;
@@ -443,11 +466,7 @@
       padding-left: 18px;
     }
 
-    .calendar-panel {
-      display: none;
-    }
-
-    .calendar-panel.open {
+    .panel-hidden.open {
       display: block;
     }
 
@@ -536,14 +555,6 @@
       height: 100%;
       background: var(--accent);
       border-radius: 999px;
-    }
-
-    .history-panel {
-      display: none;
-    }
-
-    .history-panel.open {
-      display: block;
     }
 
     .more-row {
@@ -648,10 +659,64 @@
       opacity: 1;
       transform: translateX(-50%) translateY(-4px);
     }
+
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--card);
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .login-card {
+      width: min(390px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 22px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.08);
+    }
+
+    .login-card h2 {
+      margin: 0;
+      font-size: 32px;
+      letter-spacing: -1px;
+    }
+
+    .login-card p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
 
 <body>
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <h2>ShiftFlow</h2>
+      <p>Prototype access for supervisors and managers. This simulates login locally until real accounts are added later.</p>
+
+      <label>Your name</label>
+      <select id="loginName"></select>
+
+      <label>Role</label>
+      <select id="loginRole">
+        <option>Manager</option>
+        <option>Supervisor</option>
+      </select>
+
+      <button class="primary-btn" onclick="login()">Enter ShiftFlow</button>
+      <p class="small">No password yet — secure login would be added with a real database later.</p>
+    </div>
+  </div>
+
   <div class="phone">
 
     <div class="topbar">
@@ -670,25 +735,64 @@
 
       <div id="handoverTopActions" class="top-actions">
         <button class="top-btn" onclick="generateSummary()">Opening Summary</button>
-        <button class="top-btn light" onclick="toggleCalendar()">Calendar Review</button>
+        <button class="top-btn light" onclick="togglePanelOpen('calendarPanel')">Calendar Review</button>
       </div>
     </div>
 
     <main id="handovers" class="page active">
 
+      <div class="mode-tabs">
+        <button id="closingModeBtn" class="mode-chip active" onclick="setMode('closing')">Closing mode</button>
+        <button id="openingModeBtn" class="mode-chip" onclick="setMode('opening')">Opening mode</button>
+        <button class="mode-chip" onclick="togglePanelOpen('dailyBriefingPanel')">Daily briefing</button>
+        <button class="mode-chip" onclick="togglePanelOpen('searchPanel')">Search</button>
+      </div>
+
       <div class="card">
         <label>Handover day</label>
         <input type="date" id="handoverDate" onchange="changeSelectedDate(this.value)" />
-        <p class="small">All handover notes are saved against this specific day.</p>
+        <p class="small">All handover notes, tasks and sign-off are saved against this specific day.</p>
       </div>
 
-      <div id="calendarPanel" class="calendar-panel card">
+      <div id="dailyBriefingPanel" class="panel-hidden card">
+        <h3 style="margin-top:0;">Daily briefing</h3>
+        <label>Duty managers</label>
+        <input id="briefingDMs" placeholder="Example: Jon, Dan G, Inez..." />
+
+        <label>Visitor number / groups</label>
+        <input id="briefingVisitors" placeholder="Example: 4332 visitors, 19 groups..." />
+
+        <label>Key briefing points</label>
+        <textarea id="briefingPoints" placeholder="Example: date rotation, speed of service, training new starters..."></textarea>
+
+        <label>Focus of the day</label>
+        <textarea id="briefingFocus" placeholder="Example: quality checks, allergies, close standards..."></textarea>
+
+        <button class="primary-btn" onclick="saveBriefing()">Save Daily Briefing</button>
+      </div>
+
+      <div id="calendarPanel" class="panel-hidden card">
         <h3 style="margin-top:0;">Review past handovers</h3>
+
+        <div class="three-grid">
+          <button class="tiny-btn light" onclick="changeSelectedDate(todayISO())">Today</button>
+          <button class="tiny-btn light" onclick="changeSelectedDate(offsetDate(-1))">Yesterday</button>
+          <button class="tiny-btn light" onclick="togglePanelOpen('savedDaysPanel')">Saved days</button>
+        </div>
+
         <label>Select date</label>
         <input type="date" id="calendarDate" onchange="changeSelectedDate(this.value)" />
 
-        <label>Saved handover days</label>
-        <div id="savedDaysList" class="area-list"></div>
+        <div id="savedDaysPanel" class="panel-hidden">
+          <label>Saved handover days</label>
+          <div id="savedDaysList" class="area-list"></div>
+        </div>
+      </div>
+
+      <div id="searchPanel" class="panel-hidden card">
+        <h3 style="margin-top:0;">Search all handovers</h3>
+        <input id="handoverSearch" placeholder="Search ice machine, allergen, watermelon, lateness..." oninput="searchHandovers()" />
+        <div id="handoverSearchResults" class="area-list" style="margin-top:12px;"></div>
       </div>
 
       <div id="summaryOutput" class="summary-output">
@@ -696,60 +800,132 @@
         <ul id="summaryList"></ul>
       </div>
 
-      <div class="dashboard-grid">
-        <div class="stat">
-          <h3 id="checkedCount">0/3</h3>
-          <p>Main areas</p>
+      <div id="closingView">
+        <div class="dashboard-grid">
+          <div class="stat">
+            <h3 id="checkedCount">0/3</h3>
+            <p>Main areas</p>
+          </div>
+          <div class="stat">
+            <h3 id="redCount">0</h3>
+            <p>Urgent issues</p>
+          </div>
+          <div class="stat">
+            <h3 id="completionAvg">0%</h3>
+            <p>Avg complete</p>
+          </div>
         </div>
-        <div class="stat">
-          <h3 id="redCount">0</h3>
-          <p>Urgent issues</p>
+
+        <div class="section-title">Main area</div>
+        <div class="main-tabs" id="mainAreaTabs"></div>
+
+        <div class="section-title" id="subAreaTitle">Section</div>
+        <div class="sub-tabs" id="subAreaTabs"></div>
+
+        <div id="areaHero" class="hero lobby-bg">
+          <h2 id="selectedAreaTitle">General Lobby</h2>
+          <p id="selectedAreaDesc">Main Lobby handover: duty managers, visitor numbers, briefing, conduct, service issues and safe/change.</p>
         </div>
-        <div class="stat">
-          <h3 id="photoCount">0</h3>
-          <p>Photos added</p>
+
+        <div class="card" id="handoverFormCard">
+          <label>Area status</label>
+          <div class="status-row">
+            <button class="status-btn selected" onclick="setStatus('Green', this)">Green</button>
+            <button class="status-btn" onclick="setStatus('Amber', this)">Amber</button>
+            <button class="status-btn" onclick="setStatus('Red', this)">Red</button>
+          </div>
+
+          <label>Priority</label>
+          <select id="prioritySelect">
+            <option>Low</option>
+            <option selected>Medium</option>
+            <option>High</option>
+            <option>Urgent</option>
+          </select>
+
+          <label>Submitted by</label>
+          <select id="submittedBy"></select>
+
+          <div id="dynamicForm"></div>
+
+          <label>Action required?</label>
+          <select id="actionRequired" onchange="toggleActionFields()">
+            <option>No action needed</option>
+            <option>Action required</option>
+          </select>
+
+          <div id="actionFields" class="panel-hidden">
+            <label>What needs doing?</label>
+            <textarea id="actionText" placeholder="Example: Check ice machine, prep salsa, restock watermelon..."></textarea>
+
+            <label>Who should do it?</label>
+            <input id="actionOwner" placeholder="Example: Opening supervisor, BOH, manager..." />
+
+            <label>Due by</label>
+            <input type="date" id="actionDue" />
+          </div>
+
+          <label>Photos / evidence</label>
+          <div class="photo-box">
+            <input type="file" id="photoInput" accept="image/*" multiple onchange="previewPhotos(event)" />
+            <p class="small">Prototype stores photo count only. Real app would upload files to cloud storage.</p>
+            <div id="photoPreview" class="photo-preview"></div>
+          </div>
+
+          <button class="primary-btn" onclick="submitArea()">Submit Area Handover</button>
+          <button class="secondary-btn" onclick="togglePanelOpen('versionHistoryPanel')">View Edit History</button>
+
+          <div id="versionHistoryPanel" class="panel-hidden">
+            <div class="section-title">Edit history</div>
+            <div id="versionHistoryList" class="area-list"></div>
+          </div>
+        </div>
+
+        <div class="section-title">Daily handover dashboard</div>
+        <div class="card">
+          <div id="handoverDashboard" class="area-list"></div>
+        </div>
+
+        <div class="section-title">Final sign-off</div>
+        <div class="card">
+          <label>Signed off by</label>
+          <select id="signoffBy"></select>
+          <button class="primary-btn" onclick="finalSignoff()">Final Sign-Off</button>
+          <p id="signoffStatus" class="small">Not signed off yet.</p>
         </div>
       </div>
 
-      <div class="section-title">Main area</div>
-      <div class="main-tabs" id="mainAreaTabs"></div>
-
-      <div class="section-title" id="subAreaTitle">Section</div>
-      <div class="sub-tabs" id="subAreaTabs"></div>
-
-      <div id="areaHero" class="hero lobby-bg">
-        <h2 id="selectedAreaTitle">General Lobby</h2>
-        <p id="selectedAreaDesc">Main Lobby handover: duty managers, visitor numbers, briefing, conduct, service issues and safe/change.</p>
-      </div>
-
-      <div class="card" id="handoverFormCard">
-        <label>Area status</label>
-        <div class="status-row">
-          <button class="status-btn selected" onclick="setStatus('Green', this)">Green</button>
-          <button class="status-btn" onclick="setStatus('Amber', this)">Amber</button>
-          <button class="status-btn" onclick="setStatus('Red', this)">Red</button>
+      <div id="openingView" class="hidden">
+        <div class="dashboard-grid">
+          <div class="stat">
+            <h3 id="openTaskCount">0</h3>
+            <p>Open tasks</p>
+          </div>
+          <div class="stat">
+            <h3 id="urgentTaskCount">0</h3>
+            <p>Urgent</p>
+          </div>
+          <div class="stat">
+            <h3 id="doneTaskCount">0</h3>
+            <p>Completed</p>
+          </div>
         </div>
 
-        <div id="dynamicForm"></div>
-
-        <label>Photos / evidence</label>
-        <div class="photo-box">
-          <input type="file" id="photoInput" accept="image/*" multiple onchange="previewPhotos(event)" />
-          <p class="small">Prototype stores photo count only. Real app would upload files to cloud storage.</p>
-          <div id="photoPreview" class="photo-preview"></div>
+        <div class="hero success-bg">
+          <h2>Opening Tasks</h2>
+          <p>Generated from action-required handover notes. Openers can work through the list and tick tasks off.</p>
         </div>
 
-        <button class="primary-btn" onclick="submitArea()">Submit Area Handover</button>
-      </div>
+        <div class="card">
+          <button class="primary-btn" onclick="generateOpeningTasks()">Generate Opening Tasks</button>
+          <button class="secondary-btn" onclick="clearCompletedTasks()">Clear Completed Tasks</button>
+        </div>
 
-      <div class="section-title">Daily handover dashboard</div>
-      <div class="card">
-        <div id="handoverDashboard" class="area-list"></div>
+        <div id="openingTaskList" class="area-list"></div>
       </div>
     </main>
 
     <main id="audits" class="page">
-
       <div class="card">
         <div class="score-wrap">
           <div id="auditScore" class="score-circle">100%</div>
@@ -788,7 +964,6 @@
     </main>
 
     <main id="breaks" class="page">
-
       <div class="dashboard-grid">
         <div class="stat">
           <h3 id="onBreakCount">0</h3>
@@ -815,10 +990,10 @@
           <button class="secondary-btn" onclick="finishBreak()">Finish Break</button>
         </div>
 
-        <button class="secondary-btn" onclick="toggleBreakHistory()">Open Break History</button>
+        <button class="secondary-btn" onclick="togglePanelOpen('breakHistoryPanel')">Open Break History</button>
       </div>
 
-      <div id="breakHistoryPanel" class="history-panel card">
+      <div id="breakHistoryPanel" class="panel-hidden card">
         <h3 style="margin-top:0;">Break history</h3>
 
         <label>Filter by name</label>
@@ -844,7 +1019,6 @@
     </main>
 
     <main id="conduct" class="page">
-
       <div class="section-title">Add staff note</div>
 
       <div class="card">
@@ -874,10 +1048,10 @@
         </select>
 
         <button class="primary-btn" onclick="saveConduct()">Save Staff Note</button>
-        <button class="secondary-btn" onclick="toggleConductHistory()">Open Conduct History</button>
+        <button class="secondary-btn" onclick="togglePanelOpen('conductHistoryPanel')">Open Conduct History</button>
       </div>
 
-      <div id="conductHistoryPanel" class="history-panel card">
+      <div id="conductHistoryPanel" class="panel-hidden card">
         <h3 style="margin-top:0;">Conduct / shout-out history</h3>
 
         <label>Filter by name</label>
@@ -901,13 +1075,82 @@
         <div id="filteredConductHistory" class="area-list"></div>
       </div>
 
+      <div class="section-title">Incident log</div>
+      <div class="card">
+        <label>Incident type</label>
+        <select id="incidentType">
+          <option>Guest complaint</option>
+          <option>Allergen / food incident</option>
+          <option>Equipment issue</option>
+          <option>Service issue</option>
+          <option>Safety issue</option>
+          <option>Other</option>
+        </select>
+
+        <label>Area</label>
+        <select id="incidentArea">
+          <option>Lobby</option>
+          <option>Backlot</option>
+          <option>Hogwarts Table</option>
+        </select>
+
+        <label>Details</label>
+        <textarea id="incidentDetails" placeholder="What happened, who dealt with it, what was the solution?"></textarea>
+
+        <button class="primary-btn" onclick="saveIncident()">Save Incident</button>
+        <button class="secondary-btn" onclick="togglePanelOpen('incidentHistoryPanel')">Open Incident History</button>
+      </div>
+
+      <div id="incidentHistoryPanel" class="panel-hidden card">
+        <h3 style="margin-top:0;">Incident history</h3>
+        <label>Search incidents</label>
+        <input id="incidentSearch" oninput="renderIncidents()" placeholder="Search allergen, refund, complaint..." />
+        <div id="incidentList" class="area-list" style="margin-top:12px;"></div>
+      </div>
+
       <div class="section-title">Recent notes</div>
       <div id="conductList" class="area-list"></div>
     </main>
 
     <main id="more" class="page">
-
       <div class="card">
+        <div class="more-row" onclick="togglePanel('panelEquipment')">
+          <div>
+            <strong>Equipment log</strong>
+            <p>Track broken, logged, fixed and ongoing equipment issues.</p>
+          </div>
+          <span>›</span>
+        </div>
+
+        <div id="panelEquipment" class="settings-panel">
+          <label>Equipment / item</label>
+          <input id="equipmentName" placeholder="Example: ice machine, pass 1 coffee machine..." />
+
+          <label>Area</label>
+          <select id="equipmentArea">
+            <option>Lobby</option>
+            <option>Backlot</option>
+            <option>Hogwarts Table</option>
+          </select>
+
+          <label>Status</label>
+          <select id="equipmentStatus">
+            <option>Open</option>
+            <option>Logged</option>
+            <option>Awaiting facilities</option>
+            <option>Fixed</option>
+          </select>
+
+          <label>Notes</label>
+          <textarea id="equipmentNotes" placeholder="Details, who logged it, what still needs doing..."></textarea>
+
+          <button class="primary-btn" onclick="saveEquipment()">Save Equipment Issue</button>
+
+          <label>Filter equipment</label>
+          <input id="equipmentSearch" oninput="renderEquipment()" placeholder="Search equipment history..." />
+          <div id="equipmentList" class="area-list" style="margin-top:12px;"></div>
+        </div>
+
         <div class="more-row" onclick="togglePanel('panelStorage')">
           <div>
             <strong>Company storage plan</strong>
@@ -918,8 +1161,7 @@
 
         <div id="panelStorage" class="settings-panel">
           <p class="small"><strong>Prototype:</strong> browser localStorage.</p>
-          <p class="small"><strong>Real app:</strong> Firebase or Supabase database for handovers, breaks, conduct, audits and user roles.</p>
-          <p class="small"><strong>Photos:</strong> cloud storage with links saved in the database.</p>
+          <p class="small"><strong>Real app later:</strong> Firebase or Supabase for shared data, secure login and cloud photo storage.</p>
         </div>
 
         <div class="more-row" onclick="togglePanel('panelTemplates')">
@@ -961,18 +1203,21 @@
 
         <div id="exportBox" class="settings-panel">
           <label>Email-style handover</label>
-          <textarea id="exportText" style="min-height:180px;"></textarea>
+          <textarea id="exportText" style="min-height:220px;"></textarea>
         </div>
 
         <div class="more-row" onclick="togglePanel('panelSettings')">
           <div>
             <strong>Settings</strong>
-            <p>Role, theme, accent and reset controls.</p>
+            <p>Role, theme, accent, current user and reset controls.</p>
           </div>
           <span>›</span>
         </div>
 
         <div id="panelSettings" class="settings-panel">
+          <label>Current user</label>
+          <select id="currentUserSelect" onchange="applyCurrentUser()"></select>
+
           <label>Role</label>
           <select id="roleSelect" onchange="applySettings()">
             <option>Manager</option>
@@ -993,6 +1238,7 @@
             <option value="#7b61ff">Lobby Purple</option>
           </select>
 
+          <button class="secondary-btn" onclick="logout()">Log out</button>
           <button class="secondary-btn" onclick="resetPrototype()">Reset Prototype Data</button>
         </div>
       </div>
@@ -1003,7 +1249,7 @@
         <span>📝</span>
         Handovers
       </button>
-      <button class="nav-btn" onclick="openPage('audits', this)">
+      <button id="auditNav" class="nav-btn" onclick="openPage('audits', this)">
         <span>✅</span>
         Audits
       </button>
@@ -1034,12 +1280,8 @@
             name: "General Lobby",
             colour: "lobby-bg",
             desc: "Main Lobby handover: duty managers, visitor numbers, briefing, conduct, service issues and safe/change.",
-            checks: [
-              "Briefing completed",
-              "Service issues checked",
-              "Safe/change checked",
-              "Conduct reviewed"
-            ],
+            checks: ["Briefing completed", "Service issues checked", "Safe/change checked", "Conduct reviewed"],
+            required: ["WB DMs", "Visitor number", "Briefing: key points mentioned, who led the brief including PM", "Service issues in any Lobby areas"],
             fields: [
               ["wbdms", "WB DMs", "Example: Jon, Dan G, Dan L, Inez..."],
               ["visitors", "Visitor number", "Example: 4332, 19 groups..."],
@@ -1056,12 +1298,8 @@
             name: "Food Hall",
             colour: "foodhall-bg",
             desc: "Food Hall handover: sundae station, wastage, stock shortages, equipment and key notes.",
-            checks: [
-              "Sundae station checked",
-              "Wastage entered",
-              "Equipment checked",
-              "Close completed"
-            ],
+            checks: ["Sundae station checked", "Wastage entered", "Equipment checked", "Close completed"],
+            required: ["Wastage: include stock from sundae station and drink fridges", "Broken/logged equipment", "Anything else to know"],
             fields: [
               ["sundae", "Sundae station: anything required from pastry", "Example: mango needed, pastry required, no issues..."],
               ["wastage", "Wastage: include stock from sundae station and drink fridges", "Example: n/a, cakes put through AM, drink fridge wastage..."],
@@ -1075,12 +1313,8 @@
             name: "Frog",
             colour: "frog-bg",
             desc: "Frog handover: wastage, product availability, ice cream, equipment and extra notes.",
-            checks: [
-              "Wastage entered",
-              "Products checked",
-              "Ice cream checked",
-              "Area clean"
-            ],
+            checks: ["Wastage entered", "Products checked", "Ice cream checked", "Area clean"],
+            required: ["Wastage: list anything of high volume", "Any product unavailable during the day and the reasons", "Anything else to know"],
             fields: [
               ["wastage", "Wastage: list anything of high volume", "Example: 12 bottles of milk wasted AM due to incident..."],
               ["unavailable", "Any product unavailable during the day and the reasons", "Example: all products available during shift, will need more..."],
@@ -1094,12 +1328,8 @@
             name: "Dragon",
             colour: "dragon-bg",
             desc: "Dragon handover: wastage, stock availability, milk dates, equipment and extra notes.",
-            checks: [
-              "Wastage entered",
-              "Stock checked",
-              "Milk dates checked",
-              "Equipment checked"
-            ],
+            checks: ["Wastage entered", "Stock checked", "Milk dates checked", "Equipment checked"],
+            required: ["Wastage", "Stock availability: cakes, sandwiches, feature drink toppers", "Dates of milk"],
             fields: [
               ["wastage", "Wastage", "Example: all entered..."],
               ["availability", "Stock availability: cakes, sandwiches, feature drink toppers", "Example: will need watermelon, sandwiches thrown, cakes low..."],
@@ -1119,12 +1349,8 @@
             name: "Backlot & BBB",
             colour: "backlot-bg",
             desc: "Backlot and Butterbeer Bar handover: briefing, service, quality checks, tankards, BBB stock, BOH prep and equipment.",
-            checks: [
-              "Quality checks completed",
-              "Tankards checked",
-              "BBB stock checked",
-              "BOH prep checked"
-            ],
+            checks: ["Quality checks completed", "Tankards checked", "BBB stock checked", "BOH prep checked"],
+            required: ["Briefing: key points mentioned, who led the brief including PM", "Quality checks: how often completed and results", "Broken/logged equipment"],
             fields: [
               ["briefing", "Briefing: key points mentioned, who led the brief including PM", "Example: Quick and efficient service while maintaining service standards..."],
               ["safechange", "Safe & change run required/completed", "Example: £970 required/completed..."],
@@ -1148,12 +1374,8 @@
             name: "BOH Prep",
             colour: "boh-bg",
             desc: "BOH prep subsection within Backlot: prep for the day ahead, cleaning, wastage, dates and equipment.",
-            checks: [
-              "Prep checked",
-              "Cleaning checked",
-              "Date labels checked",
-              "Equipment checked"
-            ],
+            checks: ["Prep checked", "Cleaning checked", "Date labels checked", "Equipment checked"],
+            required: ["BOH prep: ensure prep completed is for day ahead, not on the day for the day", "Broken/logged equipment"],
             fields: [
               ["prep", "BOH prep: ensure prep completed is for day ahead, not on the day for the day", "Example: salad trolley, buns, onions, sauces..."],
               ["wastage", "BOH wastage", "Any high-volume or unusual wastage..."],
@@ -1174,12 +1396,8 @@
             name: "Hogwarts Table",
             colour: "hogwarts-bg",
             desc: "Hogwarts Table handover: bookings, visitors, no-shows, guest issues, allergens, stock shortages and closing notes.",
-            checks: [
-              "Bookings checked",
-              "No-shows checked",
-              "Allergen notes checked",
-              "Lamps checked"
-            ],
+            checks: ["Bookings checked", "No-shows checked", "Allergen notes checked", "Lamps checked"],
+            required: ["Briefing: key points mentioned, who led the brief including PM", "Service issues", "Total visitors"],
             fields: [
               ["briefing", "Briefing: key points mentioned, who led the brief including PM", "Example: details, clear tables, initiative, allergens communicated with kitchen..."],
               ["shoutouts", "Shout outs, including the reasons", "Example: Jess and Jess worked well on Hogwarts..."],
@@ -1210,20 +1428,35 @@
     let currentMain = "lobby";
     let currentSection = "lobbygeneral";
     let currentStatus = "Green";
+    let currentMode = "closing";
     let selectedDate = todayISO();
     let uploadedPhotos = [];
+    let conductType = "";
+
     let state = {
+      currentUser: null,
+      currentRole: "Manager",
       handovers: {},
+      tasks: {},
+      signoffs: {},
+      briefings: {},
       audits: [],
       staff: ["James", "Ella", "Aaron", "Freya", "Noah"],
       activeBreaks: {},
       breakHistory: [],
-      conductNotes: []
+      conductNotes: [],
+      incidents: [],
+      equipmentLogs: []
     };
-    let conductType = "";
 
     function todayISO() {
       return new Date().toISOString().split("T")[0];
+    }
+
+    function offsetDate(days) {
+      const d = new Date();
+      d.setDate(d.getDate() + days);
+      return d.toISOString().split("T")[0];
     }
 
     function formatDate(iso) {
@@ -1240,6 +1473,11 @@
       return state.handovers[selectedDate];
     }
 
+    function currentDayTasks() {
+      if (!state.tasks[selectedDate]) state.tasks[selectedDate] = [];
+      return state.tasks[selectedDate];
+    }
+
     function init() {
       loadState();
 
@@ -1254,6 +1492,7 @@
       document.getElementById("auditDate").value = todayISO();
       document.getElementById("conductDate").value = todayISO();
 
+      renderLoginOptions();
       renderMainTabs();
       renderSubTabs();
       renderForm();
@@ -1264,10 +1503,49 @@
       renderConduct();
       renderConductHistory();
       renderAuditChecklist();
+      renderIncidents();
+      renderEquipment();
+      renderBriefing();
+      renderOpeningTasks();
+      renderSignoff();
       applySettings(false);
+
+      if (!state.currentUser) {
+        document.getElementById("loginScreen").classList.remove("hidden");
+      } else {
+        document.getElementById("loginScreen").classList.add("hidden");
+      }
+    }
+
+    function renderLoginOptions() {
+      const loginName = document.getElementById("loginName");
+      loginName.innerHTML = "";
+      state.staff.forEach(name => loginName.innerHTML += `<option>${name}</option>`);
+    }
+
+    function login() {
+      state.currentUser = document.getElementById("loginName").value;
+      state.currentRole = document.getElementById("loginRole").value;
+      document.getElementById("roleSelect").value = state.currentRole;
+      saveState();
+      applySettings(false);
+      document.getElementById("loginScreen").classList.add("hidden");
+      toast(`Welcome, ${state.currentUser}`);
+    }
+
+    function logout() {
+      state.currentUser = null;
+      saveState();
+      renderLoginOptions();
+      document.getElementById("loginScreen").classList.remove("hidden");
     }
 
     function openPage(pageId, button) {
+      if (pageId === "audits" && state.currentRole === "Supervisor") {
+        toast("Audit checks are manager-only in this prototype");
+        return;
+      }
+
       document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
       document.getElementById(pageId).classList.add("active");
 
@@ -1278,8 +1556,8 @@
         handovers: ["Handovers", "Daily handovers, close checks and next-shift priorities."],
         audits: ["Audit Checks", "Cleanliness, labelling, allergens, equipment and readiness."],
         breaks: ["Break Times", "Start breaks, finish breaks and review history."],
-        conduct: ["Conduct", "Shout-outs, staff notes, service issues and follow-ups."],
-        more: ["More", "Storage plan, templates, reports, export and settings."]
+        conduct: ["Conduct", "Shout-outs, staff notes, incidents and follow-ups."],
+        more: ["More", "Equipment, storage plan, templates, reports and settings."]
       };
 
       document.getElementById("pageTitle").innerText = titles[pageId][0];
@@ -1287,24 +1565,40 @@
       document.getElementById("handoverTopActions").style.display = pageId === "handovers" ? "grid" : "none";
     }
 
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById("closingModeBtn").classList.toggle("active", mode === "closing");
+      document.getElementById("openingModeBtn").classList.toggle("active", mode === "opening");
+      document.getElementById("closingView").classList.toggle("hidden", mode !== "closing");
+      document.getElementById("openingView").classList.toggle("hidden", mode !== "opening");
+      renderOpeningTasks();
+    }
+
+    function togglePanelOpen(id) {
+      document.getElementById(id).classList.toggle("open");
+      if (id === "savedDaysPanel") renderSavedDays();
+    }
+
+    function togglePanel(id) {
+      document.getElementById(id).classList.toggle("open");
+      if (id === "panelEquipment") renderEquipment();
+    }
+
     function changeSelectedDate(date) {
       selectedDate = date;
       document.getElementById("handoverDate").value = date;
       document.getElementById("calendarDate").value = date;
-
       currentStatus = currentDayHandovers()[currentSection]?.status || "Green";
 
       renderDashboard();
       renderSavedDays();
-      updateStatusButtons();
       renderForm();
+      renderBriefing();
+      renderOpeningTasks();
+      renderSignoff();
+      updateStatusButtons();
       document.getElementById("summaryOutput").style.display = "none";
       toast(`Viewing ${formatDate(selectedDate)}`);
-    }
-
-    function toggleCalendar() {
-      document.getElementById("calendarPanel").classList.toggle("open");
-      renderSavedDays();
     }
 
     function renderSavedDays() {
@@ -1320,7 +1614,6 @@
 
       days.forEach(day => {
         const count = Object.keys(state.handovers[day] || {}).length;
-
         const row = document.createElement("div");
         row.className = "area-row";
         row.onclick = () => changeSelectedDate(day);
@@ -1331,7 +1624,6 @@
           </div>
           <span class="pill">${day === selectedDate ? "Viewing" : "Open"}</span>
         `;
-
         box.appendChild(row);
       });
     }
@@ -1339,7 +1631,6 @@
     function renderMainTabs() {
       const wrap = document.getElementById("mainAreaTabs");
       wrap.innerHTML = "";
-
       Object.keys(structure).forEach(key => {
         const btn = document.createElement("button");
         btn.className = `area-chip ${structure[key].colour} ${key === currentMain ? "active" : ""}`;
@@ -1352,7 +1643,6 @@
     function renderSubTabs() {
       const wrap = document.getElementById("subAreaTabs");
       wrap.innerHTML = "";
-
       const sections = structure[currentMain].sections;
 
       document.getElementById("subAreaTitle").innerText =
@@ -1407,6 +1697,15 @@
       const existing = currentDayHandovers()[currentSection];
       form.innerHTML = "";
 
+      document.getElementById("prioritySelect").value = existing?.priority || "Medium";
+      document.getElementById("submittedBy").value = existing?.submittedBy || state.currentUser || state.staff[0];
+
+      document.getElementById("actionRequired").value = existing?.actionRequired || "No action needed";
+      document.getElementById("actionText").value = existing?.actionText || "";
+      document.getElementById("actionOwner").value = existing?.actionOwner || "";
+      document.getElementById("actionDue").value = existing?.actionDue || "";
+      toggleActionFields();
+
       const checkLabel = document.createElement("label");
       checkLabel.innerText = "Close / check items";
       form.appendChild(checkLabel);
@@ -1438,6 +1737,8 @@
         form.appendChild(labelEl);
         form.appendChild(textarea);
       });
+
+      renderVersionHistory();
     }
 
     function setStatus(status, btn) {
@@ -1451,6 +1752,11 @@
         btn.classList.remove("selected");
         if (btn.innerText === currentStatus) btn.classList.add("selected");
       });
+    }
+
+    function toggleActionFields() {
+      const open = document.getElementById("actionRequired").value === "Action required";
+      document.getElementById("actionFields").classList.toggle("open", open);
     }
 
     function previewPhotos(event) {
@@ -1474,6 +1780,16 @@
       document.getElementById("photoInput").value = "";
     }
 
+    function calculateCompletion(record, section) {
+      if (!record) return 0;
+      const totalFields = section.fields.length;
+      const filledFields = Object.values(record.fields || {}).filter(v => v && v.trim()).length;
+      const totalChecks = section.checks.length;
+      const doneChecks = record.checks?.length || 0;
+      const score = ((filledFields + doneChecks) / (totalFields + totalChecks)) * 100;
+      return Math.round(score);
+    }
+
     function submitArea() {
       const section = structure[currentMain].sections[currentSection];
       const fields = {};
@@ -1482,35 +1798,98 @@
         fields[label] = document.getElementById(`field-${id}`).value.trim();
       });
 
+      const missingRequired = (section.required || []).filter(label => !fields[label]);
+
+      if (missingRequired.length) {
+        const confirmSubmit = confirm(
+          `Some important fields are empty:\n\n${missingRequired.join("\n")}\n\nSubmit anyway?`
+        );
+        if (!confirmSubmit) return;
+      }
+
+      const actionRequired = document.getElementById("actionRequired").value;
+      const actionText = document.getElementById("actionText").value.trim();
+
+      if (actionRequired === "Action required" && !actionText) {
+        toast("Add what needs doing");
+        return;
+      }
+
       const checks = Array.from(document.querySelectorAll("#dynamicForm .check-btn.checked"))
         .map(btn => btn.innerText);
 
-      currentDayHandovers()[currentSection] = {
+      const day = currentDayHandovers();
+      const previous = day[currentSection];
+
+      if (previous) {
+        if (!previous.history) previous.history = [];
+        previous.history.unshift({
+          updatedAt: previous.updatedAt || previous.time,
+          updatedBy: previous.submittedBy || "Unknown",
+          status: previous.status,
+          note: getMainNote(previous)
+        });
+      }
+
+      day[currentSection] = {
         date: selectedDate,
         main: structure[currentMain].name,
         section: section.name,
         status: currentStatus,
+        priority: document.getElementById("prioritySelect").value,
+        submittedBy: document.getElementById("submittedBy").value,
+        submittedRole: state.currentRole,
         fields,
         checks,
+        actionRequired,
+        actionText,
+        actionOwner: document.getElementById("actionOwner").value.trim(),
+        actionDue: document.getElementById("actionDue").value,
         photoCount: uploadedPhotos.length,
-        time: new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })
+        time: previous?.time || new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }),
+        updatedAt: new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }),
+        history: previous?.history || []
       };
+
+      if (actionRequired === "Action required") {
+        addTaskFromHandover(day[currentSection], currentSection);
+      }
 
       saveState();
       renderDashboard();
       renderSavedDays();
-      toast(`${section.name} handover saved for ${formatDate(selectedDate)}`);
+      renderVersionHistory();
+      renderOpeningTasks();
+      toast(`${section.name} handover saved`);
+    }
+
+    function addTaskFromHandover(record, sectionKey) {
+      const tasks = currentDayTasks();
+      const existing = tasks.find(t => t.sourceSection === sectionKey && t.text === record.actionText);
+      if (existing) return;
+
+      tasks.unshift({
+        id: Date.now(),
+        sourceSection: sectionKey,
+        area: `${record.main} — ${record.section}`,
+        text: record.actionText,
+        owner: record.actionOwner || "Opening team",
+        due: record.actionDue || selectedDate,
+        priority: record.priority,
+        done: false,
+        createdFrom: "handover"
+      });
     }
 
     function getMainNote(data) {
       if (!data) return "No handover submitted yet.";
+      if (data.actionRequired === "Action required" && data.actionText) return `Action required: ${data.actionText}`;
 
       for (const key in data.fields) {
         if (data.fields[key]) return `${key}: ${data.fields[key]}`;
       }
 
-      if (data.checks.length) return `${data.checks.length} checks completed.`;
-
+      if (data.checks?.length) return `${data.checks.length} checks completed.`;
       return "Area checked, no major notes.";
     }
 
@@ -1521,7 +1900,8 @@
       const day = currentDayHandovers();
       let mainChecked = 0;
       let red = 0;
-      let photos = 0;
+      let completionTotal = 0;
+      let sectionTotal = 0;
 
       Object.keys(structure).forEach(mainKey => {
         const main = structure[mainKey];
@@ -1532,9 +1912,11 @@
         sectionKeys.forEach(sectionKey => {
           const section = main.sections[sectionKey];
           const data = day[sectionKey];
+          const completion = calculateCompletion(data, section);
+          sectionTotal++;
+          completionTotal += completion;
 
           if (data?.status === "Red") red++;
-          if (data?.photoCount) photos += data.photoCount;
 
           const row = document.createElement("div");
           row.className = "area-row";
@@ -1544,10 +1926,13 @@
             data?.status === "Amber" ? "amber-text" :
             data?.status === "Green" ? "green-text" : "";
 
+          const priority = data?.priority ? ` · ${data.priority}` : "";
+
           row.innerHTML = `
             <div>
               <h4>${main.name} — ${section.name}</h4>
               <p>${data ? getMainNote(data) : `No update for ${formatDate(selectedDate)}.`}</p>
+              <p>${data ? `Submitted by ${data.submittedBy} · ${completion}% complete${priority}` : ""}</p>
             </div>
             <span class="pill ${statusClass}">${data ? data.status : "—"}</span>
           `;
@@ -1558,37 +1943,231 @@
 
       document.getElementById("checkedCount").innerText = `${mainChecked}/3`;
       document.getElementById("redCount").innerText = red;
-      document.getElementById("photoCount").innerText = photos;
+      document.getElementById("completionAvg").innerText = `${Math.round(completionTotal / sectionTotal)}%`;
+    }
+
+    function renderVersionHistory() {
+      const list = document.getElementById("versionHistoryList");
+      if (!list) return;
+      list.innerHTML = "";
+
+      const data = currentDayHandovers()[currentSection];
+      if (!data || !data.history || !data.history.length) {
+        list.innerHTML = `<p class="small">No previous edits for this section.</p>`;
+        return;
+      }
+
+      data.history.forEach(item => {
+        list.innerHTML += `
+          <div class="area-row">
+            <div>
+              <h4>${item.updatedAt} · ${item.updatedBy}</h4>
+              <p>${item.status} — ${item.note}</p>
+            </div>
+            <span class="pill">Old</span>
+          </div>
+        `;
+      });
     }
 
     function generateSummary() {
-      const list = document.getElementById("summaryList");
       const output = document.getElementById("summaryOutput");
+
+      if (output.style.display === "block") {
+        output.style.display = "none";
+        return;
+      }
+
+      const list = document.getElementById("summaryList");
       const day = currentDayHandovers();
 
       document.getElementById("summaryTitle").innerText = `Opening Summary — ${formatDate(selectedDate)}`;
       list.innerHTML = "";
 
+      const briefing = state.briefings[selectedDate];
+      if (briefing) {
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>Daily briefing:</strong> ${briefing.focus || briefing.points || "Briefing saved."}`;
+        list.appendChild(li);
+      }
+
+      const urgentItems = [];
+      const normalItems = [];
+
       Object.keys(structure).forEach(mainKey => {
         const main = structure[mainKey];
-
         Object.keys(main.sections).forEach(sectionKey => {
           const section = main.sections[sectionKey];
           const data = day[sectionKey];
-          const li = document.createElement("li");
 
-          if (!data) {
-            li.innerHTML = `<strong>${main.name} — ${section.name}:</strong> No handover submitted.`;
-          } else {
-            li.innerHTML = `<strong>${main.name} — ${data.section}:</strong> ${data.status} — ${getMainNote(data)} ${data.photoCount ? `(${data.photoCount} photo${data.photoCount > 1 ? "s" : ""})` : ""}`;
-          }
+          const text = data
+            ? `<strong>${main.name} — ${data.section}:</strong> ${data.status} · ${data.priority} — ${getMainNote(data)}`
+            : `<strong>${main.name} — ${section.name}:</strong> No handover submitted.`;
 
-          list.appendChild(li);
+          if (data?.priority === "Urgent" || data?.status === "Red") urgentItems.push(text);
+          else normalItems.push(text);
         });
       });
 
+      [...urgentItems, ...normalItems].forEach(text => {
+        const li = document.createElement("li");
+        li.innerHTML = text;
+        list.appendChild(li);
+      });
+
+      const signoff = state.signoffs[selectedDate];
+      if (signoff) {
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>Final sign-off:</strong> ${signoff.by} at ${signoff.time}`;
+        list.appendChild(li);
+      }
+
       output.style.display = "block";
       output.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function finalSignoff() {
+      state.signoffs[selectedDate] = {
+        by: document.getElementById("signoffBy").value,
+        role: state.currentRole,
+        time: new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })
+      };
+      saveState();
+      renderSignoff();
+      toast("Final sign-off saved");
+    }
+
+    function renderSignoff() {
+      const signoff = state.signoffs[selectedDate];
+      const text = document.getElementById("signoffStatus");
+      if (!text) return;
+
+      if (!signoff) text.innerText = "Not signed off yet.";
+      else text.innerText = `Signed off by ${signoff.by} at ${signoff.time}.`;
+    }
+
+    function generateOpeningTasks() {
+      const day = currentDayHandovers();
+
+      Object.keys(day).forEach(sectionKey => {
+        const record = day[sectionKey];
+        if (record.actionRequired === "Action required" && record.actionText) {
+          addTaskFromHandover(record, sectionKey);
+        }
+      });
+
+      saveState();
+      renderOpeningTasks();
+      toast("Opening tasks generated");
+    }
+
+    function renderOpeningTasks() {
+      const list = document.getElementById("openingTaskList");
+      if (!list) return;
+
+      const tasks = currentDayTasks();
+
+      const open = tasks.filter(t => !t.done).length;
+      const urgent = tasks.filter(t => !t.done && t.priority === "Urgent").length;
+      const done = tasks.filter(t => t.done).length;
+
+      document.getElementById("openTaskCount").innerText = open;
+      document.getElementById("urgentTaskCount").innerText = urgent;
+      document.getElementById("doneTaskCount").innerText = done;
+
+      list.innerHTML = "";
+
+      if (!tasks.length) {
+        list.innerHTML = `<div class="card"><p class="small">No opening tasks yet. Generate tasks from action-required handovers.</p></div>`;
+        return;
+      }
+
+      tasks.forEach(task => {
+        const colour = task.done ? "green-text" : task.priority === "Urgent" ? "red-text" : task.priority === "High" ? "amber-text" : "";
+        list.innerHTML += `
+          <div class="area-row">
+            <div>
+              <h4>${task.area}</h4>
+              <p>${task.text}</p>
+              <p>Owner: ${task.owner} · Due: ${task.due || "No date"}</p>
+            </div>
+            <button class="tiny-btn ${task.done ? "light" : ""}" onclick="toggleTask(${task.id})">${task.done ? "Done" : task.priority}</button>
+          </div>
+        `;
+      });
+    }
+
+    function toggleTask(id) {
+      const task = currentDayTasks().find(t => t.id === id);
+      if (!task) return;
+      task.done = !task.done;
+      saveState();
+      renderOpeningTasks();
+    }
+
+    function clearCompletedTasks() {
+      state.tasks[selectedDate] = currentDayTasks().filter(t => !t.done);
+      saveState();
+      renderOpeningTasks();
+      toast("Completed tasks cleared");
+    }
+
+    function saveBriefing() {
+      state.briefings[selectedDate] = {
+        dms: document.getElementById("briefingDMs").value.trim(),
+        visitors: document.getElementById("briefingVisitors").value.trim(),
+        points: document.getElementById("briefingPoints").value.trim(),
+        focus: document.getElementById("briefingFocus").value.trim(),
+        by: state.currentUser,
+        time: new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })
+      };
+      saveState();
+      toast("Daily briefing saved");
+    }
+
+    function renderBriefing() {
+      const b = state.briefings[selectedDate];
+      document.getElementById("briefingDMs").value = b?.dms || "";
+      document.getElementById("briefingVisitors").value = b?.visitors || "";
+      document.getElementById("briefingPoints").value = b?.points || "";
+      document.getElementById("briefingFocus").value = b?.focus || "";
+    }
+
+    function searchHandovers() {
+      const q = document.getElementById("handoverSearch").value.toLowerCase().trim();
+      const box = document.getElementById("handoverSearchResults");
+      box.innerHTML = "";
+
+      if (!q) {
+        box.innerHTML = `<p class="small">Type to search saved handovers.</p>`;
+        return;
+      }
+
+      const results = [];
+
+      Object.keys(state.handovers).forEach(date => {
+        Object.values(state.handovers[date]).forEach(record => {
+          const haystack = JSON.stringify(record).toLowerCase();
+          if (haystack.includes(q)) results.push({ date, record });
+        });
+      });
+
+      if (!results.length) {
+        box.innerHTML = `<p class="small">No matches found.</p>`;
+        return;
+      }
+
+      results.slice(0, 20).forEach(({ date, record }) => {
+        box.innerHTML += `
+          <div class="area-row">
+            <div>
+              <h4>${formatDate(date)} · ${record.main} — ${record.section}</h4>
+              <p>${getMainNote(record)}</p>
+            </div>
+            <span class="pill">${record.priority || "—"}</span>
+          </div>
+        `;
+      });
     }
 
     function renderAuditChecklist() {
@@ -1628,7 +2207,8 @@
       state.audits.unshift({
         date: document.getElementById("auditDate").value,
         area: document.getElementById("auditArea").value,
-        score
+        score,
+        by: state.currentUser
       });
 
       saveState();
@@ -1636,18 +2216,28 @@
     }
 
     function renderStaff() {
-      const sel = document.getElementById("breakEmployee");
-      const filter = document.getElementById("breakFilterName");
+      const selects = [
+        document.getElementById("breakEmployee"),
+        document.getElementById("breakFilterName"),
+        document.getElementById("submittedBy"),
+        document.getElementById("signoffBy"),
+        document.getElementById("currentUserSelect")
+      ];
 
-      sel.innerHTML = "";
-      filter.innerHTML = `<option>All staff</option>`;
-
-      state.staff.forEach(name => {
-        sel.innerHTML += `<option value="${name}">${name}</option>`;
-        filter.innerHTML += `<option value="${name}">${name}</option>`;
+      selects.forEach(sel => {
+        if (!sel) return;
+        sel.innerHTML = sel.id === "breakFilterName" ? `<option>All staff</option>` : "";
+        state.staff.forEach(name => sel.innerHTML += `<option>${name}</option>`);
       });
 
+      if (state.currentUser) {
+        document.getElementById("submittedBy").value = state.currentUser;
+        document.getElementById("signoffBy").value = state.currentUser;
+        document.getElementById("currentUserSelect").value = state.currentUser;
+      }
+
       document.getElementById("staffListText").innerText = `Current staff: ${state.staff.join(", ")}`;
+      renderLoginOptions();
     }
 
     function startBreak() {
@@ -1673,7 +2263,8 @@
         date: todayISO(),
         start,
         finish,
-        duration
+        duration,
+        loggedBy: state.currentUser
       });
 
       delete state.activeBreaks[name];
@@ -1719,11 +2310,6 @@
       generateBreakPatterns(false);
     }
 
-    function toggleBreakHistory() {
-      document.getElementById("breakHistoryPanel").classList.toggle("open");
-      renderBreakHistory();
-    }
-
     function clearBreakFilters() {
       document.getElementById("breakFilterName").value = "All staff";
       document.getElementById("breakFilterDate").value = "";
@@ -1732,11 +2318,12 @@
 
     function renderBreakHistory() {
       const box = document.getElementById("filteredBreakHistory");
+      if (!box) return;
+
       const name = document.getElementById("breakFilterName")?.value || "All staff";
       const date = document.getElementById("breakFilterDate")?.value || "";
 
       let logs = state.breakHistory;
-
       if (name !== "All staff") logs = logs.filter(l => l.name === name);
       if (date) logs = logs.filter(l => l.date === date);
 
@@ -1817,7 +2404,8 @@
         name,
         details,
         date,
-        follow
+        follow,
+        createdBy: state.currentUser
       });
 
       document.getElementById("conductName").value = "";
@@ -1836,20 +2424,12 @@
       list.innerHTML = "";
 
       const recent = state.conductNotes.slice(0, 5);
-
       if (!recent.length) {
         list.innerHTML = `<div class="card"><p class="small">No conduct or shout-out notes yet.</p></div>`;
         return;
       }
 
-      recent.forEach(note => {
-        list.appendChild(conductRow(note));
-      });
-    }
-
-    function toggleConductHistory() {
-      document.getElementById("conductHistoryPanel").classList.toggle("open");
-      renderConductHistory();
+      recent.forEach(note => list.appendChild(conductRow(note)));
     }
 
     function clearConductFilters() {
@@ -1861,12 +2441,13 @@
 
     function renderConductHistory() {
       const box = document.getElementById("filteredConductHistory");
+      if (!box) return;
+
       const name = (document.getElementById("conductFilterName")?.value || "").toLowerCase();
       const date = document.getElementById("conductFilterDate")?.value || "";
       const type = document.getElementById("conductFilterType")?.value || "All types";
 
       let notes = state.conductNotes;
-
       if (name) notes = notes.filter(n => n.name.toLowerCase().includes(name));
       if (date) notes = notes.filter(n => n.date === date);
       if (type !== "All types") notes = notes.filter(n => n.type === type);
@@ -1878,9 +2459,7 @@
         return;
       }
 
-      notes.forEach(note => {
-        box.appendChild(conductRow(note));
-      });
+      notes.forEach(note => box.appendChild(conductRow(note)));
     }
 
     function conductRow(note) {
@@ -1899,8 +2478,101 @@
       return row;
     }
 
-    function togglePanel(id) {
-      document.getElementById(id).classList.toggle("open");
+    function saveIncident() {
+      const details = document.getElementById("incidentDetails").value.trim();
+      if (!details) return toast("Add incident details");
+
+      state.incidents.unshift({
+        id: Date.now(),
+        date: todayISO(),
+        type: document.getElementById("incidentType").value,
+        area: document.getElementById("incidentArea").value,
+        details,
+        by: state.currentUser
+      });
+
+      document.getElementById("incidentDetails").value = "";
+      saveState();
+      renderIncidents();
+      toast("Incident saved");
+    }
+
+    function renderIncidents() {
+      const box = document.getElementById("incidentList");
+      if (!box) return;
+
+      const q = (document.getElementById("incidentSearch")?.value || "").toLowerCase();
+      let list = state.incidents;
+      if (q) list = list.filter(i => JSON.stringify(i).toLowerCase().includes(q));
+
+      if (!list.length) {
+        box.innerHTML = `<p class="small">No incidents logged yet.</p>`;
+        return;
+      }
+
+      box.innerHTML = "";
+      list.forEach(i => {
+        box.innerHTML += `
+          <div class="area-row">
+            <div>
+              <h4>${i.type} · ${i.area}</h4>
+              <p>${formatDate(i.date)} · ${i.details}</p>
+            </div>
+            <span class="pill">${i.by || "—"}</span>
+          </div>
+        `;
+      });
+    }
+
+    function saveEquipment() {
+      const name = document.getElementById("equipmentName").value.trim();
+      const notes = document.getElementById("equipmentNotes").value.trim();
+
+      if (!name) return toast("Add equipment name");
+
+      state.equipmentLogs.unshift({
+        id: Date.now(),
+        date: todayISO(),
+        name,
+        area: document.getElementById("equipmentArea").value,
+        status: document.getElementById("equipmentStatus").value,
+        notes,
+        by: state.currentUser
+      });
+
+      document.getElementById("equipmentName").value = "";
+      document.getElementById("equipmentNotes").value = "";
+      saveState();
+      renderEquipment();
+      toast("Equipment issue saved");
+    }
+
+    function renderEquipment() {
+      const box = document.getElementById("equipmentList");
+      if (!box) return;
+
+      const q = (document.getElementById("equipmentSearch")?.value || "").toLowerCase();
+      let list = state.equipmentLogs;
+      if (q) list = list.filter(e => JSON.stringify(e).toLowerCase().includes(q));
+
+      if (!list.length) {
+        box.innerHTML = `<p class="small">No equipment issues logged yet.</p>`;
+        return;
+      }
+
+      box.innerHTML = "";
+      list.forEach(e => {
+        const colour = e.status === "Fixed" ? "green-text" : e.status === "Open" ? "red-text" : "amber-text";
+        box.innerHTML += `
+          <div class="area-row">
+            <div>
+              <h4>${e.name} · ${e.area}</h4>
+              <p>${formatDate(e.date)} · ${e.notes || "No extra notes"}</p>
+            </div>
+            <span class="pill ${colour}">${e.status}</span>
+          </div>
+        `;
+      });
     }
 
     function addStaff() {
@@ -1920,72 +2592,111 @@
       const panel = document.getElementById("exportBox");
       panel.classList.add("open");
 
-      let text = `ShiftFlow Handover Summary — ${formatDate(selectedDate)}\n\n`;
       const day = currentDayHandovers();
+      const briefing = state.briefings[selectedDate];
+      let text = `ShiftFlow Handover Summary — ${formatDate(selectedDate)}\n\n`;
+
+      if (briefing) {
+        text += `DAILY BRIEFING\n`;
+        text += `DMs: ${briefing.dms || "-"}\n`;
+        text += `Visitor number: ${briefing.visitors || "-"}\n`;
+        text += `Key points: ${briefing.points || "-"}\n`;
+        text += `Focus: ${briefing.focus || "-"}\n\n`;
+      }
 
       Object.keys(structure).forEach(mainKey => {
         const main = structure[mainKey];
-        text += `${main.name}\n`;
+        text += `${main.name.toUpperCase()}\n`;
 
         Object.keys(main.sections).forEach(sectionKey => {
           const section = main.sections[sectionKey];
           const data = day[sectionKey];
 
+          text += `\n${section.name}\n`;
+
           if (!data) {
-            text += `- ${section.name}: No handover submitted.\n`;
+            text += `- No handover submitted.\n`;
           } else {
-            text += `- ${data.section}: ${data.status} — ${getMainNote(data)}\n`;
+            text += `Status: ${data.status}\n`;
+            text += `Priority: ${data.priority}\n`;
+            text += `Submitted by: ${data.submittedBy} at ${data.updatedAt}\n`;
+
+            Object.keys(data.fields).forEach(question => {
+              text += `${question}: ${data.fields[question] || "-"}\n`;
+            });
+
+            if (data.actionRequired === "Action required") {
+              text += `ACTION REQUIRED: ${data.actionText}\n`;
+              text += `Owner: ${data.actionOwner || "-"}\n`;
+              text += `Due: ${data.actionDue || "-"}\n`;
+            }
           }
         });
 
         text += `\n`;
       });
 
+      const signoff = state.signoffs[selectedDate];
+      if (signoff) text += `FINAL SIGN-OFF: ${signoff.by} at ${signoff.time}\n`;
+
       document.getElementById("exportText").value = text;
       toast("Export generated");
     }
 
+    function applyCurrentUser() {
+      state.currentUser = document.getElementById("currentUserSelect").value;
+      saveState();
+      renderStaff();
+      toast(`Current user: ${state.currentUser}`);
+    }
+
     function applySettings(show = true) {
-      const role = document.getElementById("roleSelect")?.value || "Manager";
+      const role = document.getElementById("roleSelect")?.value || state.currentRole || "Manager";
       const theme = document.getElementById("themeSelect")?.value || "light";
       const accent = document.getElementById("accentSelect")?.value || "#111111";
 
+      state.currentRole = role;
       document.getElementById("rolePill").innerText = role;
-      document.getElementById("roleText").innerText = `${role} Access`;
+      document.getElementById("roleText").innerText = `${role} Access${state.currentUser ? " · " + state.currentUser : ""}`;
       document.body.classList.toggle("dark", theme === "dark");
       document.documentElement.style.setProperty("--accent", accent);
 
+      document.getElementById("auditNav").style.opacity = role === "Supervisor" ? "0.45" : "1";
+
       localStorage.setItem("shiftflow_settings", JSON.stringify({ role, theme, accent }));
+      saveState();
 
       if (show) toast("Settings applied");
     }
 
     function resetPrototype() {
       if (!confirm("Reset all prototype data?")) return;
-      localStorage.removeItem("shiftflow_state");
+
+      const keepStaff = state.staff;
+      const keepUser = state.currentUser;
+      const keepRole = state.currentRole;
+
       state = {
+        currentUser: keepUser,
+        currentRole: keepRole,
         handovers: {},
+        tasks: {},
+        signoffs: {},
+        briefings: {},
         audits: [],
-        staff: ["James", "Ella", "Aaron", "Freya", "Noah"],
+        staff: keepStaff,
         activeBreaks: {},
         breakHistory: [],
-        conductNotes: []
+        conductNotes: [],
+        incidents: [],
+        equipmentLogs: []
       };
+
       selectedDate = todayISO();
       currentMain = "lobby";
       currentSection = "lobbygeneral";
-      document.getElementById("handoverDate").value = selectedDate;
-      document.getElementById("calendarDate").value = selectedDate;
       saveState();
-      renderMainTabs();
-      renderSubTabs();
-      renderForm();
-      renderDashboard();
-      renderSavedDays();
-      renderStaff();
-      renderBreaks();
-      renderConduct();
-      renderConductHistory();
+      init();
       toast("Prototype reset");
     }
 
@@ -1995,19 +2706,27 @@
 
     function loadState() {
       const saved = JSON.parse(localStorage.getItem("shiftflow_state") || "{}");
+
       state = {
+        currentUser: saved.currentUser || null,
+        currentRole: saved.currentRole || "Manager",
         handovers: saved.handovers || {},
+        tasks: saved.tasks || {},
+        signoffs: saved.signoffs || {},
+        briefings: saved.briefings || {},
         audits: saved.audits || [],
         staff: saved.staff || ["James", "Ella", "Aaron", "Freya", "Noah"],
         activeBreaks: saved.activeBreaks || {},
         breakHistory: saved.breakHistory || [],
-        conductNotes: saved.conductNotes || []
+        conductNotes: saved.conductNotes || [],
+        incidents: saved.incidents || [],
+        equipmentLogs: saved.equipmentLogs || []
       };
 
       const settings = JSON.parse(localStorage.getItem("shiftflow_settings") || "{}");
 
       setTimeout(() => {
-        if (settings.role) document.getElementById("roleSelect").value = settings.role;
+        document.getElementById("roleSelect").value = state.currentRole || settings.role || "Manager";
         if (settings.theme) document.getElementById("themeSelect").value = settings.theme;
         if (settings.accent) document.getElementById("accentSelect").value = settings.accent;
         applySettings(false);
