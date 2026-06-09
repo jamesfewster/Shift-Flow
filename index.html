@@ -1,0 +1,2026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShiftFlow Functional Prototype</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    :root {
+      --bg: #f5f5f7;
+      --card: #ffffff;
+      --text: #111111;
+      --muted: #777777;
+      --line: #eeeeee;
+      --accent: #111111;
+
+      --lobby: #eee4ff;
+      --backlot: #dff1ff;
+      --hogwarts: #e4edff;
+      --foodhall: #ffe6c8;
+      --frog: #ffe3f4;
+      --dragon: #ddf8e8;
+      --boh: #fff6c8;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    body.dark {
+      --bg: #111111;
+      --card: #1b1b1d;
+      --text: #f5f5f7;
+      --muted: #aaaaaa;
+      --line: #333333;
+    }
+
+    .phone {
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--card);
+      position: relative;
+      padding-bottom: 96px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+      padding: 18px 16px 14px;
+    }
+
+    body.dark .topbar,
+    body.dark .bottom-nav {
+      background: rgba(27,27,29,0.94);
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 29px;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .subtitle {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .role-pill {
+      background: var(--accent);
+      color: white;
+      border-radius: 999px;
+      padding: 8px 11px;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .top-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .top-btn {
+      border: none;
+      border-radius: 16px;
+      padding: 12px 10px;
+      font-weight: 900;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+      font-size: 13px;
+    }
+
+    .top-btn.light {
+      background: #f4f4f4;
+      color: #111;
+      border: 1px solid var(--line);
+    }
+
+    .page {
+      display: none;
+      padding: 16px;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat, .card, .area-row, .break-card, .audit-item {
+      background: #fafafa;
+      border: 1px solid var(--line);
+    }
+
+    body.dark .stat,
+    body.dark .card,
+    body.dark .area-row,
+    body.dark input,
+    body.dark textarea,
+    body.dark select,
+    body.dark .break-card,
+    body.dark .audit-item,
+    body.dark .top-btn.light,
+    body.dark .secondary-btn,
+    body.dark .status-btn,
+    body.dark .check-btn,
+    body.dark .photo-box {
+      background: #242426;
+      color: var(--text);
+    }
+
+    .stat {
+      border-radius: 20px;
+      padding: 14px;
+    }
+
+    .stat h3 {
+      margin: 0;
+      font-size: 23px;
+      letter-spacing: -0.7px;
+    }
+
+    .stat p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .section-title {
+      margin: 22px 0 12px;
+      font-size: 18px;
+      font-weight: 950;
+      letter-spacing: -0.3px;
+    }
+
+    .main-tabs,
+    .sub-tabs {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: none;
+    }
+
+    .main-tabs::-webkit-scrollbar,
+    .sub-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .area-chip,
+    .sub-chip {
+      border: none;
+      padding: 12px 14px;
+      border-radius: 999px;
+      font-weight: 950;
+      font-size: 13px;
+      white-space: nowrap;
+      opacity: 0.55;
+      cursor: pointer;
+      color: #111;
+    }
+
+    .area-chip.active,
+    .sub-chip.active {
+      opacity: 1;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      transform: translateY(-1px);
+    }
+
+    .lobby-bg { background: var(--lobby); }
+    .backlot-bg { background: var(--backlot); }
+    .hogwarts-bg { background: var(--hogwarts); }
+    .foodhall-bg { background: var(--foodhall); }
+    .frog-bg { background: var(--frog); }
+    .dragon-bg { background: var(--dragon); }
+    .boh-bg { background: var(--boh); }
+
+    .hero {
+      border-radius: 28px;
+      padding: 18px;
+      margin: 10px 0 14px;
+      color: #111;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: 27px;
+      letter-spacing: -0.8px;
+    }
+
+    .hero p {
+      margin: 8px 0 0;
+      color: #444;
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .card {
+      border-radius: 26px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.035);
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 950;
+      margin: 13px 0 7px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid #e1e1e1;
+      background: #fbfbfb;
+      border-radius: 16px;
+      padding: 13px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 72px;
+      resize: vertical;
+      line-height: 1.35;
+    }
+
+    .status-row,
+    .check-grid,
+    .two-grid {
+      display: grid;
+      gap: 9px;
+    }
+
+    .status-row {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .check-grid,
+    .two-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .status-btn,
+    .check-btn {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fafafa;
+      padding: 12px;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .status-btn.selected,
+    .check-btn.checked {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      width: 100%;
+      border-radius: 18px;
+      padding: 15px;
+      font-size: 15px;
+      font-weight: 950;
+      cursor: pointer;
+      margin-top: 14px;
+    }
+
+    .primary-btn {
+      border: none;
+      background: var(--accent);
+      color: white;
+    }
+
+    .secondary-btn {
+      border: 1px solid var(--line);
+      background: #fafafa;
+      color: #111;
+    }
+
+    .photo-box {
+      border: 1px dashed #cfcfcf;
+      border-radius: 18px;
+      padding: 14px;
+      background: #fafafa;
+      margin-top: 8px;
+    }
+
+    .photo-preview {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .photo-preview img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+      margin: 6px 0 0;
+    }
+
+    .area-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .area-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 13px;
+      border-radius: 18px;
+    }
+
+    .area-row h4 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .area-row p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      max-width: 260px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .pill {
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: white;
+      padding: 7px 10px;
+      font-size: 11px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    body.dark .pill {
+      background: #1b1b1d;
+    }
+
+    .green-text { color: #167044; }
+    .amber-text { color: #a86500; }
+    .red-text { color: #b42318; }
+
+    .summary-output {
+      display: none;
+      background: #111;
+      color: white;
+      padding: 18px;
+      border-radius: 24px;
+      margin: 14px 0;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .summary-output h3 {
+      margin: 0 0 10px;
+    }
+
+    .summary-output ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .calendar-panel {
+      display: none;
+    }
+
+    .calendar-panel.open {
+      display: block;
+    }
+
+    .audit-item {
+      padding: 13px;
+      border-radius: 18px;
+      margin-bottom: 9px;
+    }
+
+    .audit-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .audit-head strong {
+      font-size: 14px;
+    }
+
+    .score-select {
+      width: auto;
+      min-width: 120px;
+      padding: 9px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .score-wrap {
+      display: flex;
+      align-items: center;
+    }
+
+    .score-circle {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      background: conic-gradient(var(--accent) 100%, #eee 0);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      font-weight: 950;
+      margin-right: 14px;
+      flex-shrink: 0;
+    }
+
+    .break-card {
+      padding: 14px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+
+    .break-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .break-top h4 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .break-top span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      margin-top: 3px;
+    }
+
+    .bar {
+      height: 10px;
+      background: #eee;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 7px;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+    }
+
+    .history-panel {
+      display: none;
+    }
+
+    .history-panel.open {
+      display: block;
+    }
+
+    .more-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+    }
+
+    .more-row:last-child {
+      border-bottom: none;
+    }
+
+    .more-row strong {
+      display: block;
+      font-size: 15px;
+    }
+
+    .more-row p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .settings-panel {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .settings-panel.open {
+      display: block;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 430px;
+      width: 100%;
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      padding: 8px 6px 18px;
+      z-index: 50;
+    }
+
+    .nav-btn {
+      border: none;
+      background: transparent;
+      color: #888;
+      display: grid;
+      gap: 4px;
+      place-items: center;
+      font-size: 10px;
+      font-weight: 950;
+      padding: 7px 0;
+      border-radius: 16px;
+      cursor: pointer;
+    }
+
+    .nav-btn span {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .nav-btn.active {
+      background: #f2f2f2;
+      color: #111;
+    }
+
+    body.dark .nav-btn.active {
+      background: #242426;
+      color: white;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 102px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 900;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.25s;
+      z-index: 99;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-4px);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="phone">
+
+    <div class="topbar">
+      <div class="topline">
+        <span id="todayText">Today</span>
+        <span id="roleText">Manager Access</span>
+      </div>
+
+      <div class="title-row">
+        <div>
+          <h1 id="pageTitle">Handovers</h1>
+          <p class="subtitle" id="pageSubtitle">Daily handovers, close checks and next-shift priorities.</p>
+        </div>
+        <div id="rolePill" class="role-pill">Manager</div>
+      </div>
+
+      <div id="handoverTopActions" class="top-actions">
+        <button class="top-btn" onclick="generateSummary()">Opening Summary</button>
+        <button class="top-btn light" onclick="toggleCalendar()">Calendar Review</button>
+      </div>
+    </div>
+
+    <main id="handovers" class="page active">
+
+      <div class="card">
+        <label>Handover day</label>
+        <input type="date" id="handoverDate" onchange="changeSelectedDate(this.value)" />
+        <p class="small">All handover notes are saved against this specific day.</p>
+      </div>
+
+      <div id="calendarPanel" class="calendar-panel card">
+        <h3 style="margin-top:0;">Review past handovers</h3>
+        <label>Select date</label>
+        <input type="date" id="calendarDate" onchange="changeSelectedDate(this.value)" />
+
+        <label>Saved handover days</label>
+        <div id="savedDaysList" class="area-list"></div>
+      </div>
+
+      <div id="summaryOutput" class="summary-output">
+        <h3 id="summaryTitle">Opening Handover Summary</h3>
+        <ul id="summaryList"></ul>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="stat">
+          <h3 id="checkedCount">0/3</h3>
+          <p>Main areas</p>
+        </div>
+        <div class="stat">
+          <h3 id="redCount">0</h3>
+          <p>Urgent issues</p>
+        </div>
+        <div class="stat">
+          <h3 id="photoCount">0</h3>
+          <p>Photos added</p>
+        </div>
+      </div>
+
+      <div class="section-title">Main area</div>
+      <div class="main-tabs" id="mainAreaTabs"></div>
+
+      <div class="section-title" id="subAreaTitle">Section</div>
+      <div class="sub-tabs" id="subAreaTabs"></div>
+
+      <div id="areaHero" class="hero lobby-bg">
+        <h2 id="selectedAreaTitle">General Lobby</h2>
+        <p id="selectedAreaDesc">Main Lobby handover: duty managers, visitor numbers, briefing, conduct, service issues and safe/change.</p>
+      </div>
+
+      <div class="card" id="handoverFormCard">
+        <label>Area status</label>
+        <div class="status-row">
+          <button class="status-btn selected" onclick="setStatus('Green', this)">Green</button>
+          <button class="status-btn" onclick="setStatus('Amber', this)">Amber</button>
+          <button class="status-btn" onclick="setStatus('Red', this)">Red</button>
+        </div>
+
+        <div id="dynamicForm"></div>
+
+        <label>Photos / evidence</label>
+        <div class="photo-box">
+          <input type="file" id="photoInput" accept="image/*" multiple onchange="previewPhotos(event)" />
+          <p class="small">Prototype stores photo count only. Real app would upload files to cloud storage.</p>
+          <div id="photoPreview" class="photo-preview"></div>
+        </div>
+
+        <button class="primary-btn" onclick="submitArea()">Submit Area Handover</button>
+      </div>
+
+      <div class="section-title">Daily handover dashboard</div>
+      <div class="card">
+        <div id="handoverDashboard" class="area-list"></div>
+      </div>
+    </main>
+
+    <main id="audits" class="page">
+
+      <div class="card">
+        <div class="score-wrap">
+          <div id="auditScore" class="score-circle">100%</div>
+          <div>
+            <h3 style="margin:0;font-size:20px;">Audit score</h3>
+            <p class="small">Cleanliness, labelling, allergens, equipment and readiness. Stock levels stay separate.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <label>Audit date</label>
+        <input type="date" id="auditDate" />
+
+        <label>Audit area</label>
+        <select id="auditArea">
+          <option>Lobby</option>
+          <option>Backlot</option>
+          <option>Hogwarts Table</option>
+        </select>
+      </div>
+
+      <div class="section-title">Audit checklist</div>
+
+      <div class="card">
+        <div id="auditChecklist"></div>
+
+        <label>Audit photos</label>
+        <div class="photo-box">
+          <input type="file" accept="image/*" multiple />
+          <p class="small">Attach photos for evidence.</p>
+        </div>
+
+        <button class="primary-btn" onclick="submitAudit()">Submit Audit Check</button>
+      </div>
+    </main>
+
+    <main id="breaks" class="page">
+
+      <div class="dashboard-grid">
+        <div class="stat">
+          <h3 id="onBreakCount">0</h3>
+          <p>On break</p>
+        </div>
+        <div class="stat">
+          <h3 id="avgBreak">0m</h3>
+          <p>Avg break</p>
+        </div>
+        <div class="stat">
+          <h3 id="breakLogs">0</h3>
+          <p>Break logs</p>
+        </div>
+      </div>
+
+      <div class="section-title">Log break</div>
+
+      <div class="card">
+        <label>Employee</label>
+        <select id="breakEmployee"></select>
+
+        <div class="two-grid">
+          <button class="primary-btn" onclick="startBreak()">Start Break</button>
+          <button class="secondary-btn" onclick="finishBreak()">Finish Break</button>
+        </div>
+
+        <button class="secondary-btn" onclick="toggleBreakHistory()">Open Break History</button>
+      </div>
+
+      <div id="breakHistoryPanel" class="history-panel card">
+        <h3 style="margin-top:0;">Break history</h3>
+
+        <label>Filter by name</label>
+        <select id="breakFilterName" onchange="renderBreakHistory()"></select>
+
+        <label>Filter by date</label>
+        <input type="date" id="breakFilterDate" onchange="renderBreakHistory()" />
+
+        <button class="secondary-btn" onclick="clearBreakFilters()">Clear Filters</button>
+
+        <div class="section-title">Filtered logs</div>
+        <div id="filteredBreakHistory"></div>
+      </div>
+
+      <div class="section-title">Current breaks</div>
+      <div id="currentBreaks"></div>
+
+      <div class="section-title">Break patterns</div>
+      <div class="card">
+        <div id="breakPatterns"></div>
+        <button class="secondary-btn" onclick="generateBreakPatterns(true)">Generate Patterns</button>
+      </div>
+    </main>
+
+    <main id="conduct" class="page">
+
+      <div class="section-title">Add staff note</div>
+
+      <div class="card">
+        <label>Type</label>
+        <div class="check-grid">
+          <button class="check-btn" onclick="selectConduct(this)">Shout-out</button>
+          <button class="check-btn" onclick="selectConduct(this)">Conduct issue</button>
+          <button class="check-btn" onclick="selectConduct(this)">Training note</button>
+          <button class="check-btn" onclick="selectConduct(this)">Service issue</button>
+        </div>
+
+        <label>Staff member</label>
+        <input id="conductName" placeholder="Enter staff name..." />
+
+        <label>Date</label>
+        <input type="date" id="conductDate" />
+
+        <label>Details</label>
+        <textarea id="conductDetails" placeholder="Example: carried Dragon close, CFC lateness, handled allergies well..."></textarea>
+
+        <label>Follow-up required?</label>
+        <select id="conductFollow">
+          <option>No follow-up needed</option>
+          <option>Supervisor follow-up</option>
+          <option>Manager follow-up</option>
+          <option>CoC / formal action required</option>
+        </select>
+
+        <button class="primary-btn" onclick="saveConduct()">Save Staff Note</button>
+        <button class="secondary-btn" onclick="toggleConductHistory()">Open Conduct History</button>
+      </div>
+
+      <div id="conductHistoryPanel" class="history-panel card">
+        <h3 style="margin-top:0;">Conduct / shout-out history</h3>
+
+        <label>Filter by name</label>
+        <input id="conductFilterName" placeholder="Search name..." oninput="renderConductHistory()" />
+
+        <label>Filter by date</label>
+        <input type="date" id="conductFilterDate" onchange="renderConductHistory()" />
+
+        <label>Filter by type</label>
+        <select id="conductFilterType" onchange="renderConductHistory()">
+          <option>All types</option>
+          <option>Shout-out</option>
+          <option>Conduct issue</option>
+          <option>Training note</option>
+          <option>Service issue</option>
+        </select>
+
+        <button class="secondary-btn" onclick="clearConductFilters()">Clear Filters</button>
+
+        <div class="section-title">Filtered notes</div>
+        <div id="filteredConductHistory" class="area-list"></div>
+      </div>
+
+      <div class="section-title">Recent notes</div>
+      <div id="conductList" class="area-list"></div>
+    </main>
+
+    <main id="more" class="page">
+
+      <div class="card">
+        <div class="more-row" onclick="togglePanel('panelStorage')">
+          <div>
+            <strong>Company storage plan</strong>
+            <p>Where the real app would save information.</p>
+          </div>
+          <span>›</span>
+        </div>
+
+        <div id="panelStorage" class="settings-panel">
+          <p class="small"><strong>Prototype:</strong> browser localStorage.</p>
+          <p class="small"><strong>Real app:</strong> Firebase or Supabase database for handovers, breaks, conduct, audits and user roles.</p>
+          <p class="small"><strong>Photos:</strong> cloud storage with links saved in the database.</p>
+        </div>
+
+        <div class="more-row" onclick="togglePanel('panelTemplates')">
+          <div>
+            <strong>Area templates</strong>
+            <p>View current structure.</p>
+          </div>
+          <span>›</span>
+        </div>
+
+        <div id="panelTemplates" class="settings-panel">
+          <p class="small"><strong>Lobby:</strong> General Lobby, Food Hall, Frog, Dragon.</p>
+          <p class="small"><strong>Backlot:</strong> Backlot & BBB, BOH Prep.</p>
+          <p class="small"><strong>Hogwarts Table:</strong> one dedicated handover form.</p>
+        </div>
+
+        <div class="more-row" onclick="togglePanel('panelStaff')">
+          <div>
+            <strong>Staff list</strong>
+            <p>Add demo staff for break and conduct filtering.</p>
+          </div>
+          <span>›</span>
+        </div>
+
+        <div id="panelStaff" class="settings-panel">
+          <label>Add staff member</label>
+          <input id="newStaffName" placeholder="Staff name..." />
+          <button class="secondary-btn" onclick="addStaff()">Add Staff</button>
+          <p class="small" id="staffListText"></p>
+        </div>
+
+        <div class="more-row" onclick="exportEmailSummary()">
+          <div>
+            <strong>Export handover</strong>
+            <p>Create an email-style summary from the selected day.</p>
+          </div>
+          <span>›</span>
+        </div>
+
+        <div id="exportBox" class="settings-panel">
+          <label>Email-style handover</label>
+          <textarea id="exportText" style="min-height:180px;"></textarea>
+        </div>
+
+        <div class="more-row" onclick="togglePanel('panelSettings')">
+          <div>
+            <strong>Settings</strong>
+            <p>Role, theme, accent and reset controls.</p>
+          </div>
+          <span>›</span>
+        </div>
+
+        <div id="panelSettings" class="settings-panel">
+          <label>Role</label>
+          <select id="roleSelect" onchange="applySettings()">
+            <option>Manager</option>
+            <option>Supervisor</option>
+          </select>
+
+          <label>Appearance</label>
+          <select id="themeSelect" onchange="applySettings()">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+
+          <label>Accent</label>
+          <select id="accentSelect" onchange="applySettings()">
+            <option value="#111111">Black</option>
+            <option value="#d06b28">Butterbeer Orange</option>
+            <option value="#4169e1">Hogwarts Blue</option>
+            <option value="#7b61ff">Lobby Purple</option>
+          </select>
+
+          <button class="secondary-btn" onclick="resetPrototype()">Reset Prototype Data</button>
+        </div>
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-btn active" onclick="openPage('handovers', this)">
+        <span>📝</span>
+        Handovers
+      </button>
+      <button class="nav-btn" onclick="openPage('audits', this)">
+        <span>✅</span>
+        Audits
+      </button>
+      <button class="nav-btn" onclick="openPage('breaks', this)">
+        <span>☕</span>
+        Breaks
+      </button>
+      <button class="nav-btn" onclick="openPage('conduct', this)">
+        <span>👥</span>
+        Conduct
+      </button>
+      <button class="nav-btn" onclick="openPage('more', this)">
+        <span>⚙️</span>
+        More
+      </button>
+    </nav>
+
+    <div id="toast" class="toast">Saved</div>
+  </div>
+
+  <script>
+    const structure = {
+      lobby: {
+        name: "Lobby",
+        colour: "lobby-bg",
+        sections: {
+          lobbygeneral: {
+            name: "General Lobby",
+            colour: "lobby-bg",
+            desc: "Main Lobby handover: duty managers, visitor numbers, briefing, conduct, service issues and safe/change.",
+            checks: [
+              "Briefing completed",
+              "Service issues checked",
+              "Safe/change checked",
+              "Conduct reviewed"
+            ],
+            fields: [
+              ["wbdms", "WB DMs", "Example: Jon, Dan G, Dan L, Inez..."],
+              ["visitors", "Visitor number", "Example: 4332, 19 groups..."],
+              ["briefing", "Briefing: key points mentioned, who led the brief including PM", "Example: Ensure we are date rotating correctly and training new starters..."],
+              ["shoutouts", "Shout outs, including the reasons", "Example: Freya was really good today and carried the Dragon close..."],
+              ["conduct", "Conduct including timekeeping, attitude and service", "Example: lateness, attitude issues, service concerns, CoC required..."],
+              ["observations", "Observations completed", "List all observations completed..."],
+              ["serviceissues", "Service issues in any Lobby areas", "Anything raised by visitor/complaints, who dealt with it, what was the solution, any food incidents..."],
+              ["safechange", "Safe & change run completed/required", "Example: £305 completed/required..."]
+            ]
+          },
+
+          foodhall: {
+            name: "Food Hall",
+            colour: "foodhall-bg",
+            desc: "Food Hall handover: sundae station, wastage, stock shortages, equipment and key notes.",
+            checks: [
+              "Sundae station checked",
+              "Wastage entered",
+              "Equipment checked",
+              "Close completed"
+            ],
+            fields: [
+              ["sundae", "Sundae station: anything required from pastry", "Example: mango needed, pastry required, no issues..."],
+              ["wastage", "Wastage: include stock from sundae station and drink fridges", "Example: n/a, cakes put through AM, drink fridge wastage..."],
+              ["shortages", "Stock shortages: food or drink", "Example: no peach iced tea, sandwiches ran out..."],
+              ["equipment", "Broken/logged equipment", "Example: nothing new, coffee machine logged, fridge issue..."],
+              ["anything", "Anything else to know", "Example: deluxe setup, cutlery wrapped, fridge is full..."]
+            ]
+          },
+
+          frog: {
+            name: "Frog",
+            colour: "frog-bg",
+            desc: "Frog handover: wastage, product availability, ice cream, equipment and extra notes.",
+            checks: [
+              "Wastage entered",
+              "Products checked",
+              "Ice cream checked",
+              "Area clean"
+            ],
+            fields: [
+              ["wastage", "Wastage: list anything of high volume", "Example: 12 bottles of milk wasted AM due to incident..."],
+              ["unavailable", "Any product unavailable during the day and the reasons", "Example: all products available during shift, will need more..."],
+              ["icecream", "Ice Cream Availability", "Example: taken out AM, low, full, defrosting..."],
+              ["equipment", "Broken/logged equipment", "Any equipment issues..."],
+              ["anything", "Anything else to know", "Example: all mason jars prepped, Gabriel cleaned dishwasher..."]
+            ]
+          },
+
+          dragon: {
+            name: "Dragon",
+            colour: "dragon-bg",
+            desc: "Dragon handover: wastage, stock availability, milk dates, equipment and extra notes.",
+            checks: [
+              "Wastage entered",
+              "Stock checked",
+              "Milk dates checked",
+              "Equipment checked"
+            ],
+            fields: [
+              ["wastage", "Wastage", "Example: all entered..."],
+              ["availability", "Stock availability: cakes, sandwiches, feature drink toppers", "Example: will need watermelon, sandwiches thrown, cakes low..."],
+              ["milk", "Dates of milk", "Example: 9th+..."],
+              ["equipment", "Broken/logged equipment", "Example: nothing new..."],
+              ["anything", "Anything else to know", "Example: lots of sandwiches thrown, put through the till..."]
+            ]
+          }
+        }
+      },
+
+      backlot: {
+        name: "Backlot",
+        colour: "backlot-bg",
+        sections: {
+          backlotbbb: {
+            name: "Backlot & BBB",
+            colour: "backlot-bg",
+            desc: "Backlot and Butterbeer Bar handover: briefing, service, quality checks, tankards, BBB stock, BOH prep and equipment.",
+            checks: [
+              "Quality checks completed",
+              "Tankards checked",
+              "BBB stock checked",
+              "BOH prep checked"
+            ],
+            fields: [
+              ["briefing", "Briefing: key points mentioned, who led the brief including PM", "Example: Quick and efficient service while maintaining service standards..."],
+              ["safechange", "Safe & change run required/completed", "Example: £970 required/completed..."],
+              ["shoutouts", "Shout outs, including the reasons", "Example: Isabella and James for being proactive..."],
+              ["conduct", "Conduct including timekeeping, attitude and service", "Example: Noah P CFC lateness..."],
+              ["observations", "Observations completed", "List all observations completed..."],
+              ["serviceissues", "Service issues", "Anything raised by visitor/complaints, who dealt with it, solution, food incidents..."],
+              ["quality", "Quality checks: how often completed and results", "Example: throughout the day, wasting anything under temp or hard buns..."],
+              ["tankards", "Tankards run required: yes or no", "Example: top up, yes, no, completed PM..."],
+              ["icecream", "Ice cream levels", "Example: 13 in walk-in, 15 at BBB, 30 defrosting..."],
+              ["toppings", "Topping levels", "Example: 9 mixed in walk-in, 3 at BBB..."],
+              ["wastage", "Wastage for all areas FOH & BOH", "Please list anything that was high volume..."],
+              ["product", "Product availability: all sweet treats for BBB", "Example: ran out of meringue, 1 trolley cupcakes, 5 trays cookies, loads of fudge..."],
+              ["bohprep", "BOH prep: ensure prep completed is for day ahead, not on the day for the day", "Example: salad trolley, buns, onions, salsa dipping sauce..."],
+              ["equipment", "Broken/logged equipment", "Example: ice machine, pass 1 coffee machine still logged..."],
+              ["anything", "Anything else to know", "Example: didn’t use prep kitchen fryer, sauces made, trays left..."]
+            ]
+          },
+
+          boh: {
+            name: "BOH Prep",
+            colour: "boh-bg",
+            desc: "BOH prep subsection within Backlot: prep for the day ahead, cleaning, wastage, dates and equipment.",
+            checks: [
+              "Prep checked",
+              "Cleaning checked",
+              "Date labels checked",
+              "Equipment checked"
+            ],
+            fields: [
+              ["prep", "BOH prep: ensure prep completed is for day ahead, not on the day for the day", "Example: salad trolley, buns, onions, sauces..."],
+              ["wastage", "BOH wastage", "Any high-volume or unusual wastage..."],
+              ["dates", "Date labelling notes", "Any product date or rotation concerns..."],
+              ["cleaning", "Cleaning completed", "Dishwasher, fryer, prep kitchen, surfaces..."],
+              ["equipment", "Broken/logged equipment", "Example: ice machine, fryer, dishwasher..."],
+              ["anything", "Anything else to know", "Example: 2 trays salsa left, ranch made, chimi made..."]
+            ]
+          }
+        }
+      },
+
+      hogwarts: {
+        name: "Hogwarts Table",
+        colour: "hogwarts-bg",
+        sections: {
+          hogwartstable: {
+            name: "Hogwarts Table",
+            colour: "hogwarts-bg",
+            desc: "Hogwarts Table handover: bookings, visitors, no-shows, guest issues, allergens, stock shortages and closing notes.",
+            checks: [
+              "Bookings checked",
+              "No-shows checked",
+              "Allergen notes checked",
+              "Lamps checked"
+            ],
+            fields: [
+              ["briefing", "Briefing: key points mentioned, who led the brief including PM", "Example: details, clear tables, initiative, allergens communicated with kitchen..."],
+              ["shoutouts", "Shout outs, including the reasons", "Example: Jess and Jess worked well on Hogwarts..."],
+              ["conduct", "Conduct including timekeeping, attitude and service", "Example: staff moved to other areas because quiet, service issue, lateness..."],
+              ["observations", "Observations completed", "List observations completed..."],
+              ["serviceissues", "Service issues", "Anything raised by visitor/complaints, who dealt with it, what was the solution, any food incidents..."],
+              ["visitors", "Total visitors", "Example: 10 including cancellations within 48 hours..."],
+              ["noshows", "No shows", "Example: none, booking number, outcome..."],
+              ["checks", "All checks cleared, including no shows", "Example: yes, no-shows cleared, cancellations checked..."],
+              ["bbcharged", "BB charged: yes or no", "Example: yes/no..."],
+              ["shortages", "Stock shortages: food or drink", "Example: need Cotswolds gin..."],
+              ["anything", "Anything else", "Example: lamps left on charge..."],
+              ["lamps", "Lamps left on charge", "Yes/no or any notes..."]
+            ]
+          }
+        }
+      }
+    };
+
+    const auditFields = [
+      "Cleanliness standards",
+      "Date labelling correct",
+      "Allergen communication",
+      "Equipment condition",
+      "Guest-facing readiness"
+    ];
+
+    let currentMain = "lobby";
+    let currentSection = "lobbygeneral";
+    let currentStatus = "Green";
+    let selectedDate = todayISO();
+    let uploadedPhotos = [];
+    let state = {
+      handovers: {},
+      audits: [],
+      staff: ["James", "Ella", "Aaron", "Freya", "Noah"],
+      activeBreaks: {},
+      breakHistory: [],
+      conductNotes: []
+    };
+    let conductType = "";
+
+    function todayISO() {
+      return new Date().toISOString().split("T")[0];
+    }
+
+    function formatDate(iso) {
+      return new Date(iso + "T12:00:00").toLocaleDateString("en-GB", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      });
+    }
+
+    function currentDayHandovers() {
+      if (!state.handovers[selectedDate]) state.handovers[selectedDate] = {};
+      return state.handovers[selectedDate];
+    }
+
+    function init() {
+      loadState();
+
+      document.getElementById("todayText").innerText = new Date().toLocaleDateString("en-GB", {
+        weekday: "long",
+        day: "numeric",
+        month: "short"
+      });
+
+      document.getElementById("handoverDate").value = selectedDate;
+      document.getElementById("calendarDate").value = selectedDate;
+      document.getElementById("auditDate").value = todayISO();
+      document.getElementById("conductDate").value = todayISO();
+
+      renderMainTabs();
+      renderSubTabs();
+      renderForm();
+      renderDashboard();
+      renderSavedDays();
+      renderStaff();
+      renderBreaks();
+      renderConduct();
+      renderConductHistory();
+      renderAuditChecklist();
+      applySettings(false);
+    }
+
+    function openPage(pageId, button) {
+      document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
+      document.getElementById(pageId).classList.add("active");
+
+      document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
+      button.classList.add("active");
+
+      const titles = {
+        handovers: ["Handovers", "Daily handovers, close checks and next-shift priorities."],
+        audits: ["Audit Checks", "Cleanliness, labelling, allergens, equipment and readiness."],
+        breaks: ["Break Times", "Start breaks, finish breaks and review history."],
+        conduct: ["Conduct", "Shout-outs, staff notes, service issues and follow-ups."],
+        more: ["More", "Storage plan, templates, reports, export and settings."]
+      };
+
+      document.getElementById("pageTitle").innerText = titles[pageId][0];
+      document.getElementById("pageSubtitle").innerText = titles[pageId][1];
+      document.getElementById("handoverTopActions").style.display = pageId === "handovers" ? "grid" : "none";
+    }
+
+    function changeSelectedDate(date) {
+      selectedDate = date;
+      document.getElementById("handoverDate").value = date;
+      document.getElementById("calendarDate").value = date;
+
+      currentStatus = currentDayHandovers()[currentSection]?.status || "Green";
+
+      renderDashboard();
+      renderSavedDays();
+      updateStatusButtons();
+      renderForm();
+      document.getElementById("summaryOutput").style.display = "none";
+      toast(`Viewing ${formatDate(selectedDate)}`);
+    }
+
+    function toggleCalendar() {
+      document.getElementById("calendarPanel").classList.toggle("open");
+      renderSavedDays();
+    }
+
+    function renderSavedDays() {
+      const box = document.getElementById("savedDaysList");
+      box.innerHTML = "";
+
+      const days = Object.keys(state.handovers).sort().reverse();
+
+      if (!days.length) {
+        box.innerHTML = `<p class="small">No saved handover days yet.</p>`;
+        return;
+      }
+
+      days.forEach(day => {
+        const count = Object.keys(state.handovers[day] || {}).length;
+
+        const row = document.createElement("div");
+        row.className = "area-row";
+        row.onclick = () => changeSelectedDate(day);
+        row.innerHTML = `
+          <div>
+            <h4>${formatDate(day)}</h4>
+            <p>${count} section handover${count === 1 ? "" : "s"} saved</p>
+          </div>
+          <span class="pill">${day === selectedDate ? "Viewing" : "Open"}</span>
+        `;
+
+        box.appendChild(row);
+      });
+    }
+
+    function renderMainTabs() {
+      const wrap = document.getElementById("mainAreaTabs");
+      wrap.innerHTML = "";
+
+      Object.keys(structure).forEach(key => {
+        const btn = document.createElement("button");
+        btn.className = `area-chip ${structure[key].colour} ${key === currentMain ? "active" : ""}`;
+        btn.innerText = structure[key].name;
+        btn.onclick = () => selectMain(key);
+        wrap.appendChild(btn);
+      });
+    }
+
+    function renderSubTabs() {
+      const wrap = document.getElementById("subAreaTabs");
+      wrap.innerHTML = "";
+
+      const sections = structure[currentMain].sections;
+
+      document.getElementById("subAreaTitle").innerText =
+        currentMain === "lobby" ? "Lobby section" :
+        currentMain === "backlot" ? "Backlot section" :
+        "Hogwarts section";
+
+      Object.keys(sections).forEach(key => {
+        const section = sections[key];
+        const btn = document.createElement("button");
+        btn.className = `sub-chip ${section.colour} ${key === currentSection ? "active" : ""}`;
+        btn.innerText = section.name;
+        btn.onclick = () => selectSection(key);
+        wrap.appendChild(btn);
+      });
+
+      updateHero();
+    }
+
+    function selectMain(key) {
+      currentMain = key;
+      currentSection = Object.keys(structure[key].sections)[0];
+      currentStatus = currentDayHandovers()[currentSection]?.status || "Green";
+      uploadedPhotos = [];
+      resetPhotoInput();
+      renderMainTabs();
+      renderSubTabs();
+      renderForm();
+      updateStatusButtons();
+    }
+
+    function selectSection(key) {
+      currentSection = key;
+      currentStatus = currentDayHandovers()[currentSection]?.status || "Green";
+      uploadedPhotos = [];
+      resetPhotoInput();
+      renderSubTabs();
+      renderForm();
+      updateStatusButtons();
+    }
+
+    function updateHero() {
+      const section = structure[currentMain].sections[currentSection];
+      document.getElementById("selectedAreaTitle").innerText = section.name;
+      document.getElementById("selectedAreaDesc").innerText = section.desc;
+      document.getElementById("areaHero").className = `hero ${section.colour}`;
+    }
+
+    function renderForm() {
+      const form = document.getElementById("dynamicForm");
+      const section = structure[currentMain].sections[currentSection];
+      const existing = currentDayHandovers()[currentSection];
+      form.innerHTML = "";
+
+      const checkLabel = document.createElement("label");
+      checkLabel.innerText = "Close / check items";
+      form.appendChild(checkLabel);
+
+      const grid = document.createElement("div");
+      grid.className = "check-grid";
+
+      section.checks.forEach(check => {
+        const btn = document.createElement("button");
+        btn.className = "check-btn";
+        btn.type = "button";
+        btn.innerText = check;
+        if (existing?.checks?.includes(check)) btn.classList.add("checked");
+        btn.onclick = () => btn.classList.toggle("checked");
+        grid.appendChild(btn);
+      });
+
+      form.appendChild(grid);
+
+      section.fields.forEach(([id, label, placeholder]) => {
+        const labelEl = document.createElement("label");
+        labelEl.innerText = label;
+
+        const textarea = document.createElement("textarea");
+        textarea.id = `field-${id}`;
+        textarea.placeholder = placeholder;
+        textarea.value = existing?.fields?.[label] || "";
+
+        form.appendChild(labelEl);
+        form.appendChild(textarea);
+      });
+    }
+
+    function setStatus(status, btn) {
+      currentStatus = status;
+      document.querySelectorAll(".status-btn").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+    }
+
+    function updateStatusButtons() {
+      document.querySelectorAll(".status-btn").forEach(btn => {
+        btn.classList.remove("selected");
+        if (btn.innerText === currentStatus) btn.classList.add("selected");
+      });
+    }
+
+    function previewPhotos(event) {
+      uploadedPhotos = Array.from(event.target.files);
+      const preview = document.getElementById("photoPreview");
+      preview.innerHTML = "";
+
+      uploadedPhotos.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function resetPhotoInput() {
+      document.getElementById("photoPreview").innerHTML = "";
+      document.getElementById("photoInput").value = "";
+    }
+
+    function submitArea() {
+      const section = structure[currentMain].sections[currentSection];
+      const fields = {};
+
+      section.fields.forEach(([id, label]) => {
+        fields[label] = document.getElementById(`field-${id}`).value.trim();
+      });
+
+      const checks = Array.from(document.querySelectorAll("#dynamicForm .check-btn.checked"))
+        .map(btn => btn.innerText);
+
+      currentDayHandovers()[currentSection] = {
+        date: selectedDate,
+        main: structure[currentMain].name,
+        section: section.name,
+        status: currentStatus,
+        fields,
+        checks,
+        photoCount: uploadedPhotos.length,
+        time: new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })
+      };
+
+      saveState();
+      renderDashboard();
+      renderSavedDays();
+      toast(`${section.name} handover saved for ${formatDate(selectedDate)}`);
+    }
+
+    function getMainNote(data) {
+      if (!data) return "No handover submitted yet.";
+
+      for (const key in data.fields) {
+        if (data.fields[key]) return `${key}: ${data.fields[key]}`;
+      }
+
+      if (data.checks.length) return `${data.checks.length} checks completed.`;
+
+      return "Area checked, no major notes.";
+    }
+
+    function renderDashboard() {
+      const dash = document.getElementById("handoverDashboard");
+      dash.innerHTML = "";
+
+      const day = currentDayHandovers();
+      let mainChecked = 0;
+      let red = 0;
+      let photos = 0;
+
+      Object.keys(structure).forEach(mainKey => {
+        const main = structure[mainKey];
+        const sectionKeys = Object.keys(main.sections);
+        const completeCount = sectionKeys.filter(k => day[k]).length;
+        if (completeCount === sectionKeys.length) mainChecked++;
+
+        sectionKeys.forEach(sectionKey => {
+          const section = main.sections[sectionKey];
+          const data = day[sectionKey];
+
+          if (data?.status === "Red") red++;
+          if (data?.photoCount) photos += data.photoCount;
+
+          const row = document.createElement("div");
+          row.className = "area-row";
+
+          const statusClass =
+            data?.status === "Red" ? "red-text" :
+            data?.status === "Amber" ? "amber-text" :
+            data?.status === "Green" ? "green-text" : "";
+
+          row.innerHTML = `
+            <div>
+              <h4>${main.name} — ${section.name}</h4>
+              <p>${data ? getMainNote(data) : `No update for ${formatDate(selectedDate)}.`}</p>
+            </div>
+            <span class="pill ${statusClass}">${data ? data.status : "—"}</span>
+          `;
+
+          dash.appendChild(row);
+        });
+      });
+
+      document.getElementById("checkedCount").innerText = `${mainChecked}/3`;
+      document.getElementById("redCount").innerText = red;
+      document.getElementById("photoCount").innerText = photos;
+    }
+
+    function generateSummary() {
+      const list = document.getElementById("summaryList");
+      const output = document.getElementById("summaryOutput");
+      const day = currentDayHandovers();
+
+      document.getElementById("summaryTitle").innerText = `Opening Summary — ${formatDate(selectedDate)}`;
+      list.innerHTML = "";
+
+      Object.keys(structure).forEach(mainKey => {
+        const main = structure[mainKey];
+
+        Object.keys(main.sections).forEach(sectionKey => {
+          const section = main.sections[sectionKey];
+          const data = day[sectionKey];
+          const li = document.createElement("li");
+
+          if (!data) {
+            li.innerHTML = `<strong>${main.name} — ${section.name}:</strong> No handover submitted.`;
+          } else {
+            li.innerHTML = `<strong>${main.name} — ${data.section}:</strong> ${data.status} — ${getMainNote(data)} ${data.photoCount ? `(${data.photoCount} photo${data.photoCount > 1 ? "s" : ""})` : ""}`;
+          }
+
+          list.appendChild(li);
+        });
+      });
+
+      output.style.display = "block";
+      output.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function renderAuditChecklist() {
+      const box = document.getElementById("auditChecklist");
+      box.innerHTML = "";
+
+      auditFields.forEach(field => {
+        box.innerHTML += `
+          <div class="audit-item">
+            <div class="audit-head">
+              <strong>${field}</strong>
+              <select class="score-select auditSelect" onchange="calculateAudit()">
+                <option value="100">Pass</option>
+                <option value="70">Minor issue</option>
+                <option value="30">Major issue</option>
+                <option value="0">Fail</option>
+              </select>
+            </div>
+            <textarea placeholder="Notes / evidence..."></textarea>
+          </div>
+        `;
+      });
+    }
+
+    function calculateAudit() {
+      const selects = Array.from(document.querySelectorAll(".auditSelect"));
+      const total = selects.reduce((sum, s) => sum + Number(s.value), 0);
+      const avg = Math.round(total / selects.length);
+      document.getElementById("auditScore").innerText = `${avg}%`;
+      document.getElementById("auditScore").style.background = `conic-gradient(var(--accent) ${avg}%, #eee 0)`;
+    }
+
+    function submitAudit() {
+      const selects = Array.from(document.querySelectorAll(".auditSelect"));
+      const score = Math.round(selects.reduce((sum, s) => sum + Number(s.value), 0) / selects.length);
+
+      state.audits.unshift({
+        date: document.getElementById("auditDate").value,
+        area: document.getElementById("auditArea").value,
+        score
+      });
+
+      saveState();
+      toast("Audit check saved");
+    }
+
+    function renderStaff() {
+      const sel = document.getElementById("breakEmployee");
+      const filter = document.getElementById("breakFilterName");
+
+      sel.innerHTML = "";
+      filter.innerHTML = `<option>All staff</option>`;
+
+      state.staff.forEach(name => {
+        sel.innerHTML += `<option value="${name}">${name}</option>`;
+        filter.innerHTML += `<option value="${name}">${name}</option>`;
+      });
+
+      document.getElementById("staffListText").innerText = `Current staff: ${state.staff.join(", ")}`;
+    }
+
+    function startBreak() {
+      const name = document.getElementById("breakEmployee").value;
+      if (state.activeBreaks[name]) return toast(`${name} is already on break`);
+
+      state.activeBreaks[name] = Date.now();
+      saveState();
+      renderBreaks();
+      toast(`${name} started break`);
+    }
+
+    function finishBreak() {
+      const name = document.getElementById("breakEmployee").value;
+      if (!state.activeBreaks[name]) return toast(`${name} is not currently on break`);
+
+      const start = state.activeBreaks[name];
+      const finish = Date.now();
+      const duration = Math.max(1, Math.round((finish - start) / 60000));
+
+      state.breakHistory.unshift({
+        name,
+        date: todayISO(),
+        start,
+        finish,
+        duration
+      });
+
+      delete state.activeBreaks[name];
+      saveState();
+      renderBreaks();
+      toast(`${name} finished break`);
+    }
+
+    function renderBreaks() {
+      const current = document.getElementById("currentBreaks");
+      current.innerHTML = "";
+
+      const activeNames = Object.keys(state.activeBreaks);
+
+      if (!activeNames.length) {
+        current.innerHTML = `<div class="card"><p class="small">Nobody is currently on break.</p></div>`;
+      } else {
+        activeNames.forEach(name => {
+          const mins = Math.max(1, Math.round((Date.now() - state.activeBreaks[name]) / 60000));
+          current.innerHTML += `
+            <div class="break-card">
+              <div class="break-top">
+                <div>
+                  <h4>${name}</h4>
+                  <span>Started at ${new Date(state.activeBreaks[name]).toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit"})}</span>
+                </div>
+                <div class="pill ${mins > 35 ? "red-text" : mins > 30 ? "amber-text" : "green-text"}">${mins} mins</div>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      const avg = state.breakHistory.length
+        ? Math.round(state.breakHistory.reduce((s, l) => s + l.duration, 0) / state.breakHistory.length)
+        : 0;
+
+      document.getElementById("onBreakCount").innerText = activeNames.length;
+      document.getElementById("avgBreak").innerText = `${avg}m`;
+      document.getElementById("breakLogs").innerText = state.breakHistory.length;
+
+      renderBreakHistory();
+      generateBreakPatterns(false);
+    }
+
+    function toggleBreakHistory() {
+      document.getElementById("breakHistoryPanel").classList.toggle("open");
+      renderBreakHistory();
+    }
+
+    function clearBreakFilters() {
+      document.getElementById("breakFilterName").value = "All staff";
+      document.getElementById("breakFilterDate").value = "";
+      renderBreakHistory();
+    }
+
+    function renderBreakHistory() {
+      const box = document.getElementById("filteredBreakHistory");
+      const name = document.getElementById("breakFilterName")?.value || "All staff";
+      const date = document.getElementById("breakFilterDate")?.value || "";
+
+      let logs = state.breakHistory;
+
+      if (name !== "All staff") logs = logs.filter(l => l.name === name);
+      if (date) logs = logs.filter(l => l.date === date);
+
+      if (!logs.length) {
+        box.innerHTML = `<p class="small">No break logs match these filters.</p>`;
+        return;
+      }
+
+      box.innerHTML = "";
+
+      logs.forEach(log => {
+        box.innerHTML += `
+          <div class="break-card">
+            <div class="break-top">
+              <div>
+                <h4>${log.name}</h4>
+                <span>${formatDate(log.date)} · ${new Date(log.start).toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit"})}–${new Date(log.finish).toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit"})}</span>
+              </div>
+              <div class="pill ${log.duration > 35 ? "red-text" : log.duration > 30 ? "amber-text" : "green-text"}">${log.duration} mins</div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function generateBreakPatterns(showToast = true) {
+      const box = document.getElementById("breakPatterns");
+
+      if (!state.breakHistory.length) {
+        box.innerHTML = `<p class="small">No break data yet. Start and finish breaks to generate patterns.</p>`;
+        return;
+      }
+
+      const byStaff = {};
+
+      state.breakHistory.forEach(log => {
+        if (!byStaff[log.name]) byStaff[log.name] = [];
+        byStaff[log.name].push(log.duration);
+      });
+
+      box.innerHTML = "";
+
+      Object.keys(byStaff).forEach(name => {
+        const logs = byStaff[name];
+        const avg = Math.round(logs.reduce((a,b) => a + b, 0) / logs.length);
+        const extended = logs.filter(x => x > 35).length;
+        const width = Math.min(100, (avg / 45) * 100);
+
+        box.innerHTML += `
+          <div style="margin-bottom:14px;">
+            <strong>${name}</strong>
+            <p class="small">Average ${avg} mins · ${extended} extended break${extended === 1 ? "" : "s"}</p>
+            <div class="bar"><span style="width:${width}%"></span></div>
+          </div>
+        `;
+      });
+
+      if (showToast) toast("Break patterns generated");
+    }
+
+    function selectConduct(btn) {
+      document.querySelectorAll("#conduct .check-btn").forEach(b => b.classList.remove("checked"));
+      btn.classList.add("checked");
+      conductType = btn.innerText;
+    }
+
+    function saveConduct() {
+      const name = document.getElementById("conductName").value.trim();
+      const details = document.getElementById("conductDetails").value.trim();
+      const date = document.getElementById("conductDate").value;
+      const follow = document.getElementById("conductFollow").value;
+
+      if (!name || !details || !conductType) return toast("Add type, name and details");
+
+      state.conductNotes.unshift({
+        id: Date.now(),
+        type: conductType,
+        name,
+        details,
+        date,
+        follow
+      });
+
+      document.getElementById("conductName").value = "";
+      document.getElementById("conductDetails").value = "";
+      document.querySelectorAll("#conduct .check-btn").forEach(b => b.classList.remove("checked"));
+      conductType = "";
+
+      saveState();
+      renderConduct();
+      renderConductHistory();
+      toast("Staff note saved");
+    }
+
+    function renderConduct() {
+      const list = document.getElementById("conductList");
+      list.innerHTML = "";
+
+      const recent = state.conductNotes.slice(0, 5);
+
+      if (!recent.length) {
+        list.innerHTML = `<div class="card"><p class="small">No conduct or shout-out notes yet.</p></div>`;
+        return;
+      }
+
+      recent.forEach(note => {
+        list.appendChild(conductRow(note));
+      });
+    }
+
+    function toggleConductHistory() {
+      document.getElementById("conductHistoryPanel").classList.toggle("open");
+      renderConductHistory();
+    }
+
+    function clearConductFilters() {
+      document.getElementById("conductFilterName").value = "";
+      document.getElementById("conductFilterDate").value = "";
+      document.getElementById("conductFilterType").value = "All types";
+      renderConductHistory();
+    }
+
+    function renderConductHistory() {
+      const box = document.getElementById("filteredConductHistory");
+      const name = (document.getElementById("conductFilterName")?.value || "").toLowerCase();
+      const date = document.getElementById("conductFilterDate")?.value || "";
+      const type = document.getElementById("conductFilterType")?.value || "All types";
+
+      let notes = state.conductNotes;
+
+      if (name) notes = notes.filter(n => n.name.toLowerCase().includes(name));
+      if (date) notes = notes.filter(n => n.date === date);
+      if (type !== "All types") notes = notes.filter(n => n.type === type);
+
+      box.innerHTML = "";
+
+      if (!notes.length) {
+        box.innerHTML = `<p class="small">No staff notes match these filters.</p>`;
+        return;
+      }
+
+      notes.forEach(note => {
+        box.appendChild(conductRow(note));
+      });
+    }
+
+    function conductRow(note) {
+      const row = document.createElement("div");
+      row.className = "area-row";
+      const colour = note.type === "Shout-out" ? "green-text" : note.follow.includes("CoC") ? "red-text" : "amber-text";
+
+      row.innerHTML = `
+        <div>
+          <h4>${note.type}: ${note.name}</h4>
+          <p>${formatDate(note.date)} · ${note.details}</p>
+        </div>
+        <span class="pill ${colour}">${note.follow.split(" ")[0]}</span>
+      `;
+
+      return row;
+    }
+
+    function togglePanel(id) {
+      document.getElementById(id).classList.toggle("open");
+    }
+
+    function addStaff() {
+      const input = document.getElementById("newStaffName");
+      const name = input.value.trim();
+      if (!name) return toast("Enter a staff name");
+      if (state.staff.includes(name)) return toast("Staff member already exists");
+
+      state.staff.push(name);
+      input.value = "";
+      saveState();
+      renderStaff();
+      toast(`${name} added`);
+    }
+
+    function exportEmailSummary() {
+      const panel = document.getElementById("exportBox");
+      panel.classList.add("open");
+
+      let text = `ShiftFlow Handover Summary — ${formatDate(selectedDate)}\n\n`;
+      const day = currentDayHandovers();
+
+      Object.keys(structure).forEach(mainKey => {
+        const main = structure[mainKey];
+        text += `${main.name}\n`;
+
+        Object.keys(main.sections).forEach(sectionKey => {
+          const section = main.sections[sectionKey];
+          const data = day[sectionKey];
+
+          if (!data) {
+            text += `- ${section.name}: No handover submitted.\n`;
+          } else {
+            text += `- ${data.section}: ${data.status} — ${getMainNote(data)}\n`;
+          }
+        });
+
+        text += `\n`;
+      });
+
+      document.getElementById("exportText").value = text;
+      toast("Export generated");
+    }
+
+    function applySettings(show = true) {
+      const role = document.getElementById("roleSelect")?.value || "Manager";
+      const theme = document.getElementById("themeSelect")?.value || "light";
+      const accent = document.getElementById("accentSelect")?.value || "#111111";
+
+      document.getElementById("rolePill").innerText = role;
+      document.getElementById("roleText").innerText = `${role} Access`;
+      document.body.classList.toggle("dark", theme === "dark");
+      document.documentElement.style.setProperty("--accent", accent);
+
+      localStorage.setItem("shiftflow_settings", JSON.stringify({ role, theme, accent }));
+
+      if (show) toast("Settings applied");
+    }
+
+    function resetPrototype() {
+      if (!confirm("Reset all prototype data?")) return;
+      localStorage.removeItem("shiftflow_state");
+      state = {
+        handovers: {},
+        audits: [],
+        staff: ["James", "Ella", "Aaron", "Freya", "Noah"],
+        activeBreaks: {},
+        breakHistory: [],
+        conductNotes: []
+      };
+      selectedDate = todayISO();
+      currentMain = "lobby";
+      currentSection = "lobbygeneral";
+      document.getElementById("handoverDate").value = selectedDate;
+      document.getElementById("calendarDate").value = selectedDate;
+      saveState();
+      renderMainTabs();
+      renderSubTabs();
+      renderForm();
+      renderDashboard();
+      renderSavedDays();
+      renderStaff();
+      renderBreaks();
+      renderConduct();
+      renderConductHistory();
+      toast("Prototype reset");
+    }
+
+    function saveState() {
+      localStorage.setItem("shiftflow_state", JSON.stringify(state));
+    }
+
+    function loadState() {
+      const saved = JSON.parse(localStorage.getItem("shiftflow_state") || "{}");
+      state = {
+        handovers: saved.handovers || {},
+        audits: saved.audits || [],
+        staff: saved.staff || ["James", "Ella", "Aaron", "Freya", "Noah"],
+        activeBreaks: saved.activeBreaks || {},
+        breakHistory: saved.breakHistory || [],
+        conductNotes: saved.conductNotes || []
+      };
+
+      const settings = JSON.parse(localStorage.getItem("shiftflow_settings") || "{}");
+
+      setTimeout(() => {
+        if (settings.role) document.getElementById("roleSelect").value = settings.role;
+        if (settings.theme) document.getElementById("themeSelect").value = settings.theme;
+        if (settings.accent) document.getElementById("accentSelect").value = settings.accent;
+        applySettings(false);
+      }, 0);
+    }
+
+    function toast(message) {
+      const t = document.getElementById("toast");
+      t.innerText = message;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 1700);
+    }
+
+    init();
+  </script>
+</body>
+</html>
