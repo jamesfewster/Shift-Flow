@@ -22,6 +22,7 @@
       --muted: #777777;
       --line: #eeeeee;
       --accent: #111111;
+
       --lobby: #eee4ff;
       --backlot: #dff1ff;
       --hogwarts: #e4edff;
@@ -32,6 +33,7 @@
       --danger: #ffe2dc;
       --success: #ddf8e8;
       --warning: #fff3cf;
+      --blue: #e4edff;
     }
 
     body {
@@ -127,7 +129,13 @@
       display: block;
     }
 
-    .card, .stat, .row, .break-card, .audit-item, .staff-profile {
+    .card,
+    .stat,
+    .row,
+    .break-card,
+    .staff-profile,
+    .zone,
+    .audit-question {
       background: var(--panel);
       border: 1px solid var(--line);
     }
@@ -235,7 +243,8 @@
     .tiny-btn,
     .chip,
     .status-btn,
-    .quick-btn {
+    .quick-btn,
+    .magnet {
       font-weight: 950;
       border-radius: 16px;
     }
@@ -276,7 +285,8 @@
     }
 
     .chip-row,
-    .quick-row {
+    .quick-row,
+    .magnet-row {
       display: flex;
       gap: 9px;
       overflow-x: auto;
@@ -285,7 +295,8 @@
     }
 
     .chip-row::-webkit-scrollbar,
-    .quick-row::-webkit-scrollbar {
+    .quick-row::-webkit-scrollbar,
+    .magnet-row::-webkit-scrollbar {
       display: none;
     }
 
@@ -391,6 +402,7 @@
     .danger-bg { background: var(--danger); }
     .success-bg { background: var(--success); }
     .warning-bg { background: var(--warning); }
+    .blue-bg { background: var(--blue); }
 
     .hidden {
       display: none !important;
@@ -588,6 +600,65 @@
       font-weight: 900;
     }
 
+    .board-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .zone {
+      min-height: 115px;
+      border-radius: 22px;
+      padding: 12px;
+      background: var(--panel);
+    }
+
+    .zone h4 {
+      margin: 0 0 8px;
+      font-size: 14px;
+    }
+
+    .zone.drop-hover {
+      outline: 3px solid var(--accent);
+    }
+
+    .magnet {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--text);
+      padding: 9px 10px;
+      margin: 3px 4px 4px 0;
+      font-size: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+      user-select: none;
+    }
+
+    .magnet.selected {
+      background: var(--accent);
+      color: white;
+    }
+
+    .audit-question {
+      border-radius: 22px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .audit-question h4 {
+      margin: 0 0 10px;
+    }
+
+    .photo-note {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -599,7 +670,7 @@
       backdrop-filter: blur(16px);
       border-top: 1px solid var(--line);
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       padding: 8px 4px 18px;
       z-index: 50;
     }
@@ -691,15 +762,16 @@
   <div id="loginScreen" class="login-screen">
     <div class="login-card">
       <h2>ShiftFlow</h2>
-      <p>Prototype access for supervisors and managers. Real secure accounts can be added later with a database.</p>
+      <p>Prototype access for supervisors, managers and admins. This is local-only until real accounts are added later.</p>
 
       <label>Your name</label>
       <select id="loginName"></select>
 
-      <label>Role</label>
+      <label>Access role</label>
       <select id="loginRole">
-        <option>Manager</option>
         <option>Supervisor</option>
+        <option>Manager</option>
+        <option>Admin</option>
       </select>
 
       <button class="primary-btn" onclick="login()">Enter ShiftFlow</button>
@@ -710,7 +782,7 @@
     <div class="topbar">
       <div class="topline">
         <span id="todayText">Today</span>
-        <span id="roleText">Manager Access</span>
+        <span id="roleText">Access</span>
       </div>
 
       <div class="title-row">
@@ -718,7 +790,7 @@
           <h1 id="pageTitle">Today</h1>
           <p class="subtitle" id="pageSubtitle">Your shift command centre.</p>
         </div>
-        <div id="rolePill" class="role-pill">Manager</div>
+        <div id="rolePill" class="role-pill">Role</div>
       </div>
     </div>
 
@@ -726,7 +798,7 @@
       <div id="homeView">
         <div class="hero">
           <h2 id="homeGreeting">Good evening</h2>
-          <p>Start, continue and review today’s operational handover from one clean dashboard.</p>
+          <p>Set the team, plan the floor, control breaks and complete handovers from one place.</p>
           <button id="startHandoverBtn" class="primary-btn" onclick="openWizard()">Start Today’s Handover</button>
         </div>
 
@@ -759,38 +831,112 @@
           <h3 style="margin-top:0;">Calendar Review</h3>
           <label>Selected day</label>
           <input type="date" id="selectedDateInput" onchange="changeDate(this.value)" />
+
           <div class="three-grid">
             <button class="tiny-btn light" onclick="changeDate(todayISO())">Today</button>
             <button class="tiny-btn light" onclick="changeDate(offsetDate(-1))">Yesterday</button>
             <button class="tiny-btn light" onclick="renderSavedDays()">Refresh</button>
           </div>
+
           <div id="savedDaysList" style="margin-top:12px;"></div>
         </div>
 
-        <div class="section-title">Today’s progress</div>
+        <div class="section-title">Today’s team</div>
         <div class="card">
-          <div id="todayProgress"></div>
+          <button class="primary-btn" onclick="togglePanel('todayTeamPanel')">Set Up Today’s Team</button>
+
+          <div id="todayTeamPanel" class="panel">
+            <label>Staff member</label>
+            <select id="teamStaff"></select>
+
+            <label>Start time</label>
+            <input type="time" id="teamStartTime" />
+
+            <label>Planned break</label>
+            <input type="time" id="teamBreakTime" />
+
+            <button class="primary-btn" onclick="addToTodayTeam()">Add to Today’s Team</button>
+            <button class="secondary-btn" onclick="autoPlanBreaks()">Auto-suggest Break Times</button>
+          </div>
+
+          <div id="todayTeamList" style="margin-top:12px;"></div>
         </div>
 
-        <div class="section-title">Urgent actions</div>
+        <div class="section-title">Shift Board</div>
         <div class="card">
-          <div id="urgentActions"></div>
+          <p class="small">Tap a staff magnet, then tap a zone. On desktop, you can also drag and drop.</p>
+
+          <div class="chip-row">
+            <button id="boardLobbyChip" class="chip active lobby-bg" onclick="setBoardArea('lobby')">Lobby</button>
+            <button id="boardBacklotChip" class="chip backlot-bg" onclick="setBoardArea('backlot')">Backlot</button>
+            <button id="boardHogwartsChip" class="chip hogwarts-bg" onclick="setBoardArea('hogwarts')">Hogwarts</button>
+          </div>
+
+          <label>Unassigned magnets</label>
+          <div id="unassignedMagnets" class="magnet-row"></div>
+
+          <div id="boardZones" class="board-grid" style="margin-top:10px;"></div>
         </div>
 
-        <div class="section-title">Unresolved from previous days</div>
-        <div class="card">
-          <div id="unresolvedIssues"></div>
+        <div class="section-title manager-only">Manager Checks</div>
+        <div class="card manager-only">
+          <p class="small">Manager/Admin only: audit areas, log evidence and turn failed points into actions.</p>
+
+          <label>Audit area</label>
+          <select id="auditAreaHome">
+            <option>Lobby</option>
+            <option>Backlot</option>
+            <option>Hogwarts Table</option>
+          </select>
+
+          <button class="primary-btn" onclick="openAuditBuilder()">Start Area Audit</button>
+          <button class="secondary-btn" onclick="togglePanel('auditHistoryPreview')">View Recent Audit Issues</button>
+
+          <div id="auditHistoryPreview" class="panel" style="margin-top:12px;"></div>
         </div>
 
-        <div class="section-title">Area status</div>
-        <div id="areaStatusCards"></div>
+        <div id="auditBuilder" class="hidden">
+          <div class="card">
+            <button class="tiny-btn light" onclick="closeAuditBuilder()">← Back to Today</button>
+            <h3 id="auditBuilderTitle">Area Audit</h3>
+            <p class="small">Each question can include a result, note, photo and action owner.</p>
+          </div>
 
-        <div class="section-title">Final sign-off</div>
-        <div class="card">
-          <label>Signed off by</label>
-          <select id="signoffBy"></select>
-          <button class="primary-btn" onclick="finalSignoff()">Final Sign-Off</button>
-          <p id="signoffStatus" class="small">Not signed off yet.</p>
+          <div id="auditQuestionList"></div>
+
+          <div class="card">
+            <label>Audited by</label>
+            <select id="auditBy"></select>
+            <button class="primary-btn" onclick="submitAudit()">Submit Audit</button>
+          </div>
+        </div>
+
+        <div id="normalHomeBlocks">
+          <div class="section-title">Today’s progress</div>
+          <div class="card">
+            <div id="todayProgress"></div>
+          </div>
+
+          <div class="section-title">Urgent actions</div>
+          <div class="card">
+            <div id="urgentActions"></div>
+          </div>
+
+          <div class="section-title">Unresolved from previous days</div>
+          <div class="card">
+            <div id="unresolvedIssues"></div>
+          </div>
+
+          <div class="section-title">Area status</div>
+          <div id="areaStatusCards"></div>
+
+          <div class="section-title">Final sign-off</div>
+          <div class="card">
+            <label>Signed off by</label>
+            <select id="signoffBy"></select>
+            <button class="primary-btn manager-admin-only" onclick="finalSignoff()">Final Sign-Off</button>
+            <p id="signoffStatus" class="small">Not signed off yet.</p>
+          </div>
         </div>
       </div>
 
@@ -875,69 +1021,11 @@
       </div>
     </main>
 
-    <main id="audits" class="page">
-      <div class="section-title">Audit checks</div>
-      <div class="card">
-        <label>Audit area</label>
-        <select id="auditArea">
-          <option>Lobby</option>
-          <option>Backlot</option>
-          <option>Hogwarts Table</option>
-        </select>
-
-        <label>Cleanliness</label>
-        <select class="auditScore" onchange="renderAuditScore()">
-          <option value="100">Pass</option>
-          <option value="70">Minor issue</option>
-          <option value="30">Major issue</option>
-          <option value="0">Fail</option>
-        </select>
-
-        <label>Date labelling</label>
-        <select class="auditScore" onchange="renderAuditScore()">
-          <option value="100">Pass</option>
-          <option value="70">Minor issue</option>
-          <option value="30">Major issue</option>
-          <option value="0">Fail</option>
-        </select>
-
-        <label>Allergens</label>
-        <select class="auditScore" onchange="renderAuditScore()">
-          <option value="100">Pass</option>
-          <option value="70">Minor issue</option>
-          <option value="30">Major issue</option>
-          <option value="0">Fail</option>
-        </select>
-
-        <label>Equipment condition</label>
-        <select class="auditScore" onchange="renderAuditScore()">
-          <option value="100">Pass</option>
-          <option value="70">Minor issue</option>
-          <option value="30">Major issue</option>
-          <option value="0">Fail</option>
-        </select>
-
-        <label>Guest-facing readiness</label>
-        <select class="auditScore" onchange="renderAuditScore()">
-          <option value="100">Pass</option>
-          <option value="70">Minor issue</option>
-          <option value="30">Major issue</option>
-          <option value="0">Fail</option>
-        </select>
-
-        <label>Audit notes</label>
-        <textarea id="auditNotes" placeholder="Evidence, issues, follow-up needed..."></textarea>
-
-        <button class="primary-btn" onclick="saveAudit()">Save Audit</button>
-        <p class="small" id="auditScoreText">Current audit score: 100%</p>
-      </div>
-    </main>
-
     <main id="breaks" class="page">
       <div class="dashboard-grid">
         <div class="stat">
           <h3 id="breaksCompletedToday">0</h3>
-          <p>Completed today</p>
+          <p>Completed</p>
         </div>
         <div class="stat">
           <h3 id="breaksActiveToday">0</h3>
@@ -951,21 +1039,7 @@
 
       <div class="section-title">Break Planner</div>
       <div class="card">
-        <label>Add staff working today</label>
-        <select id="plannerStaff"></select>
-
-        <label>Start time</label>
-        <input type="time" id="plannerStartTime" />
-
-        <label>Suggested break time</label>
-        <input type="time" id="plannerBreakTime" />
-
-        <button class="primary-btn" onclick="addToBreakPlanner()">Add to Today’s Break Table</button>
-        <button class="secondary-btn" onclick="autoPlanBreaks()">Auto-suggest Break Times</button>
-      </div>
-
-      <div class="card">
-        <h3 style="margin-top:0;">Today’s break table</h3>
+        <p class="small">Break Planner is powered by Today’s Team. Add people from Today, then start/finish breaks here.</p>
         <div id="breakPlannerTable"></div>
       </div>
 
@@ -1009,37 +1083,40 @@
     </main>
 
     <main id="staff" class="page">
-      <div class="section-title">Staff</div>
-
-      <div class="card">
-        <label>Add staff name</label>
-        <input id="newStaffName" placeholder="Example: Freya Smith" />
-
-        <label>Clock-in number</label>
-        <input id="newStaffClock" placeholder="Example: 12345" />
-
-        <label>Role</label>
-        <select id="newStaffRole">
-          <option>General Assistant</option>
-          <option>Supervisor</option>
-          <option>Manager</option>
-          <option>Kitchen</option>
-        </select>
-
-        <label>Usual area</label>
-        <select id="newStaffArea">
-          <option>Lobby</option>
-          <option>Backlot</option>
-          <option>Hogwarts Table</option>
-          <option>Flexible</option>
-        </select>
-
-        <button class="primary-btn" onclick="addStaff()">Add Staff</button>
-      </div>
+      <div class="section-title">Staff Directory</div>
 
       <div class="card">
         <label>Search staff</label>
         <input id="staffSearch" oninput="renderStaffList()" placeholder="Search by name, clock-in, role..." />
+
+        <button class="primary-btn admin-only" onclick="togglePanel('addStaffPanel')">+ Add Employee</button>
+
+        <div id="addStaffPanel" class="panel">
+          <label>Name</label>
+          <input id="newStaffName" placeholder="Example: Freya Smith" />
+
+          <label>Clock-in number</label>
+          <input id="newStaffClock" placeholder="Example: 12345" />
+
+          <label>Role</label>
+          <select id="newStaffRole">
+            <option>General Assistant</option>
+            <option>Supervisor</option>
+            <option>Manager</option>
+            <option>Admin</option>
+            <option>Kitchen</option>
+          </select>
+
+          <label>Usual area</label>
+          <select id="newStaffArea">
+            <option>Lobby</option>
+            <option>Backlot</option>
+            <option>Hogwarts Table</option>
+            <option>Flexible</option>
+          </select>
+
+          <button class="primary-btn" onclick="addStaff()">Save Employee</button>
+        </div>
       </div>
 
       <div id="staffList"></div>
@@ -1073,6 +1150,36 @@
         <div class="card">
           <h3 style="margin-top:0;">Staff information</h3>
           <p id="profileInfo" class="small"></p>
+        </div>
+
+        <div class="card admin-only">
+          <h3 style="margin-top:0;">Admin edit</h3>
+          <input type="hidden" id="editStaffId" />
+
+          <label>Name</label>
+          <input id="editStaffName" />
+
+          <label>Clock-in number</label>
+          <input id="editStaffClock" />
+
+          <label>Role</label>
+          <select id="editStaffRole">
+            <option>General Assistant</option>
+            <option>Supervisor</option>
+            <option>Manager</option>
+            <option>Admin</option>
+            <option>Kitchen</option>
+          </select>
+
+          <label>Usual area</label>
+          <select id="editStaffArea">
+            <option>Lobby</option>
+            <option>Backlot</option>
+            <option>Hogwarts Table</option>
+            <option>Flexible</option>
+          </select>
+
+          <button class="primary-btn" onclick="saveStaffEdit()">Save Changes</button>
         </div>
 
         <div class="card">
@@ -1164,21 +1271,27 @@
 
       <div id="equipmentList"></div>
 
+      <div class="section-title manager-only">Audit history</div>
+      <div class="card manager-only">
+        <div id="fullAuditHistory"></div>
+      </div>
+
       <div class="section-title">Export</div>
       <div class="card">
         <button class="primary-btn" onclick="exportSummary()">Create Email-Style Export</button>
         <textarea id="exportText" style="min-height:220px;margin-top:12px;"></textarea>
       </div>
 
-      <div class="section-title">Settings</div>
-      <div class="card">
+      <div class="section-title admin-only">Settings</div>
+      <div class="card admin-only">
         <label>Current user</label>
         <select id="currentUserSelect" onchange="changeCurrentUser()"></select>
 
-        <label>Role</label>
+        <label>Prototype access role</label>
         <select id="roleSelect" onchange="applySettings()">
-          <option>Manager</option>
           <option>Supervisor</option>
+          <option>Manager</option>
+          <option>Admin</option>
         </select>
 
         <label>Appearance</label>
@@ -1198,16 +1311,19 @@
         <button class="secondary-btn" onclick="logout()">Log out</button>
         <button class="secondary-btn" onclick="resetPrototype()">Reset Prototype Data</button>
       </div>
+
+      <div class="section-title">Access info</div>
+      <div class="card">
+        <p class="small"><strong>Supervisor:</strong> handovers, breaks, staff viewing, conduct notes, equipment issues and exports.</p>
+        <p class="small"><strong>Manager:</strong> supervisor tools plus audits, manager checks, final sign-off and audit history.</p>
+        <p class="small"><strong>Admin:</strong> everything plus staff editing, app settings and reset controls.</p>
+      </div>
     </main>
 
     <nav class="bottom-nav">
       <button class="nav-btn active" onclick="openPage('home', this)">
         <span>🏠</span>
         Today
-      </button>
-      <button class="nav-btn" onclick="openPage('audits', this)">
-        <span>✅</span>
-        Audits
       </button>
       <button class="nav-btn" onclick="openPage('breaks', this)">
         <span>☕</span>
@@ -1231,10 +1347,11 @@
   </div>
 
   <script>
-    const structure = {
+      const structure = {
       lobby: {
         name: "Lobby",
         colour: "lobby-bg",
+        boardZones: ["Pass", "Tills", "Floor", "Frog", "Dragon", "Van", "Break", "Floating"],
         sections: {
           lobbygeneral: {
             name: "General Lobby",
@@ -1296,6 +1413,7 @@
       backlot: {
         name: "Backlot",
         colour: "backlot-bg",
+        boardZones: ["Pass 1", "Pass 2", "Tills 1", "Tills 2", "Floor", "BBB", "BOH", "Kitchen", "Break", "Floating"],
         sections: {
           backlotbbb: {
             name: "Backlot & BBB",
@@ -1339,6 +1457,7 @@
       hogwarts: {
         name: "Hogwarts Table",
         colour: "hogwarts-bg",
+        boardZones: ["Host", "Runner", "Table Service", "Kitchen Link", "Break", "Floating"],
         sections: {
           hogwartstable: {
             name: "Hogwarts Table",
@@ -1364,7 +1483,20 @@
       }
     };
 
+    const auditQuestions = [
+      "Cleanliness standards",
+      "Date labelling correct",
+      "Allergen communication",
+      "Equipment condition",
+      "Guest-facing readiness",
+      "Close/open readiness",
+      "Team presentation and service standards"
+    ];
+
     let selectedDate = todayISO();
+    let currentBoardArea = "lobby";
+    let selectedMagnetStaffId = null;
+
     let wizard = {
       main: null,
       section: null,
@@ -1372,15 +1504,21 @@
       step: 1
     };
 
+    let auditDraft = {
+      area: null,
+      questions: []
+    };
+
     let state = {
       currentUserId: null,
-      currentRole: "Manager",
+      currentRole: "Supervisor",
       staff: [],
       handovers: {},
       drafts: {},
       signoffs: {},
       tasks: {},
-      breakPlanner: {},
+      todayTeam: {},
+      shiftBoards: {},
       activeBreaks: {},
       breakHistory: [],
       conductNotes: [],
@@ -1423,6 +1561,14 @@
       return state.staff.find(s => s.id === id);
     }
 
+    function hasManagerAccess() {
+      return state.currentRole === "Manager" || state.currentRole === "Admin";
+    }
+
+    function isAdmin() {
+      return state.currentRole === "Admin";
+    }
+
     function dayHandovers() {
       if (!state.handovers[selectedDate]) state.handovers[selectedDate] = {};
       return state.handovers[selectedDate];
@@ -1438,9 +1584,15 @@
       return state.tasks[selectedDate];
     }
 
-    function dayPlanner() {
-      if (!state.breakPlanner[selectedDate]) state.breakPlanner[selectedDate] = [];
-      return state.breakPlanner[selectedDate];
+    function dayTeam() {
+      if (!state.todayTeam[selectedDate]) state.todayTeam[selectedDate] = [];
+      return state.todayTeam[selectedDate];
+    }
+
+    function dayBoard() {
+      if (!state.shiftBoards[selectedDate]) state.shiftBoards[selectedDate] = {};
+      if (!state.shiftBoards[selectedDate][currentBoardArea]) state.shiftBoards[selectedDate][currentBoardArea] = {};
+      return state.shiftBoards[selectedDate][currentBoardArea];
     }
 
     function init() {
@@ -1465,23 +1617,27 @@
 
     function renderAll() {
       renderStaffSelects();
+      renderPermissions();
       renderHome();
+      renderTodayTeam();
+      renderShiftBoard();
       renderSummaryIfOpen();
       renderBreaks();
       renderStaffList();
       renderConduct();
       renderIncidents();
       renderEquipment();
+      renderAuditHistory();
       renderSignoff();
       applySettings(false);
     }
 
     function saveState() {
-      localStorage.setItem("shiftflow_v3_state", JSON.stringify(state));
+      localStorage.setItem("shiftflow_v4_state", JSON.stringify(state));
     }
 
     function loadState() {
-      const saved = JSON.parse(localStorage.getItem("shiftflow_v3_state") || "{}");
+      const saved = JSON.parse(localStorage.getItem("shiftflow_v4_state") || "{}");
 
       const defaultStaff = [
         { id: "s1", name: "James", clock: "10001", role: "Supervisor", area: "Backlot" },
@@ -1493,13 +1649,14 @@
 
       state = {
         currentUserId: saved.currentUserId || null,
-        currentRole: saved.currentRole || "Manager",
+        currentRole: saved.currentRole || "Supervisor",
         staff: saved.staff && saved.staff.length ? saved.staff : defaultStaff,
         handovers: saved.handovers || {},
         drafts: saved.drafts || {},
         signoffs: saved.signoffs || {},
         tasks: saved.tasks || {},
-        breakPlanner: saved.breakPlanner || {},
+        todayTeam: saved.todayTeam || {},
+        shiftBoards: saved.shiftBoards || {},
         activeBreaks: saved.activeBreaks || {},
         breakHistory: saved.breakHistory || [],
         conductNotes: saved.conductNotes || [],
@@ -1540,11 +1697,10 @@
 
       const titles = {
         home: ["Today", "Your shift command centre."],
-        audits: ["Audits", "Cleanliness, labelling, allergens, equipment and readiness."],
         breaks: ["Breaks", "Plan, start, finish and analyse staff breaks."],
-        staff: ["Staff", "Profiles, mentions, clock-in numbers and break patterns."],
+        staff: ["Staff", "Profiles, clock-in numbers, deployment and performance notes."],
         conduct: ["Conduct", "Shout-outs, conduct notes and incident logs."],
-        more: ["More", "Equipment, exports and settings."]
+        more: ["More", "Equipment, audit history, exports and settings."]
       };
 
       document.getElementById("pageTitle").innerText = titles[pageId][0];
@@ -1552,18 +1708,40 @@
 
       if (pageId === "breaks") renderBreaks();
       if (pageId === "staff") renderStaffList();
+      if (pageId === "more") {
+        renderEquipment();
+        renderAuditHistory();
+      }
     }
 
     function changeDate(date) {
       selectedDate = date;
       document.getElementById("selectedDateInput").value = date;
+      selectedMagnetStaffId = null;
+      closeAuditBuilder();
       renderAll();
       toast(`Viewing ${formatDate(selectedDate)}`);
     }
 
     function togglePanel(id) {
-      document.getElementById(id).classList.toggle("open");
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.toggle("open");
       if (id === "calendarPanel") renderSavedDays();
+    }
+
+    function renderPermissions() {
+      document.querySelectorAll(".manager-only").forEach(el => {
+        el.classList.toggle("hidden", !hasManagerAccess());
+      });
+
+      document.querySelectorAll(".manager-admin-only").forEach(el => {
+        el.classList.toggle("hidden", !hasManagerAccess());
+      });
+
+      document.querySelectorAll(".admin-only").forEach(el => {
+        el.classList.toggle("hidden", !isAdmin());
+      });
     }
 
     function renderHome() {
@@ -1580,14 +1758,14 @@
       document.getElementById("homeBreaks").innerText = completedBreaks;
 
       const hasDraft = Object.keys(dayDrafts()).length > 0;
-      const btn = document.getElementById("startHandoverBtn");
-      btn.innerText = hasDraft ? "Continue Today’s Handover" : "Start Today’s Handover";
+      document.getElementById("startHandoverBtn").innerText = hasDraft ? "Continue Today’s Handover" : "Start Today’s Handover";
 
       renderTodayProgress();
       renderUrgentActions();
       renderUnresolvedIssues();
       renderAreaStatusCards();
       renderSavedDays();
+      renderAuditHistoryPreview();
     }
 
     function getAllSectionKeys() {
@@ -1618,6 +1796,8 @@
       const done = all.filter(k => dayHandovers()[k]).length;
       const drafts = Object.keys(dayDrafts()).length;
       const signoff = state.signoffs[selectedDate];
+      const planned = dayTeam().length;
+      const teamAssigned = getAssignedStaffCount();
 
       box.innerHTML = `
         <div class="row">
@@ -1629,8 +1809,15 @@
         </div>
         <div class="row">
           <div>
+            <h4>Team deployment</h4>
+            <p>${teamAssigned} of ${planned} planned staff assigned on Shift Board</p>
+          </div>
+          <span class="pill">${planned ? Math.round((teamAssigned / planned) * 100) : 0}%</span>
+        </div>
+        <div class="row">
+          <div>
             <h4>Break control</h4>
-            <p>${getTodayBreaks().length} completed · ${Object.keys(state.activeBreaks).length} active · ${getPeopleNoBreakToday().length} not logged from planner</p>
+            <p>${getTodayBreaks().length} completed · ${Object.keys(state.activeBreaks).length} active · ${getPeopleNoBreakToday().length} not logged from team</p>
           </div>
           <span class="pill">${getTodayOver35().length} over 35m</span>
         </div>
@@ -1669,6 +1856,7 @@
 
     function getUrgentItems() {
       const items = [];
+
       Object.values(dayHandovers()).forEach(h => {
         if (h.status === "Red" || h.priority === "Urgent" || h.actionRequired === "Action required") {
           items.push({
@@ -1676,6 +1864,13 @@
             detail: h.actionText || getMainNote(h)
           });
         }
+      });
+
+      dayTasks().filter(t => !t.done).forEach(t => {
+        items.push({
+          title: t.source || "Open task",
+          detail: t.text
+        });
       });
 
       getTodayOver35().forEach(b => {
@@ -1711,9 +1906,12 @@
         });
       });
 
-      state.equipmentLogs
-        .filter(e => e.status !== "Fixed")
-        .forEach(e => unresolved.push({ date: e.date, equipment: e }));
+      state.equipmentLogs.filter(e => e.status !== "Fixed").forEach(e => unresolved.push({ date: e.date, equipment: e }));
+      state.audits.forEach(a => {
+        a.questions.filter(q => q.actionRequired === "Action required" || q.result === "Fail" || q.result === "Major issue").forEach(q => {
+          unresolved.push({ date: a.date, audit: a, question: q });
+        });
+      });
 
       if (!unresolved.length) {
         box.innerHTML = `<p class="small">No unresolved previous issues found.</p>`;
@@ -1721,7 +1919,7 @@
       }
 
       box.innerHTML = "";
-      unresolved.slice(0, 6).forEach(item => {
+      unresolved.slice(0, 7).forEach(item => {
         if (item.h) {
           box.innerHTML += `
             <div class="row">
@@ -1732,7 +1930,7 @@
               <span class="pill amber">Open</span>
             </div>
           `;
-        } else {
+        } else if (item.equipment) {
           box.innerHTML += `
             <div class="row">
               <div>
@@ -1740,6 +1938,16 @@
                 <p>${formatDate(item.date)} · ${item.equipment.area} · ${item.equipment.notes || "No extra notes"}</p>
               </div>
               <span class="pill amber">${item.equipment.status}</span>
+            </div>
+          `;
+        } else {
+          box.innerHTML += `
+            <div class="row">
+              <div>
+                <h4>Audit: ${item.audit.area}</h4>
+                <p>${formatDate(item.date)} · ${item.question.question} · ${item.question.note || "Action required"}</p>
+              </div>
+              <span class="pill red">${item.question.result}</span>
             </div>
           `;
         }
@@ -1759,13 +1967,20 @@
           return h && (h.status === "Red" || h.priority === "Urgent" || h.actionRequired === "Action required");
         }).length;
 
+        const auditButton = hasManagerAccess()
+          ? `<button class="tiny-btn light" onclick="event.stopPropagation(); openAuditBuilder('${main.name}')">Audit</button>`
+          : "";
+
         box.innerHTML += `
           <div class="row ${main.colour}" onclick="openWizard('${mainKey}')">
             <div>
               <h4>${main.name}</h4>
               <p>${done}/${keys.length} sections complete · ${urgent} urgent/action item${urgent === 1 ? "" : "s"}</p>
             </div>
-            <span class="pill">${done === keys.length ? "Complete" : "Open"}</span>
+            <div>
+              <span class="pill">${done === keys.length ? "Complete" : "Open"}</span>
+              ${auditButton}
+            </div>
           </div>
         `;
       });
@@ -1776,6 +1991,7 @@
       if (!box) return;
 
       const days = Object.keys(state.handovers).sort().reverse();
+
       if (!days.length) {
         box.innerHTML = `<p class="small">No saved handover days yet.</p>`;
         return;
@@ -1796,9 +2012,252 @@
       });
     }
 
+    function addToTodayTeam() {
+      const staffId = document.getElementById("teamStaff").value;
+      const startTime = document.getElementById("teamStartTime").value;
+      const breakTime = document.getElementById("teamBreakTime").value;
+
+      if (!staffId || !startTime) return toast("Add staff and start time");
+
+      const team = dayTeam();
+      const existing = team.find(t => t.staffId === staffId);
+
+      if (existing) {
+        existing.startTime = startTime;
+        existing.breakTime = breakTime || existing.breakTime || suggestBreakTime(startTime);
+      } else {
+        team.push({
+          id: makeId(),
+          staffId,
+          startTime,
+          breakTime: breakTime || suggestBreakTime(startTime)
+        });
+      }
+
+      team.sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+      saveState();
+      renderAll();
+      toast("Added to Today’s Team");
+    }
+
+    function removeFromTodayTeam(staffId) {
+      if (!isAdmin()) return toast("Admin only");
+
+      state.todayTeam[selectedDate] = dayTeam().filter(t => t.staffId !== staffId);
+
+      Object.keys(structure).forEach(area => {
+        const previousArea = currentBoardArea;
+        currentBoardArea = area;
+        const board = dayBoard();
+        Object.keys(board).forEach(zone => {
+          board[zone] = board[zone].filter(id => id !== staffId);
+        });
+        currentBoardArea = previousArea;
+      });
+
+      saveState();
+      renderAll();
+      toast("Removed from today");
+    }
+
+    function suggestBreakTime(startTime) {
+      const [h, m] = startTime.split(":").map(Number);
+      const d = new Date();
+      d.setHours(h + 3, m + 30, 0, 0);
+      return d.toTimeString().slice(0, 5);
+    }
+
+    function autoPlanBreaks() {
+      const team = dayTeam().sort((a, b) => a.startTime.localeCompare(b.startTime));
+      team.forEach((p, index) => {
+        const base = suggestBreakTime(p.startTime);
+        const [h, m] = base.split(":").map(Number);
+        const d = new Date();
+        d.setHours(h, m + (index * 15), 0, 0);
+        p.breakTime = d.toTimeString().slice(0, 5);
+      });
+
+      saveState();
+      renderAll();
+      toast("Break times suggested");
+    }
+
+    function renderTodayTeam() {
+      const box = document.getElementById("todayTeamList");
+      const team = dayTeam();
+
+      if (!team.length) {
+        box.innerHTML = `<p class="small">No one added to today’s team yet.</p>`;
+        return;
+      }
+
+      box.innerHTML = team.map(t => {
+        const s = getStaff(t.staffId);
+        const assignment = getStaffAssignment(t.staffId);
+        return `
+          <div class="row">
+            <div>
+              <h4>${s?.name || "Unknown"} · ${s?.clock || ""}</h4>
+              <p>Start ${t.startTime} · Break ${t.breakTime || "not planned"} · ${assignment || "Unassigned"}</p>
+            </div>
+            <button class="tiny-btn light admin-only" onclick="removeFromTodayTeam('${t.staffId}')">Remove</button>
+          </div>
+        `;
+      }).join("");
+
+      renderPermissions();
+    }
+
+    function setBoardArea(area) {
+      currentBoardArea = area;
+      selectedMagnetStaffId = null;
+
+      document.querySelectorAll("#boardLobbyChip, #boardBacklotChip, #boardHogwartsChip").forEach(b => b.classList.remove("active"));
+      if (area === "lobby") document.getElementById("boardLobbyChip").classList.add("active");
+      if (area === "backlot") document.getElementById("boardBacklotChip").classList.add("active");
+      if (area === "hogwarts") document.getElementById("boardHogwartsChip").classList.add("active");
+
+      renderShiftBoard();
+    }
+
+    function renderShiftBoard() {
+      renderUnassignedMagnets();
+      renderBoardZones();
+    }
+
+    function getAssignedStaffIdsForArea(area = currentBoardArea) {
+      if (!state.shiftBoards[selectedDate]) return [];
+      const areaBoard = state.shiftBoards[selectedDate][area] || {};
+      let ids = [];
+      Object.values(areaBoard).forEach(arr => ids = ids.concat(arr));
+      return ids;
+    }
+
+    function getAssignedStaffCount() {
+      let ids = new Set();
+      Object.keys(structure).forEach(area => {
+        getAssignedStaffIdsForArea(area).forEach(id => ids.add(id));
+      });
+      return ids.size;
+    }
+
+    function getStaffAssignment(staffId) {
+      if (!state.shiftBoards[selectedDate]) return null;
+
+      for (const areaKey of Object.keys(structure)) {
+        const board = state.shiftBoards[selectedDate][areaKey] || {};
+        for (const zone of Object.keys(board)) {
+          if (board[zone].includes(staffId)) {
+            return `${structure[areaKey].name} — ${zone}`;
+          }
+        }
+      }
+
+      return null;
+    }
+
+    function renderUnassignedMagnets() {
+      const box = document.getElementById("unassignedMagnets");
+      const assigned = new Set(getAssignedStaffIdsForArea());
+      const unassigned = dayTeam().filter(t => !assigned.has(t.staffId));
+
+      if (!unassigned.length) {
+        box.innerHTML = `<p class="small">All staff for this area are assigned, or no team added yet.</p>`;
+        return;
+      }
+
+      box.innerHTML = unassigned.map(t => magnetHTML(t.staffId)).join("");
+    }
+
+    function renderBoardZones() {
+      const box = document.getElementById("boardZones");
+      const zones = structure[currentBoardArea].boardZones;
+      const board = dayBoard();
+
+      box.innerHTML = zones.map(zone => {
+        if (!board[zone]) board[zone] = [];
+
+        return `
+          <div class="zone" 
+               ondragover="allowDrop(event)" 
+               ondragleave="this.classList.remove('drop-hover')" 
+               ondrop="dropStaff(event, '${zone}')"
+               onclick="tapZone('${zone}')">
+            <h4>${zone}</h4>
+            <div>${board[zone].map(id => magnetHTML(id)).join("") || `<p class="small">Tap magnet here</p>`}</div>
+          </div>
+        `;
+      }).join("");
+
+      saveState();
+    }
+
+    function magnetHTML(staffId) {
+      const s = getStaff(staffId);
+      const selected = selectedMagnetStaffId === staffId ? "selected" : "";
+      return `
+        <button class="magnet ${selected}" 
+                draggable="true"
+                ondragstart="dragStaff(event, '${staffId}')"
+                onclick="event.stopPropagation(); selectMagnet('${staffId}')">
+          ${s?.name || "Unknown"}
+        </button>
+      `;
+    }
+
+    function selectMagnet(staffId) {
+      selectedMagnetStaffId = selectedMagnetStaffId === staffId ? null : staffId;
+      renderShiftBoard();
+    }
+
+    function tapZone(zone) {
+      if (!selectedMagnetStaffId) return;
+      moveStaffToZone(selectedMagnetStaffId, zone);
+      selectedMagnetStaffId = null;
+      renderAll();
+      toast("Shift Board updated");
+    }
+
+    function dragStaff(event, staffId) {
+      event.dataTransfer.setData("staffId", staffId);
+    }
+
+    function allowDrop(event) {
+      event.preventDefault();
+      event.currentTarget.classList.add("drop-hover");
+    }
+
+    function dropStaff(event, zone) {
+      event.preventDefault();
+      event.currentTarget.classList.remove("drop-hover");
+      const staffId = event.dataTransfer.getData("staffId");
+      moveStaffToZone(staffId, zone);
+      renderAll();
+      toast("Shift Board updated");
+    }
+
+    function moveStaffToZone(staffId, zone) {
+      const board = dayBoard();
+
+      Object.keys(board).forEach(z => {
+        board[z] = board[z].filter(id => id !== staffId);
+      });
+
+      if (!board[zone]) board[zone] = [];
+      board[zone].push(staffId);
+
+      if (zone === "Break" && !state.activeBreaks[staffId]) {
+        startBreak(staffId, false);
+      }
+
+      saveState();
+    }
+
     function openWizard(mainKey = null) {
       document.getElementById("homeView").classList.add("hidden");
       document.getElementById("handoverWizard").classList.remove("hidden");
+      closeAuditBuilder();
 
       wizard.main = mainKey;
       wizard.section = null;
@@ -2060,6 +2519,210 @@
       return "Submitted with no major notes.";
     }
 
+    function openAuditBuilder(area = null) {
+      if (!hasManagerAccess()) return toast("Manager/Admin only");
+
+      const auditArea = area || document.getElementById("auditAreaHome").value;
+
+      auditDraft = {
+        id: makeId(),
+        date: selectedDate,
+        area: auditArea,
+        questions: auditQuestions.map(q => ({
+          question: q,
+          result: "Pass",
+          note: "",
+          photoCount: 0,
+          actionRequired: "No action needed",
+          actionOwner: "",
+          actionDue: ""
+        }))
+      };
+
+      document.getElementById("homeView").classList.add("hidden");
+      document.getElementById("auditBuilder").classList.remove("hidden");
+      document.getElementById("normalHomeBlocks").classList.add("hidden");
+      document.getElementById("auditBuilderTitle").innerText = `${auditArea} Audit`;
+
+      renderAuditQuestions();
+    }
+
+    function closeAuditBuilder() {
+      const auditBuilder = document.getElementById("auditBuilder");
+      const normalBlocks = document.getElementById("normalHomeBlocks");
+      const homeView = document.getElementById("homeView");
+      const wizardEl = document.getElementById("handoverWizard");
+
+      if (auditBuilder) auditBuilder.classList.add("hidden");
+      if (normalBlocks) normalBlocks.classList.remove("hidden");
+
+      if (wizardEl && !wizardEl.classList.contains("hidden")) return;
+      if (homeView) homeView.classList.remove("hidden");
+    }
+
+    function renderAuditQuestions() {
+      const box = document.getElementById("auditQuestionList");
+      box.innerHTML = "";
+
+      auditDraft.questions.forEach((q, index) => {
+        box.innerHTML += `
+          <div class="audit-question">
+            <h4>${q.question}</h4>
+
+            <label>Result</label>
+            <select id="auditResult_${index}" onchange="updateAuditQuestion(${index})">
+              <option ${q.result === "Pass" ? "selected" : ""}>Pass</option>
+              <option ${q.result === "Minor issue" ? "selected" : ""}>Minor issue</option>
+              <option ${q.result === "Major issue" ? "selected" : ""}>Major issue</option>
+              <option ${q.result === "Fail" ? "selected" : ""}>Fail</option>
+            </select>
+
+            <label>Note</label>
+            <textarea id="auditNote_${index}" oninput="updateAuditQuestion(${index})" placeholder="Add evidence or notes...">${q.note}</textarea>
+
+            <label>Photo evidence</label>
+            <input type="file" id="auditPhoto_${index}" accept="image/*" multiple onchange="updateAuditPhoto(${index}, this.files.length)" />
+            <span class="photo-note">${q.photoCount} photo${q.photoCount === 1 ? "" : "s"} selected</span>
+
+            <label>Action required?</label>
+            <select id="auditAction_${index}" onchange="updateAuditQuestion(${index}); renderAuditQuestions();">
+              <option ${q.actionRequired === "No action needed" ? "selected" : ""}>No action needed</option>
+              <option ${q.actionRequired === "Action required" ? "selected" : ""}>Action required</option>
+            </select>
+
+            ${q.actionRequired === "Action required" ? `
+              <label>Action owner</label>
+              <input id="auditOwner_${index}" oninput="updateAuditQuestion(${index})" value="${q.actionOwner}" placeholder="Example: opening supervisor, BOH, manager..." />
+
+              <label>Due by</label>
+              <input type="date" id="auditDue_${index}" onchange="updateAuditQuestion(${index})" value="${q.actionDue}" />
+            ` : ""}
+          </div>
+        `;
+      });
+    }
+
+    function updateAuditQuestion(index) {
+      const q = auditDraft.questions[index];
+      const resultEl = document.getElementById(`auditResult_${index}`);
+      const noteEl = document.getElementById(`auditNote_${index}`);
+      const actionEl = document.getElementById(`auditAction_${index}`);
+
+      if (resultEl) q.result = resultEl.value;
+      if (noteEl) q.note = noteEl.value.trim();
+      if (actionEl) q.actionRequired = actionEl.value;
+
+      const ownerEl = document.getElementById(`auditOwner_${index}`);
+      const dueEl = document.getElementById(`auditDue_${index}`);
+
+      if (ownerEl) q.actionOwner = ownerEl.value.trim();
+      if (dueEl) q.actionDue = dueEl.value;
+    }
+
+    function updateAuditPhoto(index, count) {
+      auditDraft.questions[index].photoCount = count;
+      renderAuditQuestions();
+    }
+
+    function submitAudit() {
+      if (!hasManagerAccess()) return toast("Manager/Admin only");
+
+      auditDraft.questions.forEach((_, index) => updateAuditQuestion(index));
+
+      const scoreMap = {
+        "Pass": 100,
+        "Minor issue": 70,
+        "Major issue": 30,
+        "Fail": 0
+      };
+
+      const score = Math.round(
+        auditDraft.questions.reduce((sum, q) => sum + scoreMap[q.result], 0) / auditDraft.questions.length
+      );
+
+      const auditor = getStaff(document.getElementById("auditBy").value);
+
+      const audit = {
+        ...auditDraft,
+        score,
+        by: auditor?.name || "Unknown",
+        time: nowTime()
+      };
+
+      state.audits.unshift(audit);
+
+      audit.questions.forEach(q => {
+        if (q.actionRequired === "Action required" || q.result === "Major issue" || q.result === "Fail") {
+          dayTasks().push({
+            id: makeId(),
+            text: `${q.question}: ${q.note || q.result}`,
+            owner: q.actionOwner || "Manager",
+            due: q.actionDue || selectedDate,
+            source: `Audit — ${audit.area}`,
+            priority: q.result === "Fail" ? "Urgent" : "High",
+            done: false
+          });
+        }
+      });
+
+      saveState();
+      closeAuditBuilder();
+      renderAll();
+      toast(`Audit submitted · ${score}%`);
+    }
+
+    function renderAuditHistoryPreview() {
+      const box = document.getElementById("auditHistoryPreview");
+      if (!box) return;
+
+      const issues = [];
+
+      state.audits.forEach(a => {
+        a.questions
+          .filter(q => q.result !== "Pass" || q.actionRequired === "Action required")
+          .forEach(q => issues.push({ audit: a, q }));
+      });
+
+      if (!issues.length) {
+        box.innerHTML = `<p class="small">No audit issues logged yet.</p>`;
+        return;
+      }
+
+      box.innerHTML = issues.slice(0, 5).map(item => `
+        <div class="row">
+          <div>
+            <h4>${item.audit.area} · ${item.q.question}</h4>
+            <p>${formatDate(item.audit.date)} · ${item.q.note || item.q.result}</p>
+          </div>
+          <span class="pill ${item.q.result === "Fail" ? "red" : "amber"}">${item.q.result}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderAuditHistory() {
+      const box = document.getElementById("fullAuditHistory");
+      if (!box) return;
+
+      if (!state.audits.length) {
+        box.innerHTML = `<p class="small">No audits submitted yet.</p>`;
+        return;
+      }
+
+      box.innerHTML = state.audits.slice(0, 12).map(a => {
+        const issues = a.questions.filter(q => q.result !== "Pass" || q.actionRequired === "Action required").length;
+
+        return `
+          <div class="row">
+            <div>
+              <h4>${a.area} Audit · ${a.score}%</h4>
+              <p>${formatDate(a.date)} at ${a.time} · ${a.by} · ${issues} issue${issues === 1 ? "" : "s"}</p>
+            </div>
+            <span class="pill ${a.score >= 85 ? "green" : a.score >= 60 ? "amber" : "red"}">${a.score}%</span>
+          </div>
+        `;
+      }).join("");
+    }
+
     function generateSummary() {
       const output = document.getElementById("summaryOutput");
 
@@ -2089,10 +2752,13 @@
         const mins = Math.max(1, Math.round((Date.now() - state.activeBreaks[id]) / 60000));
         return { staffName: staff?.name || "Unknown", mins };
       });
+
       const over35 = getTodayOver35();
       const noBreak = getPeopleNoBreakToday();
       const incidentsToday = state.incidents.filter(i => i.date === selectedDate);
       const equipmentOpen = state.equipmentLogs.filter(e => e.status !== "Fixed");
+      const auditsToday = state.audits.filter(a => a.date === selectedDate);
+      const deployment = getDeploymentSummary();
 
       box.innerHTML = `
         <h4>Break control</h4>
@@ -2100,7 +2766,7 @@
           <li><strong>Breaks completed today:</strong> ${completedBreaks.length}</li>
           <li><strong>Currently on break:</strong> ${activeBreaks.length || 0}</li>
           <li><strong>People over 35 minutes:</strong> ${over35.length || 0}</li>
-          <li><strong>People with no break logged from planner:</strong> ${noBreak.length || 0}</li>
+          <li><strong>People with no break logged from team:</strong> ${noBreak.length || 0}</li>
         </ul>
 
         ${over35.length ? `
@@ -2114,15 +2780,21 @@
         ` : ""}
 
         ${noBreak.length ? `
-          <h4>No break logged yet from planner</h4>
+          <h4>No break logged yet</h4>
           <ul>${noBreak.map(s => `<li>${s.name} — starts ${s.startTime}</li>`).join("")}</ul>
         ` : ""}
+
+        <h4>Team deployment</h4>
+        ${deployment.length ? `<ul>${deployment.map(d => `<li><strong>${d.area} — ${d.zone}:</strong> ${d.names}</li>`).join("")}</ul>` : `<p>No Shift Board deployment saved yet.</p>`}
 
         <h4>Urgent actions</h4>
         ${urgent.length ? `<ul>${urgent.map(i => `<li><strong>${i.title}:</strong> ${i.detail}</li>`).join("")}</ul>` : `<p>No urgent actions.</p>`}
 
         <h4>Area handover</h4>
         ${handovers.length ? `<ul>${handovers.map(h => `<li><strong>${h.mainName} — ${h.sectionName}:</strong> ${h.status} · ${h.priority} — ${getMainNote(h)}</li>`).join("")}</ul>` : `<p>No handovers submitted yet.</p>`}
+
+        <h4>Audits today</h4>
+        ${auditsToday.length ? `<ul>${auditsToday.map(a => `<li><strong>${a.area}:</strong> ${a.score}% · ${a.questions.filter(q => q.result !== "Pass").length} issue(s)</li>`).join("")}</ul>` : `<p>No audits submitted today.</p>`}
 
         <h4>Incidents today</h4>
         ${incidentsToday.length ? `<ul>${incidentsToday.map(i => `<li><strong>${i.type} · ${i.area}:</strong> ${i.details}</li>`).join("")}</ul>` : `<p>No incidents logged today.</p>`}
@@ -2135,10 +2807,30 @@
       `;
     }
 
+    function getDeploymentSummary() {
+      const out = [];
+
+      Object.keys(structure).forEach(areaKey => {
+        const areaBoard = state.shiftBoards[selectedDate]?.[areaKey] || {};
+        Object.keys(areaBoard).forEach(zone => {
+          const names = areaBoard[zone].map(id => getStaff(id)?.name).filter(Boolean);
+          if (names.length) {
+            out.push({
+              area: structure[areaKey].name,
+              zone,
+              names: names.join(", ")
+            });
+          }
+        });
+      });
+
+      return out;
+    }
+
     function renderStaffSelects() {
       const selectIds = [
-        "loginName", "wizardSubmittedBy", "signoffBy", "plannerStaff", "breakEmployee",
-        "breakFilterStaff", "conductStaff", "currentUserSelect"
+        "loginName", "wizardSubmittedBy", "signoffBy", "teamStaff", "breakEmployee",
+        "breakFilterStaff", "conductStaff", "currentUserSelect", "auditBy"
       ];
 
       selectIds.forEach(id => {
@@ -2151,17 +2843,21 @@
           sel.innerHTML += `<option value="${s.id}">${s.name}${s.clock ? " · " + s.clock : ""}</option>`;
         });
 
-        if (["loginName", "wizardSubmittedBy", "signoffBy", "currentUserSelect"].includes(id)) {
+        if (["loginName", "wizardSubmittedBy", "signoffBy", "currentUserSelect", "auditBy"].includes(id)) {
           sel.value = state.currentUserId || state.staff[0]?.id;
         }
       });
 
       document.getElementById("roleText").innerText = `${state.currentRole} Access · ${currentUser()?.name || ""}`;
       document.getElementById("rolePill").innerText = state.currentRole;
-      document.getElementById("roleSelect").value = state.currentRole;
+
+      const roleSelect = document.getElementById("roleSelect");
+      if (roleSelect) roleSelect.value = state.currentRole;
     }
 
     function addStaff() {
+      if (!isAdmin()) return toast("Admin only");
+
       const name = document.getElementById("newStaffName").value.trim();
       const clock = document.getElementById("newStaffClock").value.trim();
       const role = document.getElementById("newStaffRole").value;
@@ -2179,6 +2875,8 @@
 
       document.getElementById("newStaffName").value = "";
       document.getElementById("newStaffClock").value = "";
+      document.getElementById("addStaffPanel").classList.remove("open");
+
       saveState();
       renderAll();
       toast(`${name} added`);
@@ -2197,14 +2895,19 @@
 
       staff.forEach(s => {
         const stats = getStaffStats(s.id);
+        const assignment = getStaffAssignment(s.id);
+        const team = dayTeam().find(t => t.staffId === s.id);
+        const active = state.activeBreaks[s.id];
+
         box.innerHTML += `
           <div class="row" onclick="openStaffProfile('${s.id}')">
             <div>
               <h4>${s.name}</h4>
               <p>${s.role} · ${s.area} · Clock-in ${s.clock}</p>
               <p>${stats.good} good · ${stats.bad} bad · ${stats.avgBreak}m avg break</p>
+              <p>${team ? `Today: ${team.startTime} start · ${assignment || "Unassigned"}` : "Not added to today’s team"}${active ? " · On break" : ""}</p>
             </div>
-            <span class="pill">Open</span>
+            <span class="pill">${active ? "Break" : "Open"}</span>
           </div>
         `;
       });
@@ -2213,6 +2916,8 @@
     function openStaffProfile(id) {
       const s = getStaff(id);
       const stats = getStaffStats(id);
+      const team = dayTeam().find(t => t.staffId === id);
+      const assignment = getStaffAssignment(id);
 
       document.getElementById("staffProfilePanel").classList.remove("hidden");
       document.getElementById("profileName").innerText = s.name;
@@ -2221,7 +2926,15 @@
       document.getElementById("profileGood").innerText = stats.good;
       document.getElementById("profileBad").innerText = stats.bad;
       document.getElementById("profileAvgBreak").innerText = `${stats.avgBreak}m`;
-      document.getElementById("profileInfo").innerText = `Clock-in number: ${s.clock}. Usual area: ${s.area}. Total breaks logged: ${stats.totalBreaks}. Longest break: ${stats.longestBreak}m.`;
+
+      document.getElementById("profileInfo").innerText =
+        `Clock-in number: ${s.clock}. Usual area: ${s.area}. Today: ${team ? `${team.startTime} start, ${team.breakTime || "no planned break"}` : "not planned today"}. Assignment: ${assignment || "unassigned"}. Total breaks logged: ${stats.totalBreaks}. Longest break: ${stats.longestBreak}m.`;
+
+      document.getElementById("editStaffId").value = s.id;
+      document.getElementById("editStaffName").value = s.name;
+      document.getElementById("editStaffClock").value = s.clock;
+      document.getElementById("editStaffRole").value = s.role;
+      document.getElementById("editStaffArea").value = s.area;
 
       const notes = state.conductNotes.filter(n => n.staffId === id).slice(0, 8);
       const box = document.getElementById("profileMentions");
@@ -2240,11 +2953,30 @@
         `).join("");
       }
 
+      renderPermissions();
       document.getElementById("staffProfilePanel").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     function closeStaffProfile() {
       document.getElementById("staffProfilePanel").classList.add("hidden");
+    }
+
+    function saveStaffEdit() {
+      if (!isAdmin()) return toast("Admin only");
+
+      const id = document.getElementById("editStaffId").value;
+      const staff = getStaff(id);
+      if (!staff) return toast("Staff not found");
+
+      staff.name = document.getElementById("editStaffName").value.trim() || staff.name;
+      staff.clock = document.getElementById("editStaffClock").value.trim() || staff.clock;
+      staff.role = document.getElementById("editStaffRole").value;
+      staff.area = document.getElementById("editStaffArea").value;
+
+      saveState();
+      renderAll();
+      openStaffProfile(id);
+      toast("Staff updated");
     }
 
     function getStaffStats(id) {
@@ -2260,63 +2992,12 @@
       return { good, bad, totalBreaks, avgBreak, longestBreak };
     }
 
-    function addToBreakPlanner() {
-      const staffId = document.getElementById("plannerStaff").value;
-      const startTime = document.getElementById("plannerStartTime").value;
-      const breakTime = document.getElementById("plannerBreakTime").value;
-
-      if (!staffId || !startTime) return toast("Add staff and start time");
-
-      const planner = dayPlanner();
-      const existing = planner.find(p => p.staffId === staffId);
-
-      if (existing) {
-        existing.startTime = startTime;
-        existing.breakTime = breakTime || existing.breakTime;
-      } else {
-        planner.push({
-          id: makeId(),
-          staffId,
-          startTime,
-          breakTime: breakTime || suggestBreakTime(startTime)
-        });
-      }
-
-      planner.sort((a, b) => a.startTime.localeCompare(b.startTime));
-      saveState();
-      renderBreaks();
-      renderHome();
-      toast("Added to break planner");
-    }
-
-    function suggestBreakTime(startTime) {
-      const [h, m] = startTime.split(":").map(Number);
-      const d = new Date();
-      d.setHours(h + 3, m + 30, 0, 0);
-      return d.toTimeString().slice(0, 5);
-    }
-
-    function autoPlanBreaks() {
-      const planner = dayPlanner().sort((a, b) => a.startTime.localeCompare(b.startTime));
-      planner.forEach((p, index) => {
-        const base = suggestBreakTime(p.startTime);
-        const [h, m] = base.split(":").map(Number);
-        const d = new Date();
-        d.setHours(h, m + (index * 15), 0, 0);
-        p.breakTime = d.toTimeString().slice(0, 5);
-      });
-
-      saveState();
-      renderBreaks();
-      toast("Break times suggested");
-    }
-
     function renderBreakPlannerTable() {
       const box = document.getElementById("breakPlannerTable");
-      const planner = dayPlanner().sort((a, b) => a.startTime.localeCompare(b.startTime));
+      const team = dayTeam().sort((a, b) => a.startTime.localeCompare(b.startTime));
 
-      if (!planner.length) {
-        box.innerHTML = `<p class="small">No staff added to today’s break planner yet.</p>`;
+      if (!team.length) {
+        box.innerHTML = `<p class="small">No staff added to Today’s Team yet.</p>`;
         return;
       }
 
@@ -2328,18 +3009,21 @@
                 <th>Staff</th>
                 <th>Start</th>
                 <th>Break</th>
+                <th>Board</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              ${planner.map(p => {
+              ${team.map(p => {
                 const s = getStaff(p.staffId);
                 const active = state.activeBreaks[p.staffId];
                 const completed = getTodayBreaks().filter(b => b.staffId === p.staffId);
                 const latest = completed[0];
+                const assignment = getStaffAssignment(p.staffId);
+
                 let status = "Not started";
-                if (active) status = `On break`;
+                if (active) status = "On break";
                 if (latest) status = `Done ${latest.duration}m`;
 
                 return `
@@ -2347,6 +3031,7 @@
                     <td><strong>${s?.name || "Unknown"}</strong><br><span class="small">${s?.clock || ""}</span></td>
                     <td>${p.startTime}</td>
                     <td>${p.breakTime || "-"}</td>
+                    <td>${assignment || "Unassigned"}</td>
                     <td>${status}</td>
                     <td>
                       ${active
@@ -2363,18 +3048,19 @@
       `;
     }
 
-    function startBreak(staffId = null) {
+    function startBreak(staffId = null, showToast = true) {
       const id = staffId || document.getElementById("breakEmployee").value;
       const s = getStaff(id);
       if (!s) return toast("Choose staff");
-      if (state.activeBreaks[id]) return toast(`${s.name} is already on break`);
+      if (state.activeBreaks[id]) return showToast ? toast(`${s.name} is already on break`) : null;
 
       state.activeBreaks[id] = Date.now();
       saveState();
       renderBreaks();
       renderHome();
+      renderStaffList();
       renderSummaryIfOpen();
-      toast(`${s.name} started break`);
+      if (showToast) toast(`${s.name} started break`);
     }
 
     function finishBreak(staffId = null) {
@@ -2419,7 +3105,8 @@
     function getPeopleNoBreakToday() {
       const completedIds = new Set(getTodayBreaks().map(b => b.staffId));
       const activeIds = new Set(Object.keys(state.activeBreaks));
-      return dayPlanner()
+
+      return dayTeam()
         .filter(p => !completedIds.has(p.staffId) && !activeIds.has(p.staffId))
         .map(p => ({
           ...getStaff(p.staffId),
@@ -2461,7 +3148,7 @@
             <div class="break-top">
               <div>
                 <h4>${s?.name || "Unknown"}</h4>
-                <span>Started at ${new Date(state.activeBreaks[id]).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}</span>
+                <span>Started at ${new Date(state.activeBreaks[id]).toLocaleTimeString("en-GB", { hour:"2-digit", minute:"2-digit" })}</span>
               </div>
               <div>
                 <span class="pill ${mins > 35 ? "red" : mins > 30 ? "amber" : "green"}">${mins}m</span>
@@ -2488,7 +3175,6 @@
       }
 
       const byStaff = {};
-
       state.breakHistory.forEach(b => {
         if (!byStaff[b.staffName]) byStaff[b.staffName] = [];
         byStaff[b.staffName].push(b.duration);
@@ -2523,7 +3209,6 @@
       }
 
       const byDay = {};
-
       state.breakHistory.forEach(b => {
         if (!byDay[b.date]) byDay[b.date] = [];
         byDay[b.date].push(b.duration);
@@ -2580,7 +3265,7 @@
         <div class="row">
           <div>
             <h4>Planner coverage today</h4>
-            <p>${todayMissing} planned staff member${todayMissing === 1 ? "" : "s"} still without a completed or active break.</p>
+            <p>${todayMissing} team member${todayMissing === 1 ? "" : "s"} still without a completed or active break.</p>
           </div>
           <span class="pill">${todayMissing}</span>
         </div>
@@ -2607,7 +3292,7 @@
         <div class="row">
           <div>
             <h4>${b.staffName}</h4>
-            <p>${formatDate(b.date)} · ${new Date(b.start).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}–${new Date(b.finish).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}</p>
+            <p>${formatDate(b.date)} · ${new Date(b.start).toLocaleTimeString("en-GB", { hour:"2-digit", minute:"2-digit" })}–${new Date(b.finish).toLocaleTimeString("en-GB", { hour:"2-digit", minute:"2-digit" })}</p>
           </div>
           <span class="pill ${b.duration > 35 ? "red" : b.duration > 30 ? "amber" : "green"}">${b.duration}m</span>
         </div>
@@ -2746,6 +3431,20 @@
     }
 
     function finalSignoff() {
+      if (!hasManagerAccess()) return toast("Manager/Admin only");
+
+      const all = getAllSectionKeys();
+      const done = all.filter(k => dayHandovers()[k]).length;
+      const urgent = getUrgentItems().length;
+      const missingBreaks = getPeopleNoBreakToday().length;
+
+      if (done < all.length || urgent > 0 || missingBreaks > 0) {
+        const proceed = confirm(
+          `Sign-off check:\n\n${done}/${all.length} handover sections complete\n${urgent} urgent/open actions\n${missingBreaks} team members without a break logged\n\nSign off anyway?`
+        );
+        if (!proceed) return;
+      }
+
       const staff = getStaff(document.getElementById("signoffBy").value);
       state.signoffs[selectedDate] = {
         by: staff?.name || "Unknown",
@@ -2766,41 +3465,26 @@
         : "Not signed off yet.";
     }
 
-    function saveAudit() {
-      const selects = Array.from(document.querySelectorAll(".auditScore"));
-      const score = Math.round(selects.reduce((sum, s) => sum + Number(s.value), 0) / selects.length);
-
-      state.audits.unshift({
-        id: makeId(),
-        date: selectedDate,
-        area: document.getElementById("auditArea").value,
-        score,
-        notes: document.getElementById("auditNotes").value.trim(),
-        by: currentUser()?.name || "Unknown"
-      });
-
-      document.getElementById("auditNotes").value = "";
-      saveState();
-      toast(`Audit saved · ${score}%`);
-    }
-
-    function renderAuditScore() {
-      const selects = Array.from(document.querySelectorAll(".auditScore"));
-      const score = Math.round(selects.reduce((sum, s) => sum + Number(s.value), 0) / selects.length);
-      document.getElementById("auditScoreText").innerText = `Current audit score: ${score}%`;
-    }
-
     function exportSummary() {
       const handovers = Object.values(dayHandovers());
       const breaks = getTodayBreaks();
       const over35 = getTodayOver35();
+      const deployment = getDeploymentSummary();
+
       let text = `ShiftFlow Summary — ${formatDate(selectedDate)}\n\n`;
 
-      text += `BREAK CONTROL\n`;
+      text += `TEAM DEPLOYMENT\n`;
+      if (deployment.length) {
+        deployment.forEach(d => text += `${d.area} — ${d.zone}: ${d.names}\n`);
+      } else {
+        text += `No deployment saved.\n`;
+      }
+
+      text += `\nBREAK CONTROL\n`;
       text += `Breaks completed today: ${breaks.length}\n`;
       text += `People over 35 minutes: ${over35.length}\n`;
       over35.forEach(b => text += `- ${b.staffName}: ${b.duration} mins\n`);
-      text += `People with no break logged from planner: ${getPeopleNoBreakToday().map(s => s.name).join(", ") || "None"}\n\n`;
+      text += `People with no break logged from team: ${getPeopleNoBreakToday().map(s => s.name).join(", ") || "None"}\n\n`;
 
       text += `HANDOVERS\n`;
       handovers.forEach(h => {
@@ -2818,6 +3502,19 @@
         }
       });
 
+      const audits = state.audits.filter(a => a.date === selectedDate);
+      text += `\nAUDITS\n`;
+      if (!audits.length) {
+        text += `No audits submitted today.\n`;
+      } else {
+        audits.forEach(a => {
+          text += `${a.area}: ${a.score}% by ${a.by}\n`;
+          a.questions.filter(q => q.result !== "Pass").forEach(q => {
+            text += `- ${q.question}: ${q.result} · ${q.note || "-"}\n`;
+          });
+        });
+      }
+
       const signoff = state.signoffs[selectedDate];
       text += `\nFINAL SIGN-OFF\n${signoff ? `${signoff.by} at ${signoff.time}` : "Not signed off"}\n`;
 
@@ -2826,9 +3523,13 @@
     }
 
     function applySettings(showToast = true) {
-      const role = document.getElementById("roleSelect")?.value || state.currentRole;
-      const theme = document.getElementById("themeSelect")?.value || "light";
-      const accent = document.getElementById("accentSelect")?.value || "#111111";
+      const roleSelect = document.getElementById("roleSelect");
+      const themeSelect = document.getElementById("themeSelect");
+      const accentSelect = document.getElementById("accentSelect");
+
+      const role = roleSelect?.value || state.currentRole;
+      const theme = themeSelect?.value || "light";
+      const accent = accentSelect?.value || "#111111";
 
       state.currentRole = role;
       document.body.classList.toggle("dark", theme === "dark");
@@ -2837,8 +3538,9 @@
       document.getElementById("rolePill").innerText = role;
       document.getElementById("roleText").innerText = `${role} Access · ${currentUser()?.name || ""}`;
 
-      localStorage.setItem("shiftflow_v3_settings", JSON.stringify({ theme, accent }));
+      localStorage.setItem("shiftflow_v4_settings", JSON.stringify({ theme, accent }));
       saveState();
+      renderPermissions();
 
       if (showToast) toast("Settings applied");
     }
@@ -2851,6 +3553,7 @@
     }
 
     function resetPrototype() {
+      if (!isAdmin()) return toast("Admin only");
       if (!confirm("Reset all prototype data? Staff list will stay.")) return;
 
       const keepStaff = state.staff;
@@ -2865,7 +3568,8 @@
         drafts: {},
         signoffs: {},
         tasks: {},
-        breakPlanner: {},
+        todayTeam: {},
+        shiftBoards: {},
         activeBreaks: {},
         breakHistory: [],
         conductNotes: [],
