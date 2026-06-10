@@ -22,7 +22,6 @@
       --muted: #777777;
       --line: #eeeeee;
       --accent: #111111;
-
       --lobby: #eee4ff;
       --backlot: #dff1ff;
       --hogwarts: #e4edff;
@@ -56,7 +55,7 @@
       margin: 0 auto;
       background: var(--card);
       position: relative;
-      padding-bottom: 98px;
+      padding-bottom: 104px;
     }
 
     .topbar {
@@ -98,6 +97,10 @@
       line-height: 1;
     }
 
+    h2, h3, h4 {
+      letter-spacing: -0.3px;
+    }
+
     .subtitle {
       margin: 7px 0 0;
       color: var(--muted);
@@ -115,13 +118,6 @@
       white-space: nowrap;
     }
 
-    .top-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 9px;
-      margin-top: 14px;
-    }
-
     .page {
       display: none;
       padding: 16px;
@@ -131,7 +127,7 @@
       display: block;
     }
 
-    .card, .stat, .area-row, .break-card, .audit-item {
+    .card, .stat, .row, .break-card, .audit-item, .staff-profile {
       background: var(--panel);
       border: 1px solid var(--line);
     }
@@ -143,11 +139,33 @@
       box-shadow: 0 10px 28px rgba(0,0,0,0.035);
     }
 
+    .hero {
+      border-radius: 30px;
+      padding: 20px;
+      margin-bottom: 14px;
+      color: #111;
+      background: var(--success);
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.9px;
+    }
+
+    .hero p {
+      margin: 8px 0 0;
+      color: #444;
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .stat {
@@ -172,78 +190,6 @@
       margin: 22px 0 12px;
       font-size: 18px;
       font-weight: 950;
-      letter-spacing: -0.3px;
-    }
-
-    .main-tabs,
-    .sub-tabs,
-    .mode-tabs {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-      scrollbar-width: none;
-    }
-
-    .main-tabs::-webkit-scrollbar,
-    .sub-tabs::-webkit-scrollbar,
-    .mode-tabs::-webkit-scrollbar {
-      display: none;
-    }
-
-    .area-chip,
-    .sub-chip,
-    .mode-chip {
-      border: none;
-      padding: 12px 14px;
-      border-radius: 999px;
-      font-weight: 950;
-      font-size: 13px;
-      white-space: nowrap;
-      opacity: 0.55;
-      cursor: pointer;
-      color: #111;
-      background: #f2f2f2;
-    }
-
-    .area-chip.active,
-    .sub-chip.active,
-    .mode-chip.active {
-      opacity: 1;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-      transform: translateY(-1px);
-    }
-
-    .lobby-bg { background: var(--lobby); }
-    .backlot-bg { background: var(--backlot); }
-    .hogwarts-bg { background: var(--hogwarts); }
-    .foodhall-bg { background: var(--foodhall); }
-    .frog-bg { background: var(--frog); }
-    .dragon-bg { background: var(--dragon); }
-    .boh-bg { background: var(--boh); }
-    .danger-bg { background: var(--danger); }
-    .success-bg { background: var(--success); }
-    .warning-bg { background: var(--warning); }
-
-    .hero {
-      border-radius: 28px;
-      padding: 18px;
-      margin: 10px 0 14px;
-      color: #111;
-    }
-
-    .hero h2 {
-      margin: 0;
-      font-size: 27px;
-      letter-spacing: -0.8px;
-    }
-
-    .hero p {
-      margin: 8px 0 0;
-      color: #444;
-      font-size: 13px;
-      font-weight: 650;
-      line-height: 1.35;
     }
 
     label {
@@ -275,13 +221,100 @@
     }
 
     textarea {
-      min-height: 72px;
+      min-height: 76px;
       resize: vertical;
       line-height: 1.35;
     }
 
+    button {
+      cursor: pointer;
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .tiny-btn,
+    .chip,
+    .status-btn,
+    .quick-btn {
+      font-weight: 950;
+      border-radius: 16px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      width: 100%;
+      padding: 15px;
+      font-size: 15px;
+      margin-top: 12px;
+    }
+
+    .primary-btn {
+      border: none;
+      background: var(--accent);
+      color: white;
+    }
+
+    .secondary-btn {
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .tiny-btn {
+      border: none;
+      padding: 10px 12px;
+      background: var(--accent);
+      color: white;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .tiny-btn.light {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .chip-row,
+    .quick-row {
+      display: flex;
+      gap: 9px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scrollbar-width: none;
+    }
+
+    .chip-row::-webkit-scrollbar,
+    .quick-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      border: none;
+      padding: 12px 14px;
+      font-size: 13px;
+      white-space: nowrap;
+      color: #111;
+      opacity: 0.58;
+      background: #f2f2f2;
+    }
+
+    .chip.active {
+      opacity: 1;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      transform: translateY(-1px);
+    }
+
+    .quick-btn {
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--text);
+      padding: 9px 10px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
     .status-row,
-    .check-grid,
     .two-grid,
     .three-grid {
       display: grid;
@@ -293,24 +326,11 @@
       grid-template-columns: repeat(3, 1fr);
     }
 
-    .check-grid,
     .two-grid {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, 1fr);
     }
 
-    .status-btn,
-    .check-btn,
-    .top-btn,
-    .primary-btn,
-    .secondary-btn,
-    .tiny-btn {
-      cursor: pointer;
-      font-weight: 950;
-      border-radius: 16px;
-    }
-
-    .status-btn,
-    .check-btn {
+    .status-btn {
       border: 1px solid var(--line);
       background: var(--panel);
       padding: 12px;
@@ -318,113 +338,32 @@
       color: var(--text);
     }
 
-    .status-btn.selected,
-    .check-btn.checked {
+    .status-btn.selected {
       background: var(--accent);
       color: white;
       border-color: var(--accent);
     }
 
-    .top-btn {
-      border: none;
-      padding: 12px 10px;
-      background: var(--accent);
-      color: white;
-      font-size: 13px;
-    }
-
-    .top-btn.light,
-    .secondary-btn {
-      background: var(--panel);
-      color: var(--text);
-      border: 1px solid var(--line);
-    }
-
-    .primary-btn,
-    .secondary-btn {
-      width: 100%;
-      padding: 15px;
-      font-size: 15px;
-      margin-top: 14px;
-    }
-
-    .primary-btn {
-      border: none;
-      background: var(--accent);
-      color: white;
-    }
-
-    .tiny-btn {
-      border: none;
-      padding: 10px 12px;
-      background: var(--accent);
-      color: white;
-      font-size: 12px;
-    }
-
-    .tiny-btn.light {
-      background: var(--panel);
-      color: var(--text);
-      border: 1px solid var(--line);
-    }
-
-    .photo-box {
-      border: 1px dashed #cfcfcf;
-      border-radius: 18px;
-      padding: 14px;
-      background: var(--panel);
-      margin-top: 8px;
-    }
-
-    .photo-preview {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .photo-preview img {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-    }
-
-    .small {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.4;
-      margin: 6px 0 0;
-    }
-
-    .area-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .area-row {
+    .row {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 10px;
       align-items: center;
+      gap: 10px;
       padding: 13px;
       border-radius: 18px;
+      margin-bottom: 9px;
     }
 
-    .area-row h4 {
+    .row h4 {
       margin: 0;
       font-size: 15px;
     }
 
-    .area-row p {
+    .row p {
       margin: 4px 0 0;
       color: var(--muted);
       font-size: 12px;
-      max-width: 260px;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
+      line-height: 1.35;
     }
 
     .pill {
@@ -437,17 +376,36 @@
       white-space: nowrap;
     }
 
-    .green-text { color: #167044; }
-    .amber-text { color: #a86500; }
-    .red-text { color: #b42318; }
-    .blue-text { color: #2d62b7; }
+    .green { color: #167044; }
+    .amber { color: #a86500; }
+    .red { color: #b42318; }
+    .blue { color: #2d62b7; }
 
-    .summary-output,
-    .panel-hidden {
+    .lobby-bg { background: var(--lobby); }
+    .backlot-bg { background: var(--backlot); }
+    .hogwarts-bg { background: var(--hogwarts); }
+    .foodhall-bg { background: var(--foodhall); }
+    .frog-bg { background: var(--frog); }
+    .dragon-bg { background: var(--dragon); }
+    .boh-bg { background: var(--boh); }
+    .danger-bg { background: var(--danger); }
+    .success-bg { background: var(--success); }
+    .warning-bg { background: var(--warning); }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .panel {
       display: none;
     }
 
+    .panel.open {
+      display: block;
+    }
+
     .summary-output {
+      display: none;
       background: #111;
       color: white;
       padding: 18px;
@@ -461,59 +419,44 @@
       margin: 0 0 10px;
     }
 
+    .summary-output h4 {
+      margin: 15px 0 7px;
+    }
+
     .summary-output ul {
       margin: 0;
       padding-left: 18px;
     }
 
-    .panel-hidden.open {
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+      margin: 6px 0 0;
+    }
+
+    .wizard-step {
+      display: none;
+    }
+
+    .wizard-step.active {
       display: block;
     }
 
-    .audit-item {
-      padding: 13px;
-      border-radius: 18px;
-      margin-bottom: 9px;
+    .progress-bar {
+      height: 10px;
+      background: #ececec;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 10px;
     }
 
-    .audit-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .audit-head strong {
-      font-size: 14px;
-    }
-
-    .score-select {
-      width: auto;
-      min-width: 120px;
-      padding: 9px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 900;
-    }
-
-    .score-wrap {
-      display: flex;
-      align-items: center;
-    }
-
-    .score-circle {
-      width: 92px;
-      height: 92px;
-      border-radius: 50%;
-      background: conic-gradient(var(--accent) 100%, #eee 0);
-      color: white;
-      display: grid;
-      place-items: center;
-      font-size: 22px;
-      font-weight: 950;
-      margin-right: 14px;
-      flex-shrink: 0;
+    .progress-bar span {
+      display: block;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+      width: 0;
     }
 
     .break-card {
@@ -542,12 +485,55 @@
       margin-top: 3px;
     }
 
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 520px;
+    }
+
+    th, td {
+      padding: 11px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      font-size: 12px;
+      vertical-align: middle;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 950;
+      background: rgba(0,0,0,0.02);
+    }
+
+    td strong {
+      font-size: 13px;
+    }
+
+    .graph-row {
+      margin-bottom: 13px;
+    }
+
+    .graph-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 5px;
+      gap: 10px;
+    }
+
     .bar {
-      height: 10px;
-      background: #eee;
+      height: 11px;
+      background: #eeeeee;
       border-radius: 999px;
       overflow: hidden;
-      margin-top: 7px;
     }
 
     .bar span {
@@ -557,40 +543,49 @@
       border-radius: 999px;
     }
 
-    .more-row {
+    .staff-profile {
+      border-radius: 28px;
+      padding: 18px;
+      margin-bottom: 14px;
+      background: linear-gradient(160deg, #ffffff, #f7f7f7);
+      color: #111;
+    }
+
+    .profile-top {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       gap: 12px;
-      padding: 15px 0;
-      border-bottom: 1px solid var(--line);
-      cursor: pointer;
+      align-items: flex-start;
     }
 
-    .more-row:last-child {
-      border-bottom: none;
+    .profile-top h2 {
+      margin: 0;
+      font-size: 28px;
     }
 
-    .more-row strong {
+    .profile-stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .profile-stat {
+      background: rgba(255,255,255,0.78);
+      border: 1px solid #eeeeee;
+      border-radius: 18px;
+      padding: 12px;
+    }
+
+    .profile-stat strong {
       display: block;
-      font-size: 15px;
+      font-size: 20px;
     }
 
-    .more-row p {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .settings-panel {
-      display: none;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--line);
-    }
-
-    .settings-panel.open {
-      display: block;
+    .profile-stat span {
+      color: #666;
+      font-size: 11px;
+      font-weight: 900;
     }
 
     .bottom-nav {
@@ -604,8 +599,8 @@
       backdrop-filter: blur(16px);
       border-top: 1px solid var(--line);
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      padding: 8px 6px 18px;
+      grid-template-columns: repeat(6, 1fr);
+      padding: 8px 4px 18px;
       z-index: 50;
     }
 
@@ -614,17 +609,16 @@
       background: transparent;
       color: #888;
       display: grid;
-      gap: 4px;
+      gap: 3px;
       place-items: center;
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 950;
       padding: 7px 0;
       border-radius: 16px;
-      cursor: pointer;
     }
 
     .nav-btn span {
-      font-size: 20px;
+      font-size: 18px;
       line-height: 1;
     }
 
@@ -640,7 +634,7 @@
 
     .toast {
       position: fixed;
-      bottom: 102px;
+      bottom: 108px;
       left: 50%;
       transform: translateX(-50%);
       background: #111;
@@ -690,10 +684,6 @@
       font-size: 13px;
       line-height: 1.4;
     }
-
-    .hidden {
-      display: none !important;
-    }
   </style>
 </head>
 
@@ -701,7 +691,7 @@
   <div id="loginScreen" class="login-screen">
     <div class="login-card">
       <h2>ShiftFlow</h2>
-      <p>Prototype access for supervisors and managers. This simulates login locally until real accounts are added later.</p>
+      <p>Prototype access for supervisors and managers. Real secure accounts can be added later with a database.</p>
 
       <label>Your name</label>
       <select id="loginName"></select>
@@ -713,12 +703,10 @@
       </select>
 
       <button class="primary-btn" onclick="login()">Enter ShiftFlow</button>
-      <p class="small">No password yet — secure login would be added with a real database later.</p>
     </div>
   </div>
 
   <div class="phone">
-
     <div class="topbar">
       <div class="topline">
         <span id="todayText">Today</span>
@@ -727,164 +715,75 @@
 
       <div class="title-row">
         <div>
-          <h1 id="pageTitle">Handovers</h1>
-          <p class="subtitle" id="pageSubtitle">Daily handovers, close checks and next-shift priorities.</p>
+          <h1 id="pageTitle">Today</h1>
+          <p class="subtitle" id="pageSubtitle">Your shift command centre.</p>
         </div>
         <div id="rolePill" class="role-pill">Manager</div>
       </div>
-
-      <div id="handoverTopActions" class="top-actions">
-        <button class="top-btn" onclick="generateSummary()">Opening Summary</button>
-        <button class="top-btn light" onclick="togglePanelOpen('calendarPanel')">Calendar Review</button>
-      </div>
     </div>
 
-    <main id="handovers" class="page active">
-
-      <div class="mode-tabs">
-        <button id="closingModeBtn" class="mode-chip active" onclick="setMode('closing')">Closing mode</button>
-        <button id="openingModeBtn" class="mode-chip" onclick="setMode('opening')">Opening mode</button>
-        <button class="mode-chip" onclick="togglePanelOpen('dailyBriefingPanel')">Daily briefing</button>
-        <button class="mode-chip" onclick="togglePanelOpen('searchPanel')">Search</button>
-      </div>
-
-      <div class="card">
-        <label>Handover day</label>
-        <input type="date" id="handoverDate" onchange="changeSelectedDate(this.value)" />
-        <p class="small">All handover notes, tasks and sign-off are saved against this specific day.</p>
-      </div>
-
-      <div id="dailyBriefingPanel" class="panel-hidden card">
-        <h3 style="margin-top:0;">Daily briefing</h3>
-        <label>Duty managers</label>
-        <input id="briefingDMs" placeholder="Example: Jon, Dan G, Inez..." />
-
-        <label>Visitor number / groups</label>
-        <input id="briefingVisitors" placeholder="Example: 4332 visitors, 19 groups..." />
-
-        <label>Key briefing points</label>
-        <textarea id="briefingPoints" placeholder="Example: date rotation, speed of service, training new starters..."></textarea>
-
-        <label>Focus of the day</label>
-        <textarea id="briefingFocus" placeholder="Example: quality checks, allergies, close standards..."></textarea>
-
-        <button class="primary-btn" onclick="saveBriefing()">Save Daily Briefing</button>
-      </div>
-
-      <div id="calendarPanel" class="panel-hidden card">
-        <h3 style="margin-top:0;">Review past handovers</h3>
-
-        <div class="three-grid">
-          <button class="tiny-btn light" onclick="changeSelectedDate(todayISO())">Today</button>
-          <button class="tiny-btn light" onclick="changeSelectedDate(offsetDate(-1))">Yesterday</button>
-          <button class="tiny-btn light" onclick="togglePanelOpen('savedDaysPanel')">Saved days</button>
+    <main id="home" class="page active">
+      <div id="homeView">
+        <div class="hero">
+          <h2 id="homeGreeting">Good evening</h2>
+          <p>Start, continue and review today’s operational handover from one clean dashboard.</p>
+          <button id="startHandoverBtn" class="primary-btn" onclick="openWizard()">Start Today’s Handover</button>
         </div>
 
-        <label>Select date</label>
-        <input type="date" id="calendarDate" onchange="changeSelectedDate(this.value)" />
-
-        <div id="savedDaysPanel" class="panel-hidden">
-          <label>Saved handover days</label>
-          <div id="savedDaysList" class="area-list"></div>
-        </div>
-      </div>
-
-      <div id="searchPanel" class="panel-hidden card">
-        <h3 style="margin-top:0;">Search all handovers</h3>
-        <input id="handoverSearch" placeholder="Search ice machine, allergen, watermelon, lateness..." oninput="searchHandovers()" />
-        <div id="handoverSearchResults" class="area-list" style="margin-top:12px;"></div>
-      </div>
-
-      <div id="summaryOutput" class="summary-output">
-        <h3 id="summaryTitle">Opening Handover Summary</h3>
-        <ul id="summaryList"></ul>
-      </div>
-
-      <div id="closingView">
         <div class="dashboard-grid">
           <div class="stat">
-            <h3 id="checkedCount">0/3</h3>
-            <p>Main areas</p>
+            <h3 id="homeSectionsDone">0/7</h3>
+            <p>Sections</p>
           </div>
           <div class="stat">
-            <h3 id="redCount">0</h3>
-            <p>Urgent issues</p>
+            <h3 id="homeUrgent">0</h3>
+            <p>Urgent</p>
           </div>
           <div class="stat">
-            <h3 id="completionAvg">0%</h3>
-            <p>Avg complete</p>
+            <h3 id="homeBreaks">0</h3>
+            <p>Breaks</p>
           </div>
         </div>
 
-        <div class="section-title">Main area</div>
-        <div class="main-tabs" id="mainAreaTabs"></div>
-
-        <div class="section-title" id="subAreaTitle">Section</div>
-        <div class="sub-tabs" id="subAreaTabs"></div>
-
-        <div id="areaHero" class="hero lobby-bg">
-          <h2 id="selectedAreaTitle">General Lobby</h2>
-          <p id="selectedAreaDesc">Main Lobby handover: duty managers, visitor numbers, briefing, conduct, service issues and safe/change.</p>
+        <div class="two-grid">
+          <button class="secondary-btn" onclick="generateSummary()">Opening Summary</button>
+          <button class="secondary-btn" onclick="togglePanel('calendarPanel')">Calendar Review</button>
         </div>
 
-        <div class="card" id="handoverFormCard">
-          <label>Area status</label>
-          <div class="status-row">
-            <button class="status-btn selected" onclick="setStatus('Green', this)">Green</button>
-            <button class="status-btn" onclick="setStatus('Amber', this)">Amber</button>
-            <button class="status-btn" onclick="setStatus('Red', this)">Red</button>
-          </div>
-
-          <label>Priority</label>
-          <select id="prioritySelect">
-            <option>Low</option>
-            <option selected>Medium</option>
-            <option>High</option>
-            <option>Urgent</option>
-          </select>
-
-          <label>Submitted by</label>
-          <select id="submittedBy"></select>
-
-          <div id="dynamicForm"></div>
-
-          <label>Action required?</label>
-          <select id="actionRequired" onchange="toggleActionFields()">
-            <option>No action needed</option>
-            <option>Action required</option>
-          </select>
-
-          <div id="actionFields" class="panel-hidden">
-            <label>What needs doing?</label>
-            <textarea id="actionText" placeholder="Example: Check ice machine, prep salsa, restock watermelon..."></textarea>
-
-            <label>Who should do it?</label>
-            <input id="actionOwner" placeholder="Example: Opening supervisor, BOH, manager..." />
-
-            <label>Due by</label>
-            <input type="date" id="actionDue" />
-          </div>
-
-          <label>Photos / evidence</label>
-          <div class="photo-box">
-            <input type="file" id="photoInput" accept="image/*" multiple onchange="previewPhotos(event)" />
-            <p class="small">Prototype stores photo count only. Real app would upload files to cloud storage.</p>
-            <div id="photoPreview" class="photo-preview"></div>
-          </div>
-
-          <button class="primary-btn" onclick="submitArea()">Submit Area Handover</button>
-          <button class="secondary-btn" onclick="togglePanelOpen('versionHistoryPanel')">View Edit History</button>
-
-          <div id="versionHistoryPanel" class="panel-hidden">
-            <div class="section-title">Edit history</div>
-            <div id="versionHistoryList" class="area-list"></div>
-          </div>
+        <div id="summaryOutput" class="summary-output">
+          <h3>Opening Summary</h3>
+          <div id="summaryContent"></div>
         </div>
 
-        <div class="section-title">Daily handover dashboard</div>
+        <div id="calendarPanel" class="panel card">
+          <h3 style="margin-top:0;">Calendar Review</h3>
+          <label>Selected day</label>
+          <input type="date" id="selectedDateInput" onchange="changeDate(this.value)" />
+          <div class="three-grid">
+            <button class="tiny-btn light" onclick="changeDate(todayISO())">Today</button>
+            <button class="tiny-btn light" onclick="changeDate(offsetDate(-1))">Yesterday</button>
+            <button class="tiny-btn light" onclick="renderSavedDays()">Refresh</button>
+          </div>
+          <div id="savedDaysList" style="margin-top:12px;"></div>
+        </div>
+
+        <div class="section-title">Today’s progress</div>
         <div class="card">
-          <div id="handoverDashboard" class="area-list"></div>
+          <div id="todayProgress"></div>
         </div>
+
+        <div class="section-title">Urgent actions</div>
+        <div class="card">
+          <div id="urgentActions"></div>
+        </div>
+
+        <div class="section-title">Unresolved from previous days</div>
+        <div class="card">
+          <div id="unresolvedIssues"></div>
+        </div>
+
+        <div class="section-title">Area status</div>
+        <div id="areaStatusCards"></div>
 
         <div class="section-title">Final sign-off</div>
         <div class="card">
@@ -895,92 +794,182 @@
         </div>
       </div>
 
-      <div id="openingView" class="hidden">
-        <div class="dashboard-grid">
-          <div class="stat">
-            <h3 id="openTaskCount">0</h3>
-            <p>Open tasks</p>
-          </div>
-          <div class="stat">
-            <h3 id="urgentTaskCount">0</h3>
-            <p>Urgent</p>
-          </div>
-          <div class="stat">
-            <h3 id="doneTaskCount">0</h3>
-            <p>Completed</p>
-          </div>
-        </div>
-
-        <div class="hero success-bg">
-          <h2>Opening Tasks</h2>
-          <p>Generated from action-required handover notes. Openers can work through the list and tick tasks off.</p>
-        </div>
-
+      <div id="handoverWizard" class="hidden">
         <div class="card">
-          <button class="primary-btn" onclick="generateOpeningTasks()">Generate Opening Tasks</button>
-          <button class="secondary-btn" onclick="clearCompletedTasks()">Clear Completed Tasks</button>
+          <button class="tiny-btn light" onclick="closeWizard()">← Back to Today</button>
+          <h3 id="wizardTitle">Start Today’s Handover</h3>
+          <p id="wizardSubtitle" class="small">Follow the steps and review before submitting.</p>
+          <div class="progress-bar"><span id="wizardProgress"></span></div>
         </div>
 
-        <div id="openingTaskList" class="area-list"></div>
+        <div id="wizardStep1" class="wizard-step active">
+          <div class="section-title">Pick area</div>
+          <div class="card">
+            <button class="primary-btn lobby-bg" style="color:#111;" onclick="chooseWizardMain('lobby')">Lobby</button>
+            <button class="primary-btn backlot-bg" style="color:#111;" onclick="chooseWizardMain('backlot')">Backlot</button>
+            <button class="primary-btn hogwarts-bg" style="color:#111;" onclick="chooseWizardMain('hogwarts')">Hogwarts Table</button>
+          </div>
+        </div>
+
+        <div id="wizardStep2" class="wizard-step">
+          <div class="section-title">Pick section</div>
+          <div class="card" id="sectionPicker"></div>
+        </div>
+
+        <div id="wizardStep3" class="wizard-step">
+          <div id="wizardHero" class="hero">
+            <h2 id="wizardSectionName">Section</h2>
+            <p id="wizardSectionDesc">Complete the handover questions.</p>
+          </div>
+
+          <div class="card">
+            <label>Area status</label>
+            <div class="status-row">
+              <button class="status-btn selected" onclick="setWizardStatus('Green', this)">Green</button>
+              <button class="status-btn" onclick="setWizardStatus('Amber', this)">Amber</button>
+              <button class="status-btn" onclick="setWizardStatus('Red', this)">Red</button>
+            </div>
+
+            <label>Priority</label>
+            <select id="wizardPriority" onchange="saveDraft()">
+              <option>Low</option>
+              <option selected>Medium</option>
+              <option>High</option>
+              <option>Urgent</option>
+            </select>
+
+            <label>Submitted by</label>
+            <select id="wizardSubmittedBy" onchange="saveDraft()"></select>
+
+            <div id="wizardQuestions"></div>
+
+            <label>Action required?</label>
+            <select id="wizardActionRequired" onchange="toggleWizardAction(); saveDraft();">
+              <option>No action needed</option>
+              <option>Action required</option>
+            </select>
+
+            <div id="wizardActionFields" class="panel">
+              <label>What needs doing?</label>
+              <textarea id="wizardActionText" oninput="saveDraft()" placeholder="Example: Check ice machine, prep salsa, restock watermelon..."></textarea>
+
+              <label>Who should do it?</label>
+              <input id="wizardActionOwner" oninput="saveDraft()" placeholder="Opening supervisor, BOH, manager..." />
+
+              <label>Due by</label>
+              <input type="date" id="wizardActionDue" onchange="saveDraft()" />
+            </div>
+
+            <button class="primary-btn" onclick="openReview()">Review Handover</button>
+          </div>
+        </div>
+
+        <div id="wizardStep4" class="wizard-step">
+          <div class="section-title">Review before submit</div>
+          <div class="card">
+            <div id="reviewBox"></div>
+            <button class="primary-btn" onclick="submitHandover()">Submit Handover</button>
+            <button class="secondary-btn" onclick="showWizardStep(3)">Edit Answers</button>
+          </div>
+        </div>
       </div>
     </main>
 
     <main id="audits" class="page">
+      <div class="section-title">Audit checks</div>
       <div class="card">
-        <div class="score-wrap">
-          <div id="auditScore" class="score-circle">100%</div>
-          <div>
-            <h3 style="margin:0;font-size:20px;">Audit score</h3>
-            <p class="small">Cleanliness, labelling, allergens, equipment and readiness. Stock levels stay separate.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <label>Audit date</label>
-        <input type="date" id="auditDate" />
-
         <label>Audit area</label>
         <select id="auditArea">
           <option>Lobby</option>
           <option>Backlot</option>
           <option>Hogwarts Table</option>
         </select>
-      </div>
 
-      <div class="section-title">Audit checklist</div>
+        <label>Cleanliness</label>
+        <select class="auditScore" onchange="renderAuditScore()">
+          <option value="100">Pass</option>
+          <option value="70">Minor issue</option>
+          <option value="30">Major issue</option>
+          <option value="0">Fail</option>
+        </select>
 
-      <div class="card">
-        <div id="auditChecklist"></div>
+        <label>Date labelling</label>
+        <select class="auditScore" onchange="renderAuditScore()">
+          <option value="100">Pass</option>
+          <option value="70">Minor issue</option>
+          <option value="30">Major issue</option>
+          <option value="0">Fail</option>
+        </select>
 
-        <label>Audit photos</label>
-        <div class="photo-box">
-          <input type="file" accept="image/*" multiple />
-          <p class="small">Attach photos for evidence.</p>
-        </div>
+        <label>Allergens</label>
+        <select class="auditScore" onchange="renderAuditScore()">
+          <option value="100">Pass</option>
+          <option value="70">Minor issue</option>
+          <option value="30">Major issue</option>
+          <option value="0">Fail</option>
+        </select>
 
-        <button class="primary-btn" onclick="submitAudit()">Submit Audit Check</button>
+        <label>Equipment condition</label>
+        <select class="auditScore" onchange="renderAuditScore()">
+          <option value="100">Pass</option>
+          <option value="70">Minor issue</option>
+          <option value="30">Major issue</option>
+          <option value="0">Fail</option>
+        </select>
+
+        <label>Guest-facing readiness</label>
+        <select class="auditScore" onchange="renderAuditScore()">
+          <option value="100">Pass</option>
+          <option value="70">Minor issue</option>
+          <option value="30">Major issue</option>
+          <option value="0">Fail</option>
+        </select>
+
+        <label>Audit notes</label>
+        <textarea id="auditNotes" placeholder="Evidence, issues, follow-up needed..."></textarea>
+
+        <button class="primary-btn" onclick="saveAudit()">Save Audit</button>
+        <p class="small" id="auditScoreText">Current audit score: 100%</p>
       </div>
     </main>
 
     <main id="breaks" class="page">
       <div class="dashboard-grid">
         <div class="stat">
-          <h3 id="onBreakCount">0</h3>
-          <p>On break</p>
+          <h3 id="breaksCompletedToday">0</h3>
+          <p>Completed today</p>
         </div>
         <div class="stat">
-          <h3 id="avgBreak">0m</h3>
-          <p>Avg break</p>
+          <h3 id="breaksActiveToday">0</h3>
+          <p>Active</p>
         </div>
         <div class="stat">
-          <h3 id="breakLogs">0</h3>
-          <p>Break logs</p>
+          <h3 id="breaksOver35Today">0</h3>
+          <p>Over 35m</p>
         </div>
       </div>
 
-      <div class="section-title">Log break</div>
+      <div class="section-title">Break Planner</div>
+      <div class="card">
+        <label>Add staff working today</label>
+        <select id="plannerStaff"></select>
 
+        <label>Start time</label>
+        <input type="time" id="plannerStartTime" />
+
+        <label>Suggested break time</label>
+        <input type="time" id="plannerBreakTime" />
+
+        <button class="primary-btn" onclick="addToBreakPlanner()">Add to Today’s Break Table</button>
+        <button class="secondary-btn" onclick="autoPlanBreaks()">Auto-suggest Break Times</button>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0;">Today’s break table</h3>
+        <div id="breakPlannerTable"></div>
+      </div>
+
+      <div class="section-title">Quick break log</div>
       <div class="card">
         <label>Employee</label>
         <select id="breakEmployee"></select>
@@ -989,91 +978,134 @@
           <button class="primary-btn" onclick="startBreak()">Start Break</button>
           <button class="secondary-btn" onclick="finishBreak()">Finish Break</button>
         </div>
-
-        <button class="secondary-btn" onclick="togglePanelOpen('breakHistoryPanel')">Open Break History</button>
-      </div>
-
-      <div id="breakHistoryPanel" class="panel-hidden card">
-        <h3 style="margin-top:0;">Break history</h3>
-
-        <label>Filter by name</label>
-        <select id="breakFilterName" onchange="renderBreakHistory()"></select>
-
-        <label>Filter by date</label>
-        <input type="date" id="breakFilterDate" onchange="renderBreakHistory()" />
-
-        <button class="secondary-btn" onclick="clearBreakFilters()">Clear Filters</button>
-
-        <div class="section-title">Filtered logs</div>
-        <div id="filteredBreakHistory"></div>
       </div>
 
       <div class="section-title">Current breaks</div>
       <div id="currentBreaks"></div>
 
-      <div class="section-title">Break patterns</div>
+      <div class="section-title">Multi-day break analytics</div>
       <div class="card">
-        <div id="breakPatterns"></div>
-        <button class="secondary-btn" onclick="generateBreakPatterns(true)">Generate Patterns</button>
+        <h3 style="margin-top:0;">Average break by staff</h3>
+        <div id="staffBreakGraph"></div>
+
+        <h3>Average break by day</h3>
+        <div id="dailyBreakGraph"></div>
+
+        <h3>Pattern summary</h3>
+        <div id="breakPatternSummary"></div>
+      </div>
+
+      <div class="section-title">Break history</div>
+      <div class="card">
+        <label>Filter by staff</label>
+        <select id="breakFilterStaff" onchange="renderBreakHistory()"></select>
+
+        <label>Filter by date</label>
+        <input type="date" id="breakFilterDate" onchange="renderBreakHistory()" />
+
+        <button class="secondary-btn" onclick="clearBreakFilters()">Clear Filters</button>
+        <div id="breakHistoryList" style="margin-top:12px;"></div>
+      </div>
+    </main>
+
+    <main id="staff" class="page">
+      <div class="section-title">Staff</div>
+
+      <div class="card">
+        <label>Add staff name</label>
+        <input id="newStaffName" placeholder="Example: Freya Smith" />
+
+        <label>Clock-in number</label>
+        <input id="newStaffClock" placeholder="Example: 12345" />
+
+        <label>Role</label>
+        <select id="newStaffRole">
+          <option>General Assistant</option>
+          <option>Supervisor</option>
+          <option>Manager</option>
+          <option>Kitchen</option>
+        </select>
+
+        <label>Usual area</label>
+        <select id="newStaffArea">
+          <option>Lobby</option>
+          <option>Backlot</option>
+          <option>Hogwarts Table</option>
+          <option>Flexible</option>
+        </select>
+
+        <button class="primary-btn" onclick="addStaff()">Add Staff</button>
+      </div>
+
+      <div class="card">
+        <label>Search staff</label>
+        <input id="staffSearch" oninput="renderStaffList()" placeholder="Search by name, clock-in, role..." />
+      </div>
+
+      <div id="staffList"></div>
+
+      <div id="staffProfilePanel" class="hidden">
+        <div class="staff-profile">
+          <div class="profile-top">
+            <div>
+              <h2 id="profileName">Name</h2>
+              <p id="profileRole" class="small">Role</p>
+            </div>
+            <span id="profileClock" class="pill">Clock</span>
+          </div>
+
+          <div class="profile-stat-grid">
+            <div class="profile-stat">
+              <strong id="profileGood">0</strong>
+              <span>Good mentions</span>
+            </div>
+            <div class="profile-stat">
+              <strong id="profileBad">0</strong>
+              <span>Bad mentions</span>
+            </div>
+            <div class="profile-stat">
+              <strong id="profileAvgBreak">0m</strong>
+              <span>Avg break</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top:0;">Staff information</h3>
+          <p id="profileInfo" class="small"></p>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top:0;">Latest mentions</h3>
+          <div id="profileMentions"></div>
+        </div>
+
+        <button class="secondary-btn" onclick="closeStaffProfile()">Close Profile</button>
       </div>
     </main>
 
     <main id="conduct" class="page">
-      <div class="section-title">Add staff note</div>
-
+      <div class="section-title">Staff notes</div>
       <div class="card">
         <label>Type</label>
-        <div class="check-grid">
-          <button class="check-btn" onclick="selectConduct(this)">Shout-out</button>
-          <button class="check-btn" onclick="selectConduct(this)">Conduct issue</button>
-          <button class="check-btn" onclick="selectConduct(this)">Training note</button>
-          <button class="check-btn" onclick="selectConduct(this)">Service issue</button>
-        </div>
-
-        <label>Staff member</label>
-        <input id="conductName" placeholder="Enter staff name..." />
-
-        <label>Date</label>
-        <input type="date" id="conductDate" />
-
-        <label>Details</label>
-        <textarea id="conductDetails" placeholder="Example: carried Dragon close, CFC lateness, handled allergies well..."></textarea>
-
-        <label>Follow-up required?</label>
-        <select id="conductFollow">
-          <option>No follow-up needed</option>
-          <option>Supervisor follow-up</option>
-          <option>Manager follow-up</option>
-          <option>CoC / formal action required</option>
-        </select>
-
-        <button class="primary-btn" onclick="saveConduct()">Save Staff Note</button>
-        <button class="secondary-btn" onclick="togglePanelOpen('conductHistoryPanel')">Open Conduct History</button>
-      </div>
-
-      <div id="conductHistoryPanel" class="panel-hidden card">
-        <h3 style="margin-top:0;">Conduct / shout-out history</h3>
-
-        <label>Filter by name</label>
-        <input id="conductFilterName" placeholder="Search name..." oninput="renderConductHistory()" />
-
-        <label>Filter by date</label>
-        <input type="date" id="conductFilterDate" onchange="renderConductHistory()" />
-
-        <label>Filter by type</label>
-        <select id="conductFilterType" onchange="renderConductHistory()">
-          <option>All types</option>
+        <select id="conductType">
           <option>Shout-out</option>
           <option>Conduct issue</option>
           <option>Training note</option>
           <option>Service issue</option>
         </select>
 
-        <button class="secondary-btn" onclick="clearConductFilters()">Clear Filters</button>
+        <label>Staff member</label>
+        <select id="conductStaff"></select>
 
-        <div class="section-title">Filtered notes</div>
-        <div id="filteredConductHistory" class="area-list"></div>
+        <label>Details</label>
+        <textarea id="conductDetails" placeholder="What happened? Be clear and specific."></textarea>
+
+        <button class="primary-btn" onclick="saveConduct()">Save Staff Note</button>
       </div>
+
+      <div class="section-title">Recent notes</div>
+      <div id="conductList"></div>
 
       <div class="section-title">Incident log</div>
       <div class="card">
@@ -1098,164 +1130,92 @@
         <textarea id="incidentDetails" placeholder="What happened, who dealt with it, what was the solution?"></textarea>
 
         <button class="primary-btn" onclick="saveIncident()">Save Incident</button>
-        <button class="secondary-btn" onclick="togglePanelOpen('incidentHistoryPanel')">Open Incident History</button>
       </div>
 
-      <div id="incidentHistoryPanel" class="panel-hidden card">
-        <h3 style="margin-top:0;">Incident history</h3>
-        <label>Search incidents</label>
-        <input id="incidentSearch" oninput="renderIncidents()" placeholder="Search allergen, refund, complaint..." />
-        <div id="incidentList" class="area-list" style="margin-top:12px;"></div>
-      </div>
-
-      <div class="section-title">Recent notes</div>
-      <div id="conductList" class="area-list"></div>
+      <div id="incidentList"></div>
     </main>
 
     <main id="more" class="page">
+      <div class="section-title">Equipment log</div>
       <div class="card">
-        <div class="more-row" onclick="togglePanel('panelEquipment')">
-          <div>
-            <strong>Equipment log</strong>
-            <p>Track broken, logged, fixed and ongoing equipment issues.</p>
-          </div>
-          <span>›</span>
-        </div>
+        <label>Equipment / item</label>
+        <input id="equipmentName" placeholder="Example: ice machine, pass 1 coffee machine..." />
 
-        <div id="panelEquipment" class="settings-panel">
-          <label>Equipment / item</label>
-          <input id="equipmentName" placeholder="Example: ice machine, pass 1 coffee machine..." />
+        <label>Area</label>
+        <select id="equipmentArea">
+          <option>Lobby</option>
+          <option>Backlot</option>
+          <option>Hogwarts Table</option>
+        </select>
 
-          <label>Area</label>
-          <select id="equipmentArea">
-            <option>Lobby</option>
-            <option>Backlot</option>
-            <option>Hogwarts Table</option>
-          </select>
+        <label>Status</label>
+        <select id="equipmentStatus">
+          <option>Open</option>
+          <option>Logged</option>
+          <option>Awaiting facilities</option>
+          <option>Fixed</option>
+        </select>
 
-          <label>Status</label>
-          <select id="equipmentStatus">
-            <option>Open</option>
-            <option>Logged</option>
-            <option>Awaiting facilities</option>
-            <option>Fixed</option>
-          </select>
+        <label>Notes</label>
+        <textarea id="equipmentNotes" placeholder="Details, who logged it, what still needs doing..."></textarea>
 
-          <label>Notes</label>
-          <textarea id="equipmentNotes" placeholder="Details, who logged it, what still needs doing..."></textarea>
+        <button class="primary-btn" onclick="saveEquipment()">Save Equipment Issue</button>
+      </div>
 
-          <button class="primary-btn" onclick="saveEquipment()">Save Equipment Issue</button>
+      <div id="equipmentList"></div>
 
-          <label>Filter equipment</label>
-          <input id="equipmentSearch" oninput="renderEquipment()" placeholder="Search equipment history..." />
-          <div id="equipmentList" class="area-list" style="margin-top:12px;"></div>
-        </div>
+      <div class="section-title">Export</div>
+      <div class="card">
+        <button class="primary-btn" onclick="exportSummary()">Create Email-Style Export</button>
+        <textarea id="exportText" style="min-height:220px;margin-top:12px;"></textarea>
+      </div>
 
-        <div class="more-row" onclick="togglePanel('panelStorage')">
-          <div>
-            <strong>Company storage plan</strong>
-            <p>Where the real app would save information.</p>
-          </div>
-          <span>›</span>
-        </div>
+      <div class="section-title">Settings</div>
+      <div class="card">
+        <label>Current user</label>
+        <select id="currentUserSelect" onchange="changeCurrentUser()"></select>
 
-        <div id="panelStorage" class="settings-panel">
-          <p class="small"><strong>Prototype:</strong> browser localStorage.</p>
-          <p class="small"><strong>Real app later:</strong> Firebase or Supabase for shared data, secure login and cloud photo storage.</p>
-        </div>
+        <label>Role</label>
+        <select id="roleSelect" onchange="applySettings()">
+          <option>Manager</option>
+          <option>Supervisor</option>
+        </select>
 
-        <div class="more-row" onclick="togglePanel('panelTemplates')">
-          <div>
-            <strong>Area templates</strong>
-            <p>View current structure.</p>
-          </div>
-          <span>›</span>
-        </div>
+        <label>Appearance</label>
+        <select id="themeSelect" onchange="applySettings()">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
 
-        <div id="panelTemplates" class="settings-panel">
-          <p class="small"><strong>Lobby:</strong> General Lobby, Food Hall, Frog, Dragon.</p>
-          <p class="small"><strong>Backlot:</strong> Backlot & BBB, BOH Prep.</p>
-          <p class="small"><strong>Hogwarts Table:</strong> one dedicated handover form.</p>
-        </div>
+        <label>Accent</label>
+        <select id="accentSelect" onchange="applySettings()">
+          <option value="#111111">Black</option>
+          <option value="#d06b28">Butterbeer Orange</option>
+          <option value="#4169e1">Hogwarts Blue</option>
+          <option value="#7b61ff">Lobby Purple</option>
+        </select>
 
-        <div class="more-row" onclick="togglePanel('panelStaff')">
-          <div>
-            <strong>Staff list</strong>
-            <p>Add demo staff for break and conduct filtering.</p>
-          </div>
-          <span>›</span>
-        </div>
-
-        <div id="panelStaff" class="settings-panel">
-          <label>Add staff member</label>
-          <input id="newStaffName" placeholder="Staff name..." />
-          <button class="secondary-btn" onclick="addStaff()">Add Staff</button>
-          <p class="small" id="staffListText"></p>
-        </div>
-
-        <div class="more-row" onclick="exportEmailSummary()">
-          <div>
-            <strong>Export handover</strong>
-            <p>Create an email-style summary from the selected day.</p>
-          </div>
-          <span>›</span>
-        </div>
-
-        <div id="exportBox" class="settings-panel">
-          <label>Email-style handover</label>
-          <textarea id="exportText" style="min-height:220px;"></textarea>
-        </div>
-
-        <div class="more-row" onclick="togglePanel('panelSettings')">
-          <div>
-            <strong>Settings</strong>
-            <p>Role, theme, accent, current user and reset controls.</p>
-          </div>
-          <span>›</span>
-        </div>
-
-        <div id="panelSettings" class="settings-panel">
-          <label>Current user</label>
-          <select id="currentUserSelect" onchange="applyCurrentUser()"></select>
-
-          <label>Role</label>
-          <select id="roleSelect" onchange="applySettings()">
-            <option>Manager</option>
-            <option>Supervisor</option>
-          </select>
-
-          <label>Appearance</label>
-          <select id="themeSelect" onchange="applySettings()">
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-
-          <label>Accent</label>
-          <select id="accentSelect" onchange="applySettings()">
-            <option value="#111111">Black</option>
-            <option value="#d06b28">Butterbeer Orange</option>
-            <option value="#4169e1">Hogwarts Blue</option>
-            <option value="#7b61ff">Lobby Purple</option>
-          </select>
-
-          <button class="secondary-btn" onclick="logout()">Log out</button>
-          <button class="secondary-btn" onclick="resetPrototype()">Reset Prototype Data</button>
-        </div>
+        <button class="secondary-btn" onclick="logout()">Log out</button>
+        <button class="secondary-btn" onclick="resetPrototype()">Reset Prototype Data</button>
       </div>
     </main>
 
     <nav class="bottom-nav">
-      <button class="nav-btn active" onclick="openPage('handovers', this)">
-        <span>📝</span>
-        Handovers
+      <button class="nav-btn active" onclick="openPage('home', this)">
+        <span>🏠</span>
+        Today
       </button>
-      <button id="auditNav" class="nav-btn" onclick="openPage('audits', this)">
+      <button class="nav-btn" onclick="openPage('audits', this)">
         <span>✅</span>
         Audits
       </button>
       <button class="nav-btn" onclick="openPage('breaks', this)">
         <span>☕</span>
         Breaks
+      </button>
+      <button class="nav-btn" onclick="openPage('staff', this)">
+        <span>⭐</span>
+        Staff
       </button>
       <button class="nav-btn" onclick="openPage('conduct', this)">
         <span>👥</span>
@@ -1279,68 +1239,60 @@
           lobbygeneral: {
             name: "General Lobby",
             colour: "lobby-bg",
-            desc: "Main Lobby handover: duty managers, visitor numbers, briefing, conduct, service issues and safe/change.",
-            checks: ["Briefing completed", "Service issues checked", "Safe/change checked", "Conduct reviewed"],
+            desc: "Duty managers, visitor numbers, briefing, conduct, observations, service issues and safe/change.",
             required: ["WB DMs", "Visitor number", "Briefing: key points mentioned, who led the brief including PM", "Service issues in any Lobby areas"],
             fields: [
-              ["wbdms", "WB DMs", "Example: Jon, Dan G, Dan L, Inez..."],
-              ["visitors", "Visitor number", "Example: 4332, 19 groups..."],
-              ["briefing", "Briefing: key points mentioned, who led the brief including PM", "Example: Ensure we are date rotating correctly and training new starters..."],
-              ["shoutouts", "Shout outs, including the reasons", "Example: Freya was really good today and carried the Dragon close..."],
-              ["conduct", "Conduct including timekeeping, attitude and service", "Example: lateness, attitude issues, service concerns, CoC required..."],
-              ["observations", "Observations completed", "List all observations completed..."],
-              ["serviceissues", "Service issues in any Lobby areas", "Anything raised by visitor/complaints, who dealt with it, what was the solution, any food incidents..."],
-              ["safechange", "Safe & change run completed/required", "Example: £305 completed/required..."]
+              ["WB DMs", "Example: Jon, Dan G, Inez..."],
+              ["Visitor number", "Example: 4332 visitors, 19 groups..."],
+              ["Briefing: key points mentioned, who led the brief including PM", "Example: date rotation, new starters, speed of service..."],
+              ["Shout outs, including the reasons", "Example: Freya carried Dragon close..."],
+              ["Conduct including timekeeping, attitude and service", "Example: lateness, attitude, service issue..."],
+              ["Observations completed", "List any observations completed..."],
+              ["Service issues in any Lobby areas", "Complaints, food incidents, who dealt with it, outcome..."],
+              ["Safe & change run completed/required", "Example: £305 completed/required..."]
             ]
           },
-
           foodhall: {
             name: "Food Hall",
             colour: "foodhall-bg",
-            desc: "Food Hall handover: sundae station, wastage, stock shortages, equipment and key notes.",
-            checks: ["Sundae station checked", "Wastage entered", "Equipment checked", "Close completed"],
+            desc: "Sundae station, wastage, stock shortages, equipment and anything else.",
             required: ["Wastage: include stock from sundae station and drink fridges", "Broken/logged equipment", "Anything else to know"],
             fields: [
-              ["sundae", "Sundae station: anything required from pastry", "Example: mango needed, pastry required, no issues..."],
-              ["wastage", "Wastage: include stock from sundae station and drink fridges", "Example: n/a, cakes put through AM, drink fridge wastage..."],
-              ["shortages", "Stock shortages: food or drink", "Example: no peach iced tea, sandwiches ran out..."],
-              ["equipment", "Broken/logged equipment", "Example: nothing new, coffee machine logged, fridge issue..."],
-              ["anything", "Anything else to know", "Example: deluxe setup, cutlery wrapped, fridge is full..."]
+              ["Sundae station: anything required from pastry", "Anything needed from pastry..."],
+              ["Wastage: include stock from sundae station and drink fridges", "High volume wastage, drink fridges..."],
+              ["Stock shortages: food or drink", "Shortages or low items..."],
+              ["Broken/logged equipment", "Equipment issues..."],
+              ["Anything else to know", "Any extra notes..."]
             ]
           },
-
           frog: {
             name: "Frog",
             colour: "frog-bg",
-            desc: "Frog handover: wastage, product availability, ice cream, equipment and extra notes.",
-            checks: ["Wastage entered", "Products checked", "Ice cream checked", "Area clean"],
-            required: ["Wastage: list anything of high volume", "Any product unavailable during the day and the reasons", "Anything else to know"],
+            desc: "Wastage, product availability, ice cream, equipment and anything else.",
+            required: ["Wastage: list anything of high volume", "Any product unavailable during the day and the reasons"],
             fields: [
-              ["wastage", "Wastage: list anything of high volume", "Example: 12 bottles of milk wasted AM due to incident..."],
-              ["unavailable", "Any product unavailable during the day and the reasons", "Example: all products available during shift, will need more..."],
-              ["icecream", "Ice Cream Availability", "Example: taken out AM, low, full, defrosting..."],
-              ["equipment", "Broken/logged equipment", "Any equipment issues..."],
-              ["anything", "Anything else to know", "Example: all mason jars prepped, Gabriel cleaned dishwasher..."]
+              ["Wastage: list anything of high volume", "High-volume wastage..."],
+              ["Any product unavailable during the day and the reasons", "Unavailable items and why..."],
+              ["Ice Cream Availability", "Levels, defrosting, low stock..."],
+              ["Broken/logged equipment", "Equipment issues..."],
+              ["Anything else to know", "Any extra notes..."]
             ]
           },
-
           dragon: {
             name: "Dragon",
             colour: "dragon-bg",
-            desc: "Dragon handover: wastage, stock availability, milk dates, equipment and extra notes.",
-            checks: ["Wastage entered", "Stock checked", "Milk dates checked", "Equipment checked"],
+            desc: "Wastage, stock availability, milk dates, equipment and anything else.",
             required: ["Wastage", "Stock availability: cakes, sandwiches, feature drink toppers", "Dates of milk"],
             fields: [
-              ["wastage", "Wastage", "Example: all entered..."],
-              ["availability", "Stock availability: cakes, sandwiches, feature drink toppers", "Example: will need watermelon, sandwiches thrown, cakes low..."],
-              ["milk", "Dates of milk", "Example: 9th+..."],
-              ["equipment", "Broken/logged equipment", "Example: nothing new..."],
-              ["anything", "Anything else to know", "Example: lots of sandwiches thrown, put through the till..."]
+              ["Wastage", "Wastage notes..."],
+              ["Stock availability: cakes, sandwiches, feature drink toppers", "Low or unavailable items..."],
+              ["Dates of milk", "Example: 9th+..."],
+              ["Broken/logged equipment", "Equipment issues..."],
+              ["Anything else to know", "Any extra notes..."]
             ]
           }
         }
       },
-
       backlot: {
         name: "Backlot",
         colour: "backlot-bg",
@@ -1348,46 +1300,42 @@
           backlotbbb: {
             name: "Backlot & BBB",
             colour: "backlot-bg",
-            desc: "Backlot and Butterbeer Bar handover: briefing, service, quality checks, tankards, BBB stock, BOH prep and equipment.",
-            checks: ["Quality checks completed", "Tankards checked", "BBB stock checked", "BOH prep checked"],
+            desc: "Briefing, safe/change, quality checks, tankards, ice cream, toppings, BBB product, BOH prep and equipment.",
             required: ["Briefing: key points mentioned, who led the brief including PM", "Quality checks: how often completed and results", "Broken/logged equipment"],
             fields: [
-              ["briefing", "Briefing: key points mentioned, who led the brief including PM", "Example: Quick and efficient service while maintaining service standards..."],
-              ["safechange", "Safe & change run required/completed", "Example: £970 required/completed..."],
-              ["shoutouts", "Shout outs, including the reasons", "Example: Isabella and James for being proactive..."],
-              ["conduct", "Conduct including timekeeping, attitude and service", "Example: Noah P CFC lateness..."],
-              ["observations", "Observations completed", "List all observations completed..."],
-              ["serviceissues", "Service issues", "Anything raised by visitor/complaints, who dealt with it, solution, food incidents..."],
-              ["quality", "Quality checks: how often completed and results", "Example: throughout the day, wasting anything under temp or hard buns..."],
-              ["tankards", "Tankards run required: yes or no", "Example: top up, yes, no, completed PM..."],
-              ["icecream", "Ice cream levels", "Example: 13 in walk-in, 15 at BBB, 30 defrosting..."],
-              ["toppings", "Topping levels", "Example: 9 mixed in walk-in, 3 at BBB..."],
-              ["wastage", "Wastage for all areas FOH & BOH", "Please list anything that was high volume..."],
-              ["product", "Product availability: all sweet treats for BBB", "Example: ran out of meringue, 1 trolley cupcakes, 5 trays cookies, loads of fudge..."],
-              ["bohprep", "BOH prep: ensure prep completed is for day ahead, not on the day for the day", "Example: salad trolley, buns, onions, salsa dipping sauce..."],
-              ["equipment", "Broken/logged equipment", "Example: ice machine, pass 1 coffee machine still logged..."],
-              ["anything", "Anything else to know", "Example: didn’t use prep kitchen fryer, sauces made, trays left..."]
+              ["Briefing: key points mentioned, who led the brief including PM", "Key points from brief..."],
+              ["Safe & change run required/completed", "Example: £970 required/completed..."],
+              ["Shout outs, including the reasons", "Good mentions..."],
+              ["Conduct including timekeeping, attitude and service", "Conduct notes..."],
+              ["Observations completed", "Observation notes..."],
+              ["Service issues", "Guest issues, food incidents, outcomes..."],
+              ["Quality checks: how often completed and results", "Frequency and results..."],
+              ["Tankards run required: yes or no", "Yes/no and notes..."],
+              ["Ice cream levels", "Current levels..."],
+              ["Topping levels", "Current levels..."],
+              ["Wastage for all areas FOH & BOH", "High-volume wastage..."],
+              ["Product availability: all sweet treats for BBB", "Sweet treats, cookies, fudge, cupcakes..."],
+              ["BOH prep: ensure prep completed is for day ahead, not on the day for the day", "Prep completed for tomorrow..."],
+              ["Broken/logged equipment", "Equipment issues..."],
+              ["Anything else to know", "Any extra notes..."]
             ]
           },
-
           boh: {
             name: "BOH Prep",
             colour: "boh-bg",
-            desc: "BOH prep subsection within Backlot: prep for the day ahead, cleaning, wastage, dates and equipment.",
-            checks: ["Prep checked", "Cleaning checked", "Date labels checked", "Equipment checked"],
+            desc: "BOH prep, wastage, date labelling, cleaning and equipment.",
             required: ["BOH prep: ensure prep completed is for day ahead, not on the day for the day", "Broken/logged equipment"],
             fields: [
-              ["prep", "BOH prep: ensure prep completed is for day ahead, not on the day for the day", "Example: salad trolley, buns, onions, sauces..."],
-              ["wastage", "BOH wastage", "Any high-volume or unusual wastage..."],
-              ["dates", "Date labelling notes", "Any product date or rotation concerns..."],
-              ["cleaning", "Cleaning completed", "Dishwasher, fryer, prep kitchen, surfaces..."],
-              ["equipment", "Broken/logged equipment", "Example: ice machine, fryer, dishwasher..."],
-              ["anything", "Anything else to know", "Example: 2 trays salsa left, ranch made, chimi made..."]
+              ["BOH prep: ensure prep completed is for day ahead, not on the day for the day", "Tomorrow’s prep..."],
+              ["BOH wastage", "BOH wastage notes..."],
+              ["Date labelling notes", "Date labelling or rotation concerns..."],
+              ["Cleaning completed", "Cleaning notes..."],
+              ["Broken/logged equipment", "Equipment issues..."],
+              ["Anything else to know", "Any extra notes..."]
             ]
           }
         }
       },
-
       hogwarts: {
         name: "Hogwarts Table",
         colour: "hogwarts-bg",
@@ -1395,58 +1343,50 @@
           hogwartstable: {
             name: "Hogwarts Table",
             colour: "hogwarts-bg",
-            desc: "Hogwarts Table handover: bookings, visitors, no-shows, guest issues, allergens, stock shortages and closing notes.",
-            checks: ["Bookings checked", "No-shows checked", "Allergen notes checked", "Lamps checked"],
+            desc: "Briefing, service issues, visitors, no-shows, checks, BB charged, stock and lamps.",
             required: ["Briefing: key points mentioned, who led the brief including PM", "Service issues", "Total visitors"],
             fields: [
-              ["briefing", "Briefing: key points mentioned, who led the brief including PM", "Example: details, clear tables, initiative, allergens communicated with kitchen..."],
-              ["shoutouts", "Shout outs, including the reasons", "Example: Jess and Jess worked well on Hogwarts..."],
-              ["conduct", "Conduct including timekeeping, attitude and service", "Example: staff moved to other areas because quiet, service issue, lateness..."],
-              ["observations", "Observations completed", "List observations completed..."],
-              ["serviceissues", "Service issues", "Anything raised by visitor/complaints, who dealt with it, what was the solution, any food incidents..."],
-              ["visitors", "Total visitors", "Example: 10 including cancellations within 48 hours..."],
-              ["noshows", "No shows", "Example: none, booking number, outcome..."],
-              ["checks", "All checks cleared, including no shows", "Example: yes, no-shows cleared, cancellations checked..."],
-              ["bbcharged", "BB charged: yes or no", "Example: yes/no..."],
-              ["shortages", "Stock shortages: food or drink", "Example: need Cotswolds gin..."],
-              ["anything", "Anything else", "Example: lamps left on charge..."],
-              ["lamps", "Lamps left on charge", "Yes/no or any notes..."]
+              ["Briefing: key points mentioned, who led the brief including PM", "Key points from brief..."],
+              ["Shout outs, including the reasons", "Good mentions..."],
+              ["Conduct including timekeeping, attitude and service", "Conduct notes..."],
+              ["Observations completed", "Observation notes..."],
+              ["Service issues", "Guest issues, food incidents, outcome..."],
+              ["Total visitors", "Total visitors..."],
+              ["No shows", "No-show details..."],
+              ["All checks cleared, including no shows", "Yes/no and notes..."],
+              ["BB charged: yes or no", "Yes/no..."],
+              ["Stock shortages: food or drink", "Shortages..."],
+              ["Anything else", "Any extra notes..."],
+              ["Lamps left on charge", "Yes/no and notes..."]
             ]
           }
         }
       }
     };
 
-    const auditFields = [
-      "Cleanliness standards",
-      "Date labelling correct",
-      "Allergen communication",
-      "Equipment condition",
-      "Guest-facing readiness"
-    ];
-
-    let currentMain = "lobby";
-    let currentSection = "lobbygeneral";
-    let currentStatus = "Green";
-    let currentMode = "closing";
     let selectedDate = todayISO();
-    let uploadedPhotos = [];
-    let conductType = "";
+    let wizard = {
+      main: null,
+      section: null,
+      status: "Green",
+      step: 1
+    };
 
     let state = {
-      currentUser: null,
+      currentUserId: null,
       currentRole: "Manager",
+      staff: [],
       handovers: {},
-      tasks: {},
+      drafts: {},
       signoffs: {},
-      briefings: {},
-      audits: [],
-      staff: ["James", "Ella", "Aaron", "Freya", "Noah"],
+      tasks: {},
+      breakPlanner: {},
       activeBreaks: {},
       breakHistory: [],
       conductNotes: [],
       incidents: [],
-      equipmentLogs: []
+      equipmentLogs: [],
+      audits: []
     };
 
     function todayISO() {
@@ -1463,19 +1403,44 @@
       return new Date(iso + "T12:00:00").toLocaleDateString("en-GB", {
         weekday: "short",
         day: "numeric",
-        month: "short",
-        year: "numeric"
+        month: "short"
       });
     }
 
-    function currentDayHandovers() {
+    function nowTime() {
+      return new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+    }
+
+    function makeId() {
+      return Date.now().toString() + Math.random().toString(16).slice(2);
+    }
+
+    function currentUser() {
+      return state.staff.find(s => s.id === state.currentUserId) || state.staff[0];
+    }
+
+    function getStaff(id) {
+      return state.staff.find(s => s.id === id);
+    }
+
+    function dayHandovers() {
       if (!state.handovers[selectedDate]) state.handovers[selectedDate] = {};
       return state.handovers[selectedDate];
     }
 
-    function currentDayTasks() {
+    function dayDrafts() {
+      if (!state.drafts[selectedDate]) state.drafts[selectedDate] = {};
+      return state.drafts[selectedDate];
+    }
+
+    function dayTasks() {
       if (!state.tasks[selectedDate]) state.tasks[selectedDate] = [];
       return state.tasks[selectedDate];
+    }
+
+    function dayPlanner() {
+      if (!state.breakPlanner[selectedDate]) state.breakPlanner[selectedDate] = [];
+      return state.breakPlanner[selectedDate];
     }
 
     function init() {
@@ -1487,487 +1452,612 @@
         month: "short"
       });
 
-      document.getElementById("handoverDate").value = selectedDate;
-      document.getElementById("calendarDate").value = selectedDate;
-      document.getElementById("auditDate").value = todayISO();
-      document.getElementById("conductDate").value = todayISO();
+      document.getElementById("selectedDateInput").value = selectedDate;
 
-      renderLoginOptions();
-      renderMainTabs();
-      renderSubTabs();
-      renderForm();
-      renderDashboard();
-      renderSavedDays();
-      renderStaff();
-      renderBreaks();
-      renderConduct();
-      renderConductHistory();
-      renderAuditChecklist();
-      renderIncidents();
-      renderEquipment();
-      renderBriefing();
-      renderOpeningTasks();
-      renderSignoff();
-      applySettings(false);
+      renderAll();
 
-      if (!state.currentUser) {
+      if (!state.currentUserId) {
         document.getElementById("loginScreen").classList.remove("hidden");
       } else {
         document.getElementById("loginScreen").classList.add("hidden");
       }
     }
 
-    function renderLoginOptions() {
-      const loginName = document.getElementById("loginName");
-      loginName.innerHTML = "";
-      state.staff.forEach(name => loginName.innerHTML += `<option>${name}</option>`);
+    function renderAll() {
+      renderStaffSelects();
+      renderHome();
+      renderSummaryIfOpen();
+      renderBreaks();
+      renderStaffList();
+      renderConduct();
+      renderIncidents();
+      renderEquipment();
+      renderSignoff();
+      applySettings(false);
+    }
+
+    function saveState() {
+      localStorage.setItem("shiftflow_v3_state", JSON.stringify(state));
+    }
+
+    function loadState() {
+      const saved = JSON.parse(localStorage.getItem("shiftflow_v3_state") || "{}");
+
+      const defaultStaff = [
+        { id: "s1", name: "James", clock: "10001", role: "Supervisor", area: "Backlot" },
+        { id: "s2", name: "Ella", clock: "10002", role: "General Assistant", area: "Lobby" },
+        { id: "s3", name: "Aaron", clock: "10003", role: "General Assistant", area: "Backlot" },
+        { id: "s4", name: "Freya", clock: "10004", role: "General Assistant", area: "Lobby" },
+        { id: "s5", name: "Noah", clock: "10005", role: "General Assistant", area: "Hogwarts Table" }
+      ];
+
+      state = {
+        currentUserId: saved.currentUserId || null,
+        currentRole: saved.currentRole || "Manager",
+        staff: saved.staff && saved.staff.length ? saved.staff : defaultStaff,
+        handovers: saved.handovers || {},
+        drafts: saved.drafts || {},
+        signoffs: saved.signoffs || {},
+        tasks: saved.tasks || {},
+        breakPlanner: saved.breakPlanner || {},
+        activeBreaks: saved.activeBreaks || {},
+        breakHistory: saved.breakHistory || [],
+        conductNotes: saved.conductNotes || [],
+        incidents: saved.incidents || [],
+        equipmentLogs: saved.equipmentLogs || [],
+        audits: saved.audits || []
+      };
+
+      if (!state.currentUserId && state.staff.length) state.currentUserId = state.staff[0].id;
+    }
+
+    function toast(message) {
+      const t = document.getElementById("toast");
+      t.innerText = message;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 1700);
     }
 
     function login() {
-      state.currentUser = document.getElementById("loginName").value;
+      state.currentUserId = document.getElementById("loginName").value;
       state.currentRole = document.getElementById("loginRole").value;
-      document.getElementById("roleSelect").value = state.currentRole;
       saveState();
-      applySettings(false);
       document.getElementById("loginScreen").classList.add("hidden");
-      toast(`Welcome, ${state.currentUser}`);
+      renderAll();
+      toast(`Welcome, ${currentUser().name}`);
     }
 
     function logout() {
-      state.currentUser = null;
-      saveState();
-      renderLoginOptions();
       document.getElementById("loginScreen").classList.remove("hidden");
     }
 
-    function openPage(pageId, button) {
-      if (pageId === "audits" && state.currentRole === "Supervisor") {
-        toast("Audit checks are manager-only in this prototype");
-        return;
-      }
-
-      document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
+    function openPage(pageId, btn) {
+      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
       document.getElementById(pageId).classList.add("active");
 
-      document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
-      button.classList.add("active");
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
 
       const titles = {
-        handovers: ["Handovers", "Daily handovers, close checks and next-shift priorities."],
-        audits: ["Audit Checks", "Cleanliness, labelling, allergens, equipment and readiness."],
-        breaks: ["Break Times", "Start breaks, finish breaks and review history."],
-        conduct: ["Conduct", "Shout-outs, staff notes, incidents and follow-ups."],
-        more: ["More", "Equipment, storage plan, templates, reports and settings."]
+        home: ["Today", "Your shift command centre."],
+        audits: ["Audits", "Cleanliness, labelling, allergens, equipment and readiness."],
+        breaks: ["Breaks", "Plan, start, finish and analyse staff breaks."],
+        staff: ["Staff", "Profiles, mentions, clock-in numbers and break patterns."],
+        conduct: ["Conduct", "Shout-outs, conduct notes and incident logs."],
+        more: ["More", "Equipment, exports and settings."]
       };
 
       document.getElementById("pageTitle").innerText = titles[pageId][0];
       document.getElementById("pageSubtitle").innerText = titles[pageId][1];
-      document.getElementById("handoverTopActions").style.display = pageId === "handovers" ? "grid" : "none";
+
+      if (pageId === "breaks") renderBreaks();
+      if (pageId === "staff") renderStaffList();
     }
 
-    function setMode(mode) {
-      currentMode = mode;
-      document.getElementById("closingModeBtn").classList.toggle("active", mode === "closing");
-      document.getElementById("openingModeBtn").classList.toggle("active", mode === "opening");
-      document.getElementById("closingView").classList.toggle("hidden", mode !== "closing");
-      document.getElementById("openingView").classList.toggle("hidden", mode !== "opening");
-      renderOpeningTasks();
-    }
-
-    function togglePanelOpen(id) {
-      document.getElementById(id).classList.toggle("open");
-      if (id === "savedDaysPanel") renderSavedDays();
+    function changeDate(date) {
+      selectedDate = date;
+      document.getElementById("selectedDateInput").value = date;
+      renderAll();
+      toast(`Viewing ${formatDate(selectedDate)}`);
     }
 
     function togglePanel(id) {
       document.getElementById(id).classList.toggle("open");
-      if (id === "panelEquipment") renderEquipment();
+      if (id === "calendarPanel") renderSavedDays();
     }
 
-    function changeSelectedDate(date) {
-      selectedDate = date;
-      document.getElementById("handoverDate").value = date;
-      document.getElementById("calendarDate").value = date;
-      currentStatus = currentDayHandovers()[currentSection]?.status || "Green";
+    function renderHome() {
+      const user = currentUser();
+      document.getElementById("homeGreeting").innerText = `Good evening, ${user ? user.name : "there"}`;
 
-      renderDashboard();
+      const allSectionKeys = getAllSectionKeys();
+      const done = allSectionKeys.filter(k => dayHandovers()[k]).length;
+      const urgent = getUrgentItems().length;
+      const completedBreaks = getTodayBreaks().length;
+
+      document.getElementById("homeSectionsDone").innerText = `${done}/${allSectionKeys.length}`;
+      document.getElementById("homeUrgent").innerText = urgent;
+      document.getElementById("homeBreaks").innerText = completedBreaks;
+
+      const hasDraft = Object.keys(dayDrafts()).length > 0;
+      const btn = document.getElementById("startHandoverBtn");
+      btn.innerText = hasDraft ? "Continue Today’s Handover" : "Start Today’s Handover";
+
+      renderTodayProgress();
+      renderUrgentActions();
+      renderUnresolvedIssues();
+      renderAreaStatusCards();
       renderSavedDays();
-      renderForm();
-      renderBriefing();
-      renderOpeningTasks();
-      renderSignoff();
-      updateStatusButtons();
-      document.getElementById("summaryOutput").style.display = "none";
-      toast(`Viewing ${formatDate(selectedDate)}`);
+    }
+
+    function getAllSectionKeys() {
+      let keys = [];
+      Object.values(structure).forEach(main => {
+        keys = keys.concat(Object.keys(main.sections));
+      });
+      return keys;
+    }
+
+    function getSectionByKey(key) {
+      for (const mainKey in structure) {
+        if (structure[mainKey].sections[key]) {
+          return {
+            mainKey,
+            mainName: structure[mainKey].name,
+            sectionKey: key,
+            ...structure[mainKey].sections[key]
+          };
+        }
+      }
+      return null;
+    }
+
+    function renderTodayProgress() {
+      const box = document.getElementById("todayProgress");
+      const all = getAllSectionKeys();
+      const done = all.filter(k => dayHandovers()[k]).length;
+      const drafts = Object.keys(dayDrafts()).length;
+      const signoff = state.signoffs[selectedDate];
+
+      box.innerHTML = `
+        <div class="row">
+          <div>
+            <h4>Sections complete</h4>
+            <p>${done} of ${all.length} submitted · ${drafts} draft${drafts === 1 ? "" : "s"}</p>
+          </div>
+          <span class="pill">${Math.round((done / all.length) * 100)}%</span>
+        </div>
+        <div class="row">
+          <div>
+            <h4>Break control</h4>
+            <p>${getTodayBreaks().length} completed · ${Object.keys(state.activeBreaks).length} active · ${getPeopleNoBreakToday().length} not logged from planner</p>
+          </div>
+          <span class="pill">${getTodayOver35().length} over 35m</span>
+        </div>
+        <div class="row">
+          <div>
+            <h4>Final sign-off</h4>
+            <p>${signoff ? `Signed off by ${signoff.by} at ${signoff.time}` : "Not signed off yet"}</p>
+          </div>
+          <span class="pill">${signoff ? "Done" : "Open"}</span>
+        </div>
+      `;
+    }
+
+    function renderUrgentActions() {
+      const box = document.getElementById("urgentActions");
+      const urgent = getUrgentItems();
+
+      if (!urgent.length) {
+        box.innerHTML = `<p class="small">No urgent actions for this day.</p>`;
+        return;
+      }
+
+      box.innerHTML = "";
+      urgent.forEach(item => {
+        box.innerHTML += `
+          <div class="row">
+            <div>
+              <h4>${item.title}</h4>
+              <p>${item.detail}</p>
+            </div>
+            <span class="pill red">Urgent</span>
+          </div>
+        `;
+      });
+    }
+
+    function getUrgentItems() {
+      const items = [];
+      Object.values(dayHandovers()).forEach(h => {
+        if (h.status === "Red" || h.priority === "Urgent" || h.actionRequired === "Action required") {
+          items.push({
+            title: `${h.mainName} — ${h.sectionName}`,
+            detail: h.actionText || getMainNote(h)
+          });
+        }
+      });
+
+      getTodayOver35().forEach(b => {
+        items.push({
+          title: `${b.staffName} break over 35 minutes`,
+          detail: `${b.duration} minutes logged today.`
+        });
+      });
+
+      state.equipmentLogs
+        .filter(e => e.status !== "Fixed")
+        .slice(0, 3)
+        .forEach(e => {
+          items.push({
+            title: `${e.name} unresolved`,
+            detail: `${e.area} · ${e.status} · ${e.notes || "No extra notes"}`
+          });
+        });
+
+      return items;
+    }
+
+    function renderUnresolvedIssues() {
+      const box = document.getElementById("unresolvedIssues");
+      const unresolved = [];
+
+      Object.keys(state.handovers).forEach(date => {
+        if (date >= selectedDate) return;
+        Object.values(state.handovers[date]).forEach(h => {
+          if ((h.status === "Red" || h.actionRequired === "Action required") && !h.resolved) {
+            unresolved.push({ date, h });
+          }
+        });
+      });
+
+      state.equipmentLogs
+        .filter(e => e.status !== "Fixed")
+        .forEach(e => unresolved.push({ date: e.date, equipment: e }));
+
+      if (!unresolved.length) {
+        box.innerHTML = `<p class="small">No unresolved previous issues found.</p>`;
+        return;
+      }
+
+      box.innerHTML = "";
+      unresolved.slice(0, 6).forEach(item => {
+        if (item.h) {
+          box.innerHTML += `
+            <div class="row">
+              <div>
+                <h4>${item.h.mainName} — ${item.h.sectionName}</h4>
+                <p>${formatDate(item.date)} · ${item.h.actionText || getMainNote(item.h)}</p>
+              </div>
+              <span class="pill amber">Open</span>
+            </div>
+          `;
+        } else {
+          box.innerHTML += `
+            <div class="row">
+              <div>
+                <h4>${item.equipment.name}</h4>
+                <p>${formatDate(item.date)} · ${item.equipment.area} · ${item.equipment.notes || "No extra notes"}</p>
+              </div>
+              <span class="pill amber">${item.equipment.status}</span>
+            </div>
+          `;
+        }
+      });
+    }
+
+    function renderAreaStatusCards() {
+      const box = document.getElementById("areaStatusCards");
+      box.innerHTML = "";
+
+      Object.keys(structure).forEach(mainKey => {
+        const main = structure[mainKey];
+        const keys = Object.keys(main.sections);
+        const done = keys.filter(k => dayHandovers()[k]).length;
+        const urgent = keys.filter(k => {
+          const h = dayHandovers()[k];
+          return h && (h.status === "Red" || h.priority === "Urgent" || h.actionRequired === "Action required");
+        }).length;
+
+        box.innerHTML += `
+          <div class="row ${main.colour}" onclick="openWizard('${mainKey}')">
+            <div>
+              <h4>${main.name}</h4>
+              <p>${done}/${keys.length} sections complete · ${urgent} urgent/action item${urgent === 1 ? "" : "s"}</p>
+            </div>
+            <span class="pill">${done === keys.length ? "Complete" : "Open"}</span>
+          </div>
+        `;
+      });
     }
 
     function renderSavedDays() {
       const box = document.getElementById("savedDaysList");
-      box.innerHTML = "";
+      if (!box) return;
 
       const days = Object.keys(state.handovers).sort().reverse();
-
       if (!days.length) {
         box.innerHTML = `<p class="small">No saved handover days yet.</p>`;
         return;
       }
 
+      box.innerHTML = "";
       days.forEach(day => {
         const count = Object.keys(state.handovers[day] || {}).length;
-        const row = document.createElement("div");
-        row.className = "area-row";
-        row.onclick = () => changeSelectedDate(day);
-        row.innerHTML = `
-          <div>
-            <h4>${formatDate(day)}</h4>
-            <p>${count} section handover${count === 1 ? "" : "s"} saved</p>
+        box.innerHTML += `
+          <div class="row" onclick="changeDate('${day}')">
+            <div>
+              <h4>${formatDate(day)}</h4>
+              <p>${count} handover section${count === 1 ? "" : "s"} saved</p>
+            </div>
+            <span class="pill">${day === selectedDate ? "Viewing" : "Open"}</span>
           </div>
-          <span class="pill">${day === selectedDate ? "Viewing" : "Open"}</span>
         `;
-        box.appendChild(row);
       });
     }
 
-    function renderMainTabs() {
-      const wrap = document.getElementById("mainAreaTabs");
-      wrap.innerHTML = "";
-      Object.keys(structure).forEach(key => {
-        const btn = document.createElement("button");
-        btn.className = `area-chip ${structure[key].colour} ${key === currentMain ? "active" : ""}`;
-        btn.innerText = structure[key].name;
-        btn.onclick = () => selectMain(key);
-        wrap.appendChild(btn);
+    function openWizard(mainKey = null) {
+      document.getElementById("homeView").classList.add("hidden");
+      document.getElementById("handoverWizard").classList.remove("hidden");
+
+      wizard.main = mainKey;
+      wizard.section = null;
+      wizard.status = "Green";
+
+      if (mainKey) {
+        renderSectionPicker();
+        showWizardStep(2);
+      } else {
+        showWizardStep(1);
+      }
+    }
+
+    function closeWizard() {
+      document.getElementById("homeView").classList.remove("hidden");
+      document.getElementById("handoverWizard").classList.add("hidden");
+      renderHome();
+    }
+
+    function chooseWizardMain(mainKey) {
+      wizard.main = mainKey;
+      renderSectionPicker();
+      showWizardStep(2);
+    }
+
+    function renderSectionPicker() {
+      const box = document.getElementById("sectionPicker");
+      box.innerHTML = "";
+
+      Object.keys(structure[wizard.main].sections).forEach(sectionKey => {
+        const s = structure[wizard.main].sections[sectionKey];
+        const existing = dayHandovers()[sectionKey];
+        const draft = dayDrafts()[sectionKey];
+
+        box.innerHTML += `
+          <div class="row ${s.colour}" onclick="chooseWizardSection('${sectionKey}')">
+            <div>
+              <h4>${s.name}</h4>
+              <p>${s.desc}</p>
+            </div>
+            <span class="pill">${existing ? "Submitted" : draft ? "Draft" : "Start"}</span>
+          </div>
+        `;
       });
     }
 
-    function renderSubTabs() {
-      const wrap = document.getElementById("subAreaTabs");
-      wrap.innerHTML = "";
-      const sections = structure[currentMain].sections;
+    function chooseWizardSection(sectionKey) {
+      wizard.section = sectionKey;
+      const existing = dayHandovers()[sectionKey];
+      const draft = dayDrafts()[sectionKey];
+      wizard.status = existing?.status || draft?.status || "Green";
 
-      document.getElementById("subAreaTitle").innerText =
-        currentMain === "lobby" ? "Lobby section" :
-        currentMain === "backlot" ? "Backlot section" :
-        "Hogwarts section";
+      renderWizardForm();
+      showWizardStep(3);
+    }
 
-      Object.keys(sections).forEach(key => {
-        const section = sections[key];
-        const btn = document.createElement("button");
-        btn.className = `sub-chip ${section.colour} ${key === currentSection ? "active" : ""}`;
-        btn.innerText = section.name;
-        btn.onclick = () => selectSection(key);
-        wrap.appendChild(btn);
+    function showWizardStep(step) {
+      wizard.step = step;
+      document.querySelectorAll(".wizard-step").forEach(s => s.classList.remove("active"));
+      document.getElementById(`wizardStep${step}`).classList.add("active");
+
+      const widths = { 1: 25, 2: 50, 3: 75, 4: 100 };
+      document.getElementById("wizardProgress").style.width = `${widths[step]}%`;
+
+      const titles = {
+        1: "Start Today’s Handover",
+        2: "Choose Section",
+        3: "Complete Handover",
+        4: "Review & Submit"
+      };
+
+      document.getElementById("wizardTitle").innerText = titles[step];
+    }
+
+    function renderWizardForm() {
+      const section = getSectionByKey(wizard.section);
+      const existing = dayHandovers()[wizard.section];
+      const draft = dayDrafts()[wizard.section];
+      const data = draft || existing || {};
+
+      document.getElementById("wizardHero").className = `hero ${section.colour}`;
+      document.getElementById("wizardSectionName").innerText = section.name;
+      document.getElementById("wizardSectionDesc").innerText = section.desc;
+
+      document.getElementById("wizardPriority").value = data.priority || "Medium";
+      document.getElementById("wizardSubmittedBy").value = data.submittedById || state.currentUserId;
+      document.getElementById("wizardActionRequired").value = data.actionRequired || "No action needed";
+      document.getElementById("wizardActionText").value = data.actionText || "";
+      document.getElementById("wizardActionOwner").value = data.actionOwner || "";
+      document.getElementById("wizardActionDue").value = data.actionDue || "";
+
+      const box = document.getElementById("wizardQuestions");
+      box.innerHTML = "";
+
+      section.fields.forEach(([label, placeholder], index) => {
+        const fieldId = `question_${index}`;
+        const value = data.answers?.[label] || "";
+
+        box.innerHTML += `
+          <label>${label}</label>
+          <div class="quick-row">
+            <button class="quick-btn" onclick="quickFill('${fieldId}', 'N/A')">N/A</button>
+            <button class="quick-btn" onclick="quickFill('${fieldId}', 'All good')">All good</button>
+            <button class="quick-btn" onclick="quickFill('${fieldId}', 'Completed')">Completed</button>
+            <button class="quick-btn" onclick="quickFill('${fieldId}', 'Logged')">Logged</button>
+            <button class="quick-btn" onclick="quickFill('${fieldId}', 'Needs follow-up')">Needs follow-up</button>
+          </div>
+          <textarea id="${fieldId}" data-label="${label}" oninput="saveDraft()" placeholder="${placeholder}">${value}</textarea>
+        `;
       });
 
-      updateHero();
+      toggleWizardAction();
+      setTimeout(() => updateWizardStatusButtons(), 0);
     }
 
-    function selectMain(key) {
-      currentMain = key;
-      currentSection = Object.keys(structure[key].sections)[0];
-      currentStatus = currentDayHandovers()[currentSection]?.status || "Green";
-      uploadedPhotos = [];
-      resetPhotoInput();
-      renderMainTabs();
-      renderSubTabs();
-      renderForm();
-      updateStatusButtons();
+    function quickFill(id, text) {
+      const el = document.getElementById(id);
+      el.value = text;
+      saveDraft();
     }
 
-    function selectSection(key) {
-      currentSection = key;
-      currentStatus = currentDayHandovers()[currentSection]?.status || "Green";
-      uploadedPhotos = [];
-      resetPhotoInput();
-      renderSubTabs();
-      renderForm();
-      updateStatusButtons();
-    }
-
-    function updateHero() {
-      const section = structure[currentMain].sections[currentSection];
-      document.getElementById("selectedAreaTitle").innerText = section.name;
-      document.getElementById("selectedAreaDesc").innerText = section.desc;
-      document.getElementById("areaHero").className = `hero ${section.colour}`;
-    }
-
-    function renderForm() {
-      const form = document.getElementById("dynamicForm");
-      const section = structure[currentMain].sections[currentSection];
-      const existing = currentDayHandovers()[currentSection];
-      form.innerHTML = "";
-
-      document.getElementById("prioritySelect").value = existing?.priority || "Medium";
-      document.getElementById("submittedBy").value = existing?.submittedBy || state.currentUser || state.staff[0];
-
-      document.getElementById("actionRequired").value = existing?.actionRequired || "No action needed";
-      document.getElementById("actionText").value = existing?.actionText || "";
-      document.getElementById("actionOwner").value = existing?.actionOwner || "";
-      document.getElementById("actionDue").value = existing?.actionDue || "";
-      toggleActionFields();
-
-      const checkLabel = document.createElement("label");
-      checkLabel.innerText = "Close / check items";
-      form.appendChild(checkLabel);
-
-      const grid = document.createElement("div");
-      grid.className = "check-grid";
-
-      section.checks.forEach(check => {
-        const btn = document.createElement("button");
-        btn.className = "check-btn";
-        btn.type = "button";
-        btn.innerText = check;
-        if (existing?.checks?.includes(check)) btn.classList.add("checked");
-        btn.onclick = () => btn.classList.toggle("checked");
-        grid.appendChild(btn);
-      });
-
-      form.appendChild(grid);
-
-      section.fields.forEach(([id, label, placeholder]) => {
-        const labelEl = document.createElement("label");
-        labelEl.innerText = label;
-
-        const textarea = document.createElement("textarea");
-        textarea.id = `field-${id}`;
-        textarea.placeholder = placeholder;
-        textarea.value = existing?.fields?.[label] || "";
-
-        form.appendChild(labelEl);
-        form.appendChild(textarea);
-      });
-
-      renderVersionHistory();
-    }
-
-    function setStatus(status, btn) {
-      currentStatus = status;
-      document.querySelectorAll(".status-btn").forEach(b => b.classList.remove("selected"));
+    function setWizardStatus(status, btn) {
+      wizard.status = status;
+      document.querySelectorAll("#wizardStep3 .status-btn").forEach(b => b.classList.remove("selected"));
       btn.classList.add("selected");
+      saveDraft();
     }
 
-    function updateStatusButtons() {
-      document.querySelectorAll(".status-btn").forEach(btn => {
-        btn.classList.remove("selected");
-        if (btn.innerText === currentStatus) btn.classList.add("selected");
+    function updateWizardStatusButtons() {
+      document.querySelectorAll("#wizardStep3 .status-btn").forEach(btn => {
+        btn.classList.toggle("selected", btn.innerText === wizard.status);
       });
     }
 
-    function toggleActionFields() {
-      const open = document.getElementById("actionRequired").value === "Action required";
-      document.getElementById("actionFields").classList.toggle("open", open);
+    function toggleWizardAction() {
+      const isOpen = document.getElementById("wizardActionRequired").value === "Action required";
+      document.getElementById("wizardActionFields").classList.toggle("open", isOpen);
     }
 
-    function previewPhotos(event) {
-      uploadedPhotos = Array.from(event.target.files);
-      const preview = document.getElementById("photoPreview");
-      preview.innerHTML = "";
+    function collectWizardData() {
+      const section = getSectionByKey(wizard.section);
+      const answers = {};
 
-      uploadedPhotos.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = e => {
-          const img = document.createElement("img");
-          img.src = e.target.result;
-          preview.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-
-    function resetPhotoInput() {
-      document.getElementById("photoPreview").innerHTML = "";
-      document.getElementById("photoInput").value = "";
-    }
-
-    function calculateCompletion(record, section) {
-      if (!record) return 0;
-      const totalFields = section.fields.length;
-      const filledFields = Object.values(record.fields || {}).filter(v => v && v.trim()).length;
-      const totalChecks = section.checks.length;
-      const doneChecks = record.checks?.length || 0;
-      const score = ((filledFields + doneChecks) / (totalFields + totalChecks)) * 100;
-      return Math.round(score);
-    }
-
-    function submitArea() {
-      const section = structure[currentMain].sections[currentSection];
-      const fields = {};
-
-      section.fields.forEach(([id, label]) => {
-        fields[label] = document.getElementById(`field-${id}`).value.trim();
+      document.querySelectorAll("#wizardQuestions textarea").forEach(t => {
+        answers[t.dataset.label] = t.value.trim();
       });
 
-      const missingRequired = (section.required || []).filter(label => !fields[label]);
+      return {
+        id: makeId(),
+        date: selectedDate,
+        mainKey: wizard.main,
+        mainName: structure[wizard.main].name,
+        sectionKey: wizard.section,
+        sectionName: section.name,
+        status: wizard.status,
+        priority: document.getElementById("wizardPriority").value,
+        submittedById: document.getElementById("wizardSubmittedBy").value,
+        submittedByName: getStaff(document.getElementById("wizardSubmittedBy").value)?.name || "Unknown",
+        actionRequired: document.getElementById("wizardActionRequired").value,
+        actionText: document.getElementById("wizardActionText").value.trim(),
+        actionOwner: document.getElementById("wizardActionOwner").value.trim(),
+        actionDue: document.getElementById("wizardActionDue").value,
+        answers,
+        updatedAt: nowTime()
+      };
+    }
 
-      if (missingRequired.length) {
-        const confirmSubmit = confirm(
-          `Some important fields are empty:\n\n${missingRequired.join("\n")}\n\nSubmit anyway?`
-        );
-        if (!confirmSubmit) return;
+    function saveDraft() {
+      if (!wizard.section) return;
+      dayDrafts()[wizard.section] = collectWizardData();
+      saveState();
+    }
+
+    function openReview() {
+      const data = collectWizardData();
+      const section = getSectionByKey(wizard.section);
+
+      const missing = section.required.filter(q => !data.answers[q]);
+      if (missing.length) {
+        const proceed = confirm(`Important fields are empty:\n\n${missing.join("\n")}\n\nReview anyway?`);
+        if (!proceed) return;
       }
 
-      const actionRequired = document.getElementById("actionRequired").value;
-      const actionText = document.getElementById("actionText").value.trim();
-
-      if (actionRequired === "Action required" && !actionText) {
+      if (data.actionRequired === "Action required" && !data.actionText) {
         toast("Add what needs doing");
         return;
       }
 
-      const checks = Array.from(document.querySelectorAll("#dynamicForm .check-btn.checked"))
-        .map(btn => btn.innerText);
+      const box = document.getElementById("reviewBox");
+      box.innerHTML = `
+        <div class="row">
+          <div>
+            <h4>${data.mainName} — ${data.sectionName}</h4>
+            <p>${data.status} · ${data.priority} · Submitted by ${data.submittedByName}</p>
+          </div>
+          <span class="pill">${data.status}</span>
+        </div>
+        ${data.actionRequired === "Action required" ? `
+          <div class="row danger-bg">
+            <div>
+              <h4>Action required</h4>
+              <p>${data.actionText}</p>
+              <p>Owner: ${data.actionOwner || "Not assigned"} · Due: ${data.actionDue || "No date"}</p>
+            </div>
+            <span class="pill red">Action</span>
+          </div>
+        ` : ""}
+        <h4>Answers</h4>
+        ${Object.keys(data.answers).map(q => `
+          <p><strong>${q}</strong><br>${data.answers[q] || "-"}</p>
+        `).join("")}
+      `;
 
-      const day = currentDayHandovers();
-      const previous = day[currentSection];
+      showWizardStep(4);
+    }
 
-      if (previous) {
-        if (!previous.history) previous.history = [];
-        previous.history.unshift({
-          updatedAt: previous.updatedAt || previous.time,
-          updatedBy: previous.submittedBy || "Unknown",
-          status: previous.status,
-          note: getMainNote(previous)
+    function submitHandover() {
+      const data = collectWizardData();
+
+      if (dayHandovers()[wizard.section]) {
+        data.history = dayHandovers()[wizard.section].history || [];
+        data.history.unshift({
+          editedAt: dayHandovers()[wizard.section].updatedAt,
+          editedBy: dayHandovers()[wizard.section].submittedByName,
+          note: getMainNote(dayHandovers()[wizard.section])
         });
+      } else {
+        data.history = [];
       }
 
-      day[currentSection] = {
-        date: selectedDate,
-        main: structure[currentMain].name,
-        section: section.name,
-        status: currentStatus,
-        priority: document.getElementById("prioritySelect").value,
-        submittedBy: document.getElementById("submittedBy").value,
-        submittedRole: state.currentRole,
-        fields,
-        checks,
-        actionRequired,
-        actionText,
-        actionOwner: document.getElementById("actionOwner").value.trim(),
-        actionDue: document.getElementById("actionDue").value,
-        photoCount: uploadedPhotos.length,
-        time: previous?.time || new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }),
-        updatedAt: new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }),
-        history: previous?.history || []
-      };
+      dayHandovers()[wizard.section] = data;
+      delete dayDrafts()[wizard.section];
 
-      if (actionRequired === "Action required") {
-        addTaskFromHandover(day[currentSection], currentSection);
+      if (data.actionRequired === "Action required") {
+        dayTasks().push({
+          id: makeId(),
+          text: data.actionText,
+          owner: data.actionOwner || "Opening team",
+          due: data.actionDue || selectedDate,
+          source: `${data.mainName} — ${data.sectionName}`,
+          priority: data.priority,
+          done: false
+        });
       }
 
       saveState();
-      renderDashboard();
-      renderSavedDays();
-      renderVersionHistory();
-      renderOpeningTasks();
-      toast(`${section.name} handover saved`);
+      closeWizard();
+      toast(`${data.sectionName} submitted`);
     }
 
-    function addTaskFromHandover(record, sectionKey) {
-      const tasks = currentDayTasks();
-      const existing = tasks.find(t => t.sourceSection === sectionKey && t.text === record.actionText);
-      if (existing) return;
+    function getMainNote(h) {
+      if (!h) return "No handover submitted.";
+      if (h.actionRequired === "Action required" && h.actionText) return h.actionText;
 
-      tasks.unshift({
-        id: Date.now(),
-        sourceSection: sectionKey,
-        area: `${record.main} — ${record.section}`,
-        text: record.actionText,
-        owner: record.actionOwner || "Opening team",
-        due: record.actionDue || selectedDate,
-        priority: record.priority,
-        done: false,
-        createdFrom: "handover"
-      });
-    }
-
-    function getMainNote(data) {
-      if (!data) return "No handover submitted yet.";
-      if (data.actionRequired === "Action required" && data.actionText) return `Action required: ${data.actionText}`;
-
-      for (const key in data.fields) {
-        if (data.fields[key]) return `${key}: ${data.fields[key]}`;
+      for (const key in h.answers) {
+        if (h.answers[key]) return `${key}: ${h.answers[key]}`;
       }
 
-      if (data.checks?.length) return `${data.checks.length} checks completed.`;
-      return "Area checked, no major notes.";
-    }
-
-    function renderDashboard() {
-      const dash = document.getElementById("handoverDashboard");
-      dash.innerHTML = "";
-
-      const day = currentDayHandovers();
-      let mainChecked = 0;
-      let red = 0;
-      let completionTotal = 0;
-      let sectionTotal = 0;
-
-      Object.keys(structure).forEach(mainKey => {
-        const main = structure[mainKey];
-        const sectionKeys = Object.keys(main.sections);
-        const completeCount = sectionKeys.filter(k => day[k]).length;
-        if (completeCount === sectionKeys.length) mainChecked++;
-
-        sectionKeys.forEach(sectionKey => {
-          const section = main.sections[sectionKey];
-          const data = day[sectionKey];
-          const completion = calculateCompletion(data, section);
-          sectionTotal++;
-          completionTotal += completion;
-
-          if (data?.status === "Red") red++;
-
-          const row = document.createElement("div");
-          row.className = "area-row";
-
-          const statusClass =
-            data?.status === "Red" ? "red-text" :
-            data?.status === "Amber" ? "amber-text" :
-            data?.status === "Green" ? "green-text" : "";
-
-          const priority = data?.priority ? ` · ${data.priority}` : "";
-
-          row.innerHTML = `
-            <div>
-              <h4>${main.name} — ${section.name}</h4>
-              <p>${data ? getMainNote(data) : `No update for ${formatDate(selectedDate)}.`}</p>
-              <p>${data ? `Submitted by ${data.submittedBy} · ${completion}% complete${priority}` : ""}</p>
-            </div>
-            <span class="pill ${statusClass}">${data ? data.status : "—"}</span>
-          `;
-
-          dash.appendChild(row);
-        });
-      });
-
-      document.getElementById("checkedCount").innerText = `${mainChecked}/3`;
-      document.getElementById("redCount").innerText = red;
-      document.getElementById("completionAvg").innerText = `${Math.round(completionTotal / sectionTotal)}%`;
-    }
-
-    function renderVersionHistory() {
-      const list = document.getElementById("versionHistoryList");
-      if (!list) return;
-      list.innerHTML = "";
-
-      const data = currentDayHandovers()[currentSection];
-      if (!data || !data.history || !data.history.length) {
-        list.innerHTML = `<p class="small">No previous edits for this section.</p>`;
-        return;
-      }
-
-      data.history.forEach(item => {
-        list.innerHTML += `
-          <div class="area-row">
-            <div>
-              <h4>${item.updatedAt} · ${item.updatedBy}</h4>
-              <p>${item.status} — ${item.note}</p>
-            </div>
-            <span class="pill">Old</span>
-          </div>
-        `;
-      });
+      return "Submitted with no major notes.";
     }
 
     function generateSummary() {
@@ -1978,504 +2068,600 @@
         return;
       }
 
-      const list = document.getElementById("summaryList");
-      const day = currentDayHandovers();
-
-      document.getElementById("summaryTitle").innerText = `Opening Summary — ${formatDate(selectedDate)}`;
-      list.innerHTML = "";
-
-      const briefing = state.briefings[selectedDate];
-      if (briefing) {
-        const li = document.createElement("li");
-        li.innerHTML = `<strong>Daily briefing:</strong> ${briefing.focus || briefing.points || "Briefing saved."}`;
-        list.appendChild(li);
-      }
-
-      const urgentItems = [];
-      const normalItems = [];
-
-      Object.keys(structure).forEach(mainKey => {
-        const main = structure[mainKey];
-        Object.keys(main.sections).forEach(sectionKey => {
-          const section = main.sections[sectionKey];
-          const data = day[sectionKey];
-
-          const text = data
-            ? `<strong>${main.name} — ${data.section}:</strong> ${data.status} · ${data.priority} — ${getMainNote(data)}`
-            : `<strong>${main.name} — ${section.name}:</strong> No handover submitted.`;
-
-          if (data?.priority === "Urgent" || data?.status === "Red") urgentItems.push(text);
-          else normalItems.push(text);
-        });
-      });
-
-      [...urgentItems, ...normalItems].forEach(text => {
-        const li = document.createElement("li");
-        li.innerHTML = text;
-        list.appendChild(li);
-      });
-
-      const signoff = state.signoffs[selectedDate];
-      if (signoff) {
-        const li = document.createElement("li");
-        li.innerHTML = `<strong>Final sign-off:</strong> ${signoff.by} at ${signoff.time}`;
-        list.appendChild(li);
-      }
-
+      renderSummary();
       output.style.display = "block";
       output.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    function finalSignoff() {
-      state.signoffs[selectedDate] = {
-        by: document.getElementById("signoffBy").value,
-        role: state.currentRole,
-        time: new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })
-      };
-      saveState();
-      renderSignoff();
-      toast("Final sign-off saved");
+    function renderSummaryIfOpen() {
+      if (document.getElementById("summaryOutput")?.style.display === "block") {
+        renderSummary();
+      }
     }
 
-    function renderSignoff() {
-      const signoff = state.signoffs[selectedDate];
-      const text = document.getElementById("signoffStatus");
-      if (!text) return;
+    function renderSummary() {
+      const box = document.getElementById("summaryContent");
+      const handovers = Object.values(dayHandovers());
+      const urgent = getUrgentItems();
+      const completedBreaks = getTodayBreaks();
+      const activeBreaks = Object.keys(state.activeBreaks).map(id => {
+        const staff = getStaff(id);
+        const mins = Math.max(1, Math.round((Date.now() - state.activeBreaks[id]) / 60000));
+        return { staffName: staff?.name || "Unknown", mins };
+      });
+      const over35 = getTodayOver35();
+      const noBreak = getPeopleNoBreakToday();
+      const incidentsToday = state.incidents.filter(i => i.date === selectedDate);
+      const equipmentOpen = state.equipmentLogs.filter(e => e.status !== "Fixed");
 
-      if (!signoff) text.innerText = "Not signed off yet.";
-      else text.innerText = `Signed off by ${signoff.by} at ${signoff.time}.`;
+      box.innerHTML = `
+        <h4>Break control</h4>
+        <ul>
+          <li><strong>Breaks completed today:</strong> ${completedBreaks.length}</li>
+          <li><strong>Currently on break:</strong> ${activeBreaks.length || 0}</li>
+          <li><strong>People over 35 minutes:</strong> ${over35.length || 0}</li>
+          <li><strong>People with no break logged from planner:</strong> ${noBreak.length || 0}</li>
+        </ul>
+
+        ${over35.length ? `
+          <h4>Over 35 minutes</h4>
+          <ul>${over35.map(b => `<li>${b.staffName} — ${b.duration} mins</li>`).join("")}</ul>
+        ` : ""}
+
+        ${activeBreaks.length ? `
+          <h4>Currently on break</h4>
+          <ul>${activeBreaks.map(b => `<li>${b.staffName} — ${b.mins} mins so far</li>`).join("")}</ul>
+        ` : ""}
+
+        ${noBreak.length ? `
+          <h4>No break logged yet from planner</h4>
+          <ul>${noBreak.map(s => `<li>${s.name} — starts ${s.startTime}</li>`).join("")}</ul>
+        ` : ""}
+
+        <h4>Urgent actions</h4>
+        ${urgent.length ? `<ul>${urgent.map(i => `<li><strong>${i.title}:</strong> ${i.detail}</li>`).join("")}</ul>` : `<p>No urgent actions.</p>`}
+
+        <h4>Area handover</h4>
+        ${handovers.length ? `<ul>${handovers.map(h => `<li><strong>${h.mainName} — ${h.sectionName}:</strong> ${h.status} · ${h.priority} — ${getMainNote(h)}</li>`).join("")}</ul>` : `<p>No handovers submitted yet.</p>`}
+
+        <h4>Incidents today</h4>
+        ${incidentsToday.length ? `<ul>${incidentsToday.map(i => `<li><strong>${i.type} · ${i.area}:</strong> ${i.details}</li>`).join("")}</ul>` : `<p>No incidents logged today.</p>`}
+
+        <h4>Open equipment</h4>
+        ${equipmentOpen.length ? `<ul>${equipmentOpen.slice(0,8).map(e => `<li><strong>${e.name}:</strong> ${e.area} · ${e.status} · ${e.notes || "No notes"}</li>`).join("")}</ul>` : `<p>No open equipment issues.</p>`}
+
+        <h4>Final sign-off</h4>
+        <p>${state.signoffs[selectedDate] ? `${state.signoffs[selectedDate].by} at ${state.signoffs[selectedDate].time}` : "Not signed off yet."}</p>
+      `;
     }
 
-    function generateOpeningTasks() {
-      const day = currentDayHandovers();
+    function renderStaffSelects() {
+      const selectIds = [
+        "loginName", "wizardSubmittedBy", "signoffBy", "plannerStaff", "breakEmployee",
+        "breakFilterStaff", "conductStaff", "currentUserSelect"
+      ];
 
-      Object.keys(day).forEach(sectionKey => {
-        const record = day[sectionKey];
-        if (record.actionRequired === "Action required" && record.actionText) {
-          addTaskFromHandover(record, sectionKey);
+      selectIds.forEach(id => {
+        const sel = document.getElementById(id);
+        if (!sel) return;
+
+        sel.innerHTML = id === "breakFilterStaff" ? `<option value="all">All staff</option>` : "";
+
+        state.staff.forEach(s => {
+          sel.innerHTML += `<option value="${s.id}">${s.name}${s.clock ? " · " + s.clock : ""}</option>`;
+        });
+
+        if (["loginName", "wizardSubmittedBy", "signoffBy", "currentUserSelect"].includes(id)) {
+          sel.value = state.currentUserId || state.staff[0]?.id;
         }
       });
 
-      saveState();
-      renderOpeningTasks();
-      toast("Opening tasks generated");
+      document.getElementById("roleText").innerText = `${state.currentRole} Access · ${currentUser()?.name || ""}`;
+      document.getElementById("rolePill").innerText = state.currentRole;
+      document.getElementById("roleSelect").value = state.currentRole;
     }
 
-    function renderOpeningTasks() {
-      const list = document.getElementById("openingTaskList");
-      if (!list) return;
+    function addStaff() {
+      const name = document.getElementById("newStaffName").value.trim();
+      const clock = document.getElementById("newStaffClock").value.trim();
+      const role = document.getElementById("newStaffRole").value;
+      const area = document.getElementById("newStaffArea").value;
 
-      const tasks = currentDayTasks();
+      if (!name) return toast("Add staff name");
 
-      const open = tasks.filter(t => !t.done).length;
-      const urgent = tasks.filter(t => !t.done && t.priority === "Urgent").length;
-      const done = tasks.filter(t => t.done).length;
+      state.staff.push({
+        id: makeId(),
+        name,
+        clock: clock || "No clock-in",
+        role,
+        area
+      });
 
-      document.getElementById("openTaskCount").innerText = open;
-      document.getElementById("urgentTaskCount").innerText = urgent;
-      document.getElementById("doneTaskCount").innerText = done;
+      document.getElementById("newStaffName").value = "";
+      document.getElementById("newStaffClock").value = "";
+      saveState();
+      renderAll();
+      toast(`${name} added`);
+    }
 
-      list.innerHTML = "";
+    function renderStaffList() {
+      const box = document.getElementById("staffList");
+      const q = (document.getElementById("staffSearch")?.value || "").toLowerCase();
+      let staff = state.staff;
 
-      if (!tasks.length) {
-        list.innerHTML = `<div class="card"><p class="small">No opening tasks yet. Generate tasks from action-required handovers.</p></div>`;
-        return;
+      if (q) {
+        staff = staff.filter(s => `${s.name} ${s.clock} ${s.role} ${s.area}`.toLowerCase().includes(q));
       }
 
-      tasks.forEach(task => {
-        const colour = task.done ? "green-text" : task.priority === "Urgent" ? "red-text" : task.priority === "High" ? "amber-text" : "";
-        list.innerHTML += `
-          <div class="area-row">
+      box.innerHTML = "";
+
+      staff.forEach(s => {
+        const stats = getStaffStats(s.id);
+        box.innerHTML += `
+          <div class="row" onclick="openStaffProfile('${s.id}')">
             <div>
-              <h4>${task.area}</h4>
-              <p>${task.text}</p>
-              <p>Owner: ${task.owner} · Due: ${task.due || "No date"}</p>
+              <h4>${s.name}</h4>
+              <p>${s.role} · ${s.area} · Clock-in ${s.clock}</p>
+              <p>${stats.good} good · ${stats.bad} bad · ${stats.avgBreak}m avg break</p>
             </div>
-            <button class="tiny-btn ${task.done ? "light" : ""}" onclick="toggleTask(${task.id})">${task.done ? "Done" : task.priority}</button>
+            <span class="pill">Open</span>
           </div>
         `;
       });
     }
 
-    function toggleTask(id) {
-      const task = currentDayTasks().find(t => t.id === id);
-      if (!task) return;
-      task.done = !task.done;
-      saveState();
-      renderOpeningTasks();
-    }
+    function openStaffProfile(id) {
+      const s = getStaff(id);
+      const stats = getStaffStats(id);
 
-    function clearCompletedTasks() {
-      state.tasks[selectedDate] = currentDayTasks().filter(t => !t.done);
-      saveState();
-      renderOpeningTasks();
-      toast("Completed tasks cleared");
-    }
+      document.getElementById("staffProfilePanel").classList.remove("hidden");
+      document.getElementById("profileName").innerText = s.name;
+      document.getElementById("profileRole").innerText = `${s.role} · ${s.area}`;
+      document.getElementById("profileClock").innerText = `Clock ${s.clock}`;
+      document.getElementById("profileGood").innerText = stats.good;
+      document.getElementById("profileBad").innerText = stats.bad;
+      document.getElementById("profileAvgBreak").innerText = `${stats.avgBreak}m`;
+      document.getElementById("profileInfo").innerText = `Clock-in number: ${s.clock}. Usual area: ${s.area}. Total breaks logged: ${stats.totalBreaks}. Longest break: ${stats.longestBreak}m.`;
 
-    function saveBriefing() {
-      state.briefings[selectedDate] = {
-        dms: document.getElementById("briefingDMs").value.trim(),
-        visitors: document.getElementById("briefingVisitors").value.trim(),
-        points: document.getElementById("briefingPoints").value.trim(),
-        focus: document.getElementById("briefingFocus").value.trim(),
-        by: state.currentUser,
-        time: new Date().toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })
-      };
-      saveState();
-      toast("Daily briefing saved");
-    }
+      const notes = state.conductNotes.filter(n => n.staffId === id).slice(0, 8);
+      const box = document.getElementById("profileMentions");
 
-    function renderBriefing() {
-      const b = state.briefings[selectedDate];
-      document.getElementById("briefingDMs").value = b?.dms || "";
-      document.getElementById("briefingVisitors").value = b?.visitors || "";
-      document.getElementById("briefingPoints").value = b?.points || "";
-      document.getElementById("briefingFocus").value = b?.focus || "";
-    }
-
-    function searchHandovers() {
-      const q = document.getElementById("handoverSearch").value.toLowerCase().trim();
-      const box = document.getElementById("handoverSearchResults");
-      box.innerHTML = "";
-
-      if (!q) {
-        box.innerHTML = `<p class="small">Type to search saved handovers.</p>`;
-        return;
+      if (!notes.length) {
+        box.innerHTML = `<p class="small">No mentions logged yet.</p>`;
+      } else {
+        box.innerHTML = notes.map(n => `
+          <div class="row">
+            <div>
+              <h4>${n.type}</h4>
+              <p>${formatDate(n.date)} · ${n.details}</p>
+            </div>
+            <span class="pill">${n.type === "Shout-out" ? "Good" : "Note"}</span>
+          </div>
+        `).join("");
       }
 
-      const results = [];
+      document.getElementById("staffProfilePanel").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
 
-      Object.keys(state.handovers).forEach(date => {
-        Object.values(state.handovers[date]).forEach(record => {
-          const haystack = JSON.stringify(record).toLowerCase();
-          if (haystack.includes(q)) results.push({ date, record });
+    function closeStaffProfile() {
+      document.getElementById("staffProfilePanel").classList.add("hidden");
+    }
+
+    function getStaffStats(id) {
+      const notes = state.conductNotes.filter(n => n.staffId === id);
+      const breaks = state.breakHistory.filter(b => b.staffId === id);
+
+      const good = notes.filter(n => n.type === "Shout-out").length;
+      const bad = notes.filter(n => n.type === "Conduct issue" || n.type === "Service issue").length;
+      const totalBreaks = breaks.length;
+      const avgBreak = breaks.length ? Math.round(breaks.reduce((sum, b) => sum + b.duration, 0) / breaks.length) : 0;
+      const longestBreak = breaks.length ? Math.max(...breaks.map(b => b.duration)) : 0;
+
+      return { good, bad, totalBreaks, avgBreak, longestBreak };
+    }
+
+    function addToBreakPlanner() {
+      const staffId = document.getElementById("plannerStaff").value;
+      const startTime = document.getElementById("plannerStartTime").value;
+      const breakTime = document.getElementById("plannerBreakTime").value;
+
+      if (!staffId || !startTime) return toast("Add staff and start time");
+
+      const planner = dayPlanner();
+      const existing = planner.find(p => p.staffId === staffId);
+
+      if (existing) {
+        existing.startTime = startTime;
+        existing.breakTime = breakTime || existing.breakTime;
+      } else {
+        planner.push({
+          id: makeId(),
+          staffId,
+          startTime,
+          breakTime: breakTime || suggestBreakTime(startTime)
         });
-      });
-
-      if (!results.length) {
-        box.innerHTML = `<p class="small">No matches found.</p>`;
-        return;
       }
 
-      results.slice(0, 20).forEach(({ date, record }) => {
-        box.innerHTML += `
-          <div class="area-row">
-            <div>
-              <h4>${formatDate(date)} · ${record.main} — ${record.section}</h4>
-              <p>${getMainNote(record)}</p>
-            </div>
-            <span class="pill">${record.priority || "—"}</span>
-          </div>
-        `;
-      });
-    }
-
-    function renderAuditChecklist() {
-      const box = document.getElementById("auditChecklist");
-      box.innerHTML = "";
-
-      auditFields.forEach(field => {
-        box.innerHTML += `
-          <div class="audit-item">
-            <div class="audit-head">
-              <strong>${field}</strong>
-              <select class="score-select auditSelect" onchange="calculateAudit()">
-                <option value="100">Pass</option>
-                <option value="70">Minor issue</option>
-                <option value="30">Major issue</option>
-                <option value="0">Fail</option>
-              </select>
-            </div>
-            <textarea placeholder="Notes / evidence..."></textarea>
-          </div>
-        `;
-      });
-    }
-
-    function calculateAudit() {
-      const selects = Array.from(document.querySelectorAll(".auditSelect"));
-      const total = selects.reduce((sum, s) => sum + Number(s.value), 0);
-      const avg = Math.round(total / selects.length);
-      document.getElementById("auditScore").innerText = `${avg}%`;
-      document.getElementById("auditScore").style.background = `conic-gradient(var(--accent) ${avg}%, #eee 0)`;
-    }
-
-    function submitAudit() {
-      const selects = Array.from(document.querySelectorAll(".auditSelect"));
-      const score = Math.round(selects.reduce((sum, s) => sum + Number(s.value), 0) / selects.length);
-
-      state.audits.unshift({
-        date: document.getElementById("auditDate").value,
-        area: document.getElementById("auditArea").value,
-        score,
-        by: state.currentUser
-      });
-
-      saveState();
-      toast("Audit check saved");
-    }
-
-    function renderStaff() {
-      const selects = [
-        document.getElementById("breakEmployee"),
-        document.getElementById("breakFilterName"),
-        document.getElementById("submittedBy"),
-        document.getElementById("signoffBy"),
-        document.getElementById("currentUserSelect")
-      ];
-
-      selects.forEach(sel => {
-        if (!sel) return;
-        sel.innerHTML = sel.id === "breakFilterName" ? `<option>All staff</option>` : "";
-        state.staff.forEach(name => sel.innerHTML += `<option>${name}</option>`);
-      });
-
-      if (state.currentUser) {
-        document.getElementById("submittedBy").value = state.currentUser;
-        document.getElementById("signoffBy").value = state.currentUser;
-        document.getElementById("currentUserSelect").value = state.currentUser;
-      }
-
-      document.getElementById("staffListText").innerText = `Current staff: ${state.staff.join(", ")}`;
-      renderLoginOptions();
-    }
-
-    function startBreak() {
-      const name = document.getElementById("breakEmployee").value;
-      if (state.activeBreaks[name]) return toast(`${name} is already on break`);
-
-      state.activeBreaks[name] = Date.now();
+      planner.sort((a, b) => a.startTime.localeCompare(b.startTime));
       saveState();
       renderBreaks();
-      toast(`${name} started break`);
+      renderHome();
+      toast("Added to break planner");
     }
 
-    function finishBreak() {
-      const name = document.getElementById("breakEmployee").value;
-      if (!state.activeBreaks[name]) return toast(`${name} is not currently on break`);
+    function suggestBreakTime(startTime) {
+      const [h, m] = startTime.split(":").map(Number);
+      const d = new Date();
+      d.setHours(h + 3, m + 30, 0, 0);
+      return d.toTimeString().slice(0, 5);
+    }
 
-      const start = state.activeBreaks[name];
+    function autoPlanBreaks() {
+      const planner = dayPlanner().sort((a, b) => a.startTime.localeCompare(b.startTime));
+      planner.forEach((p, index) => {
+        const base = suggestBreakTime(p.startTime);
+        const [h, m] = base.split(":").map(Number);
+        const d = new Date();
+        d.setHours(h, m + (index * 15), 0, 0);
+        p.breakTime = d.toTimeString().slice(0, 5);
+      });
+
+      saveState();
+      renderBreaks();
+      toast("Break times suggested");
+    }
+
+    function renderBreakPlannerTable() {
+      const box = document.getElementById("breakPlannerTable");
+      const planner = dayPlanner().sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+      if (!planner.length) {
+        box.innerHTML = `<p class="small">No staff added to today’s break planner yet.</p>`;
+        return;
+      }
+
+      box.innerHTML = `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Staff</th>
+                <th>Start</th>
+                <th>Break</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${planner.map(p => {
+                const s = getStaff(p.staffId);
+                const active = state.activeBreaks[p.staffId];
+                const completed = getTodayBreaks().filter(b => b.staffId === p.staffId);
+                const latest = completed[0];
+                let status = "Not started";
+                if (active) status = `On break`;
+                if (latest) status = `Done ${latest.duration}m`;
+
+                return `
+                  <tr>
+                    <td><strong>${s?.name || "Unknown"}</strong><br><span class="small">${s?.clock || ""}</span></td>
+                    <td>${p.startTime}</td>
+                    <td>${p.breakTime || "-"}</td>
+                    <td>${status}</td>
+                    <td>
+                      ${active
+                        ? `<button class="tiny-btn" onclick="finishBreak('${p.staffId}')">Finish</button>`
+                        : `<button class="tiny-btn light" onclick="startBreak('${p.staffId}')">Start</button>`
+                      }
+                    </td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function startBreak(staffId = null) {
+      const id = staffId || document.getElementById("breakEmployee").value;
+      const s = getStaff(id);
+      if (!s) return toast("Choose staff");
+      if (state.activeBreaks[id]) return toast(`${s.name} is already on break`);
+
+      state.activeBreaks[id] = Date.now();
+      saveState();
+      renderBreaks();
+      renderHome();
+      renderSummaryIfOpen();
+      toast(`${s.name} started break`);
+    }
+
+    function finishBreak(staffId = null) {
+      const id = staffId || document.getElementById("breakEmployee").value;
+      const s = getStaff(id);
+      if (!s) return toast("Choose staff");
+      if (!state.activeBreaks[id]) return toast(`${s.name} is not on break`);
+
+      const start = state.activeBreaks[id];
       const finish = Date.now();
       const duration = Math.max(1, Math.round((finish - start) / 60000));
 
       state.breakHistory.unshift({
-        name,
-        date: todayISO(),
+        id: makeId(),
+        staffId: id,
+        staffName: s.name,
+        date: selectedDate,
         start,
         finish,
         duration,
-        loggedBy: state.currentUser
+        loggedBy: currentUser()?.name || "Unknown"
       });
 
-      delete state.activeBreaks[name];
+      delete state.activeBreaks[id];
+
       saveState();
       renderBreaks();
-      toast(`${name} finished break`);
+      renderHome();
+      renderStaffList();
+      renderSummaryIfOpen();
+      toast(`${s.name} finished break · ${duration}m`);
+    }
+
+    function getTodayBreaks() {
+      return state.breakHistory.filter(b => b.date === selectedDate);
+    }
+
+    function getTodayOver35() {
+      return getTodayBreaks().filter(b => b.duration > 35);
+    }
+
+    function getPeopleNoBreakToday() {
+      const completedIds = new Set(getTodayBreaks().map(b => b.staffId));
+      const activeIds = new Set(Object.keys(state.activeBreaks));
+      return dayPlanner()
+        .filter(p => !completedIds.has(p.staffId) && !activeIds.has(p.staffId))
+        .map(p => ({
+          ...getStaff(p.staffId),
+          startTime: p.startTime
+        }))
+        .filter(Boolean);
     }
 
     function renderBreaks() {
-      const current = document.getElementById("currentBreaks");
-      current.innerHTML = "";
+      const completed = getTodayBreaks();
+      const active = Object.keys(state.activeBreaks);
+      const over35 = getTodayOver35();
 
-      const activeNames = Object.keys(state.activeBreaks);
+      document.getElementById("breaksCompletedToday").innerText = completed.length;
+      document.getElementById("breaksActiveToday").innerText = active.length;
+      document.getElementById("breaksOver35Today").innerText = over35.length;
 
-      if (!activeNames.length) {
-        current.innerHTML = `<div class="card"><p class="small">Nobody is currently on break.</p></div>`;
-      } else {
-        activeNames.forEach(name => {
-          const mins = Math.max(1, Math.round((Date.now() - state.activeBreaks[name]) / 60000));
-          current.innerHTML += `
-            <div class="break-card">
-              <div class="break-top">
-                <div>
-                  <h4>${name}</h4>
-                  <span>Started at ${new Date(state.activeBreaks[name]).toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit"})}</span>
-                </div>
-                <div class="pill ${mins > 35 ? "red-text" : mins > 30 ? "amber-text" : "green-text"}">${mins} mins</div>
-              </div>
-            </div>
-          `;
-        });
-      }
-
-      const avg = state.breakHistory.length
-        ? Math.round(state.breakHistory.reduce((s, l) => s + l.duration, 0) / state.breakHistory.length)
-        : 0;
-
-      document.getElementById("onBreakCount").innerText = activeNames.length;
-      document.getElementById("avgBreak").innerText = `${avg}m`;
-      document.getElementById("breakLogs").innerText = state.breakHistory.length;
-
+      renderBreakPlannerTable();
+      renderCurrentBreaks();
+      renderBreakGraphs();
       renderBreakHistory();
-      generateBreakPatterns(false);
     }
 
-    function clearBreakFilters() {
-      document.getElementById("breakFilterName").value = "All staff";
-      document.getElementById("breakFilterDate").value = "";
-      renderBreakHistory();
+    function renderCurrentBreaks() {
+      const box = document.getElementById("currentBreaks");
+      const active = Object.keys(state.activeBreaks);
+
+      if (!active.length) {
+        box.innerHTML = `<div class="card"><p class="small">Nobody is currently on break.</p></div>`;
+        return;
+      }
+
+      box.innerHTML = active.map(id => {
+        const s = getStaff(id);
+        const mins = Math.max(1, Math.round((Date.now() - state.activeBreaks[id]) / 60000));
+
+        return `
+          <div class="break-card">
+            <div class="break-top">
+              <div>
+                <h4>${s?.name || "Unknown"}</h4>
+                <span>Started at ${new Date(state.activeBreaks[id]).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}</span>
+              </div>
+              <div>
+                <span class="pill ${mins > 35 ? "red" : mins > 30 ? "amber" : "green"}">${mins}m</span>
+                <button class="tiny-btn" onclick="finishBreak('${id}')">Finish</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderBreakGraphs() {
+      renderStaffBreakGraph();
+      renderDailyBreakGraph();
+      renderBreakPatternSummary();
+    }
+
+    function renderStaffBreakGraph() {
+      const box = document.getElementById("staffBreakGraph");
+
+      if (!state.breakHistory.length) {
+        box.innerHTML = `<p class="small">No break data yet.</p>`;
+        return;
+      }
+
+      const byStaff = {};
+
+      state.breakHistory.forEach(b => {
+        if (!byStaff[b.staffName]) byStaff[b.staffName] = [];
+        byStaff[b.staffName].push(b.duration);
+      });
+
+      const rows = Object.keys(byStaff)
+        .map(name => {
+          const avg = Math.round(byStaff[name].reduce((a,b) => a + b, 0) / byStaff[name].length);
+          return { name, avg, count: byStaff[name].length };
+        })
+        .sort((a,b) => b.avg - a.avg);
+
+      const max = Math.max(...rows.map(r => r.avg), 40);
+
+      box.innerHTML = rows.map(r => `
+        <div class="graph-row">
+          <div class="graph-head">
+            <span>${r.name}</span>
+            <span>${r.avg}m avg · ${r.count} break${r.count === 1 ? "" : "s"}</span>
+          </div>
+          <div class="bar"><span style="width:${Math.min(100, (r.avg / max) * 100)}%"></span></div>
+        </div>
+      `).join("");
+    }
+
+    function renderDailyBreakGraph() {
+      const box = document.getElementById("dailyBreakGraph");
+
+      if (!state.breakHistory.length) {
+        box.innerHTML = `<p class="small">No daily break data yet.</p>`;
+        return;
+      }
+
+      const byDay = {};
+
+      state.breakHistory.forEach(b => {
+        if (!byDay[b.date]) byDay[b.date] = [];
+        byDay[b.date].push(b.duration);
+      });
+
+      const rows = Object.keys(byDay)
+        .sort()
+        .slice(-10)
+        .map(date => {
+          const avg = Math.round(byDay[date].reduce((a,b) => a + b, 0) / byDay[date].length);
+          return { date, avg, count: byDay[date].length };
+        });
+
+      const max = Math.max(...rows.map(r => r.avg), 40);
+
+      box.innerHTML = rows.map(r => `
+        <div class="graph-row">
+          <div class="graph-head">
+            <span>${formatDate(r.date)}</span>
+            <span>${r.avg}m avg · ${r.count} break${r.count === 1 ? "" : "s"}</span>
+          </div>
+          <div class="bar"><span style="width:${Math.min(100, (r.avg / max) * 100)}%"></span></div>
+        </div>
+      `).join("");
+    }
+
+    function renderBreakPatternSummary() {
+      const box = document.getElementById("breakPatternSummary");
+
+      if (!state.breakHistory.length) {
+        box.innerHTML = `<p class="small">Patterns will appear once breaks have been logged across multiple days.</p>`;
+        return;
+      }
+
+      const longest = [...state.breakHistory].sort((a,b) => b.duration - a.duration)[0];
+      const over35 = state.breakHistory.filter(b => b.duration > 35).length;
+      const todayMissing = getPeopleNoBreakToday().length;
+
+      box.innerHTML = `
+        <div class="row">
+          <div>
+            <h4>Longest recorded break</h4>
+            <p>${longest.staffName} · ${longest.duration}m · ${formatDate(longest.date)}</p>
+          </div>
+          <span class="pill ${longest.duration > 35 ? "red" : "green"}">${longest.duration}m</span>
+        </div>
+        <div class="row">
+          <div>
+            <h4>Extended breaks</h4>
+            <p>${over35} break${over35 === 1 ? "" : "s"} over 35 minutes across all saved days.</p>
+          </div>
+          <span class="pill">${over35}</span>
+        </div>
+        <div class="row">
+          <div>
+            <h4>Planner coverage today</h4>
+            <p>${todayMissing} planned staff member${todayMissing === 1 ? "" : "s"} still without a completed or active break.</p>
+          </div>
+          <span class="pill">${todayMissing}</span>
+        </div>
+      `;
     }
 
     function renderBreakHistory() {
-      const box = document.getElementById("filteredBreakHistory");
+      const box = document.getElementById("breakHistoryList");
       if (!box) return;
 
-      const name = document.getElementById("breakFilterName")?.value || "All staff";
+      const staffId = document.getElementById("breakFilterStaff")?.value || "all";
       const date = document.getElementById("breakFilterDate")?.value || "";
 
       let logs = state.breakHistory;
-      if (name !== "All staff") logs = logs.filter(l => l.name === name);
-      if (date) logs = logs.filter(l => l.date === date);
+      if (staffId !== "all") logs = logs.filter(b => b.staffId === staffId);
+      if (date) logs = logs.filter(b => b.date === date);
 
       if (!logs.length) {
         box.innerHTML = `<p class="small">No break logs match these filters.</p>`;
         return;
       }
 
-      box.innerHTML = "";
-
-      logs.forEach(log => {
-        box.innerHTML += `
-          <div class="break-card">
-            <div class="break-top">
-              <div>
-                <h4>${log.name}</h4>
-                <span>${formatDate(log.date)} · ${new Date(log.start).toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit"})}–${new Date(log.finish).toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit"})}</span>
-              </div>
-              <div class="pill ${log.duration > 35 ? "red-text" : log.duration > 30 ? "amber-text" : "green-text"}">${log.duration} mins</div>
-            </div>
+      box.innerHTML = logs.slice(0, 30).map(b => `
+        <div class="row">
+          <div>
+            <h4>${b.staffName}</h4>
+            <p>${formatDate(b.date)} · ${new Date(b.start).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}–${new Date(b.finish).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}</p>
           </div>
-        `;
-      });
+          <span class="pill ${b.duration > 35 ? "red" : b.duration > 30 ? "amber" : "green"}">${b.duration}m</span>
+        </div>
+      `).join("");
     }
 
-    function generateBreakPatterns(showToast = true) {
-      const box = document.getElementById("breakPatterns");
-
-      if (!state.breakHistory.length) {
-        box.innerHTML = `<p class="small">No break data yet. Start and finish breaks to generate patterns.</p>`;
-        return;
-      }
-
-      const byStaff = {};
-
-      state.breakHistory.forEach(log => {
-        if (!byStaff[log.name]) byStaff[log.name] = [];
-        byStaff[log.name].push(log.duration);
-      });
-
-      box.innerHTML = "";
-
-      Object.keys(byStaff).forEach(name => {
-        const logs = byStaff[name];
-        const avg = Math.round(logs.reduce((a,b) => a + b, 0) / logs.length);
-        const extended = logs.filter(x => x > 35).length;
-        const width = Math.min(100, (avg / 45) * 100);
-
-        box.innerHTML += `
-          <div style="margin-bottom:14px;">
-            <strong>${name}</strong>
-            <p class="small">Average ${avg} mins · ${extended} extended break${extended === 1 ? "" : "s"}</p>
-            <div class="bar"><span style="width:${width}%"></span></div>
-          </div>
-        `;
-      });
-
-      if (showToast) toast("Break patterns generated");
-    }
-
-    function selectConduct(btn) {
-      document.querySelectorAll("#conduct .check-btn").forEach(b => b.classList.remove("checked"));
-      btn.classList.add("checked");
-      conductType = btn.innerText;
+    function clearBreakFilters() {
+      document.getElementById("breakFilterStaff").value = "all";
+      document.getElementById("breakFilterDate").value = "";
+      renderBreakHistory();
     }
 
     function saveConduct() {
-      const name = document.getElementById("conductName").value.trim();
+      const staffId = document.getElementById("conductStaff").value;
+      const staff = getStaff(staffId);
       const details = document.getElementById("conductDetails").value.trim();
-      const date = document.getElementById("conductDate").value;
-      const follow = document.getElementById("conductFollow").value;
 
-      if (!name || !details || !conductType) return toast("Add type, name and details");
+      if (!details) return toast("Add note details");
 
       state.conductNotes.unshift({
-        id: Date.now(),
-        type: conductType,
-        name,
+        id: makeId(),
+        date: selectedDate,
+        type: document.getElementById("conductType").value,
+        staffId,
+        staffName: staff?.name || "Unknown",
         details,
-        date,
-        follow,
-        createdBy: state.currentUser
+        createdBy: currentUser()?.name || "Unknown"
       });
 
-      document.getElementById("conductName").value = "";
       document.getElementById("conductDetails").value = "";
-      document.querySelectorAll("#conduct .check-btn").forEach(b => b.classList.remove("checked"));
-      conductType = "";
-
       saveState();
       renderConduct();
-      renderConductHistory();
+      renderStaffList();
+      renderSummaryIfOpen();
       toast("Staff note saved");
     }
 
     function renderConduct() {
-      const list = document.getElementById("conductList");
-      list.innerHTML = "";
+      const box = document.getElementById("conductList");
 
-      const recent = state.conductNotes.slice(0, 5);
-      if (!recent.length) {
-        list.innerHTML = `<div class="card"><p class="small">No conduct or shout-out notes yet.</p></div>`;
+      if (!state.conductNotes.length) {
+        box.innerHTML = `<div class="card"><p class="small">No staff notes yet.</p></div>`;
         return;
       }
 
-      recent.forEach(note => list.appendChild(conductRow(note)));
-    }
-
-    function clearConductFilters() {
-      document.getElementById("conductFilterName").value = "";
-      document.getElementById("conductFilterDate").value = "";
-      document.getElementById("conductFilterType").value = "All types";
-      renderConductHistory();
-    }
-
-    function renderConductHistory() {
-      const box = document.getElementById("filteredConductHistory");
-      if (!box) return;
-
-      const name = (document.getElementById("conductFilterName")?.value || "").toLowerCase();
-      const date = document.getElementById("conductFilterDate")?.value || "";
-      const type = document.getElementById("conductFilterType")?.value || "All types";
-
-      let notes = state.conductNotes;
-      if (name) notes = notes.filter(n => n.name.toLowerCase().includes(name));
-      if (date) notes = notes.filter(n => n.date === date);
-      if (type !== "All types") notes = notes.filter(n => n.type === type);
-
-      box.innerHTML = "";
-
-      if (!notes.length) {
-        box.innerHTML = `<p class="small">No staff notes match these filters.</p>`;
-        return;
-      }
-
-      notes.forEach(note => box.appendChild(conductRow(note)));
-    }
-
-    function conductRow(note) {
-      const row = document.createElement("div");
-      row.className = "area-row";
-      const colour = note.type === "Shout-out" ? "green-text" : note.follow.includes("CoC") ? "red-text" : "amber-text";
-
-      row.innerHTML = `
-        <div>
-          <h4>${note.type}: ${note.name}</h4>
-          <p>${formatDate(note.date)} · ${note.details}</p>
+      box.innerHTML = state.conductNotes.slice(0, 12).map(n => `
+        <div class="row">
+          <div>
+            <h4>${n.type}: ${n.staffName}</h4>
+            <p>${formatDate(n.date)} · ${n.details}</p>
+          </div>
+          <span class="pill ${n.type === "Shout-out" ? "green" : "amber"}">${n.type === "Shout-out" ? "Good" : "Note"}</span>
         </div>
-        <span class="pill ${colour}">${note.follow.split(" ")[0]}</span>
-      `;
-
-      return row;
+      `).join("");
     }
 
     function saveIncident() {
@@ -2483,261 +2669,215 @@
       if (!details) return toast("Add incident details");
 
       state.incidents.unshift({
-        id: Date.now(),
-        date: todayISO(),
+        id: makeId(),
+        date: selectedDate,
         type: document.getElementById("incidentType").value,
         area: document.getElementById("incidentArea").value,
         details,
-        by: state.currentUser
+        by: currentUser()?.name || "Unknown"
       });
 
       document.getElementById("incidentDetails").value = "";
       saveState();
       renderIncidents();
+      renderSummaryIfOpen();
       toast("Incident saved");
     }
 
     function renderIncidents() {
       const box = document.getElementById("incidentList");
-      if (!box) return;
 
-      const q = (document.getElementById("incidentSearch")?.value || "").toLowerCase();
-      let list = state.incidents;
-      if (q) list = list.filter(i => JSON.stringify(i).toLowerCase().includes(q));
-
-      if (!list.length) {
-        box.innerHTML = `<p class="small">No incidents logged yet.</p>`;
+      if (!state.incidents.length) {
+        box.innerHTML = `<div class="card"><p class="small">No incidents logged yet.</p></div>`;
         return;
       }
 
-      box.innerHTML = "";
-      list.forEach(i => {
-        box.innerHTML += `
-          <div class="area-row">
-            <div>
-              <h4>${i.type} · ${i.area}</h4>
-              <p>${formatDate(i.date)} · ${i.details}</p>
-            </div>
-            <span class="pill">${i.by || "—"}</span>
+      box.innerHTML = state.incidents.slice(0, 10).map(i => `
+        <div class="row">
+          <div>
+            <h4>${i.type} · ${i.area}</h4>
+            <p>${formatDate(i.date)} · ${i.details}</p>
           </div>
-        `;
-      });
+          <span class="pill">${i.by}</span>
+        </div>
+      `).join("");
     }
 
     function saveEquipment() {
       const name = document.getElementById("equipmentName").value.trim();
-      const notes = document.getElementById("equipmentNotes").value.trim();
-
       if (!name) return toast("Add equipment name");
 
       state.equipmentLogs.unshift({
-        id: Date.now(),
-        date: todayISO(),
+        id: makeId(),
+        date: selectedDate,
         name,
         area: document.getElementById("equipmentArea").value,
         status: document.getElementById("equipmentStatus").value,
-        notes,
-        by: state.currentUser
+        notes: document.getElementById("equipmentNotes").value.trim(),
+        by: currentUser()?.name || "Unknown"
       });
 
       document.getElementById("equipmentName").value = "";
       document.getElementById("equipmentNotes").value = "";
       saveState();
       renderEquipment();
+      renderHome();
+      renderSummaryIfOpen();
       toast("Equipment issue saved");
     }
 
     function renderEquipment() {
       const box = document.getElementById("equipmentList");
-      if (!box) return;
 
-      const q = (document.getElementById("equipmentSearch")?.value || "").toLowerCase();
-      let list = state.equipmentLogs;
-      if (q) list = list.filter(e => JSON.stringify(e).toLowerCase().includes(q));
-
-      if (!list.length) {
-        box.innerHTML = `<p class="small">No equipment issues logged yet.</p>`;
+      if (!state.equipmentLogs.length) {
+        box.innerHTML = `<div class="card"><p class="small">No equipment issues logged yet.</p></div>`;
         return;
       }
 
-      box.innerHTML = "";
-      list.forEach(e => {
-        const colour = e.status === "Fixed" ? "green-text" : e.status === "Open" ? "red-text" : "amber-text";
-        box.innerHTML += `
-          <div class="area-row">
-            <div>
-              <h4>${e.name} · ${e.area}</h4>
-              <p>${formatDate(e.date)} · ${e.notes || "No extra notes"}</p>
-            </div>
-            <span class="pill ${colour}">${e.status}</span>
+      box.innerHTML = state.equipmentLogs.slice(0, 12).map(e => `
+        <div class="row">
+          <div>
+            <h4>${e.name} · ${e.area}</h4>
+            <p>${formatDate(e.date)} · ${e.notes || "No extra notes"}</p>
           </div>
-        `;
-      });
+          <span class="pill ${e.status === "Fixed" ? "green" : e.status === "Open" ? "red" : "amber"}">${e.status}</span>
+        </div>
+      `).join("");
     }
 
-    function addStaff() {
-      const input = document.getElementById("newStaffName");
-      const name = input.value.trim();
-      if (!name) return toast("Enter a staff name");
-      if (state.staff.includes(name)) return toast("Staff member already exists");
+    function finalSignoff() {
+      const staff = getStaff(document.getElementById("signoffBy").value);
+      state.signoffs[selectedDate] = {
+        by: staff?.name || "Unknown",
+        time: nowTime()
+      };
 
-      state.staff.push(name);
-      input.value = "";
       saveState();
-      renderStaff();
-      toast(`${name} added`);
+      renderSignoff();
+      renderHome();
+      renderSummaryIfOpen();
+      toast("Final sign-off saved");
     }
 
-    function exportEmailSummary() {
-      const panel = document.getElementById("exportBox");
-      panel.classList.add("open");
+    function renderSignoff() {
+      const signoff = state.signoffs[selectedDate];
+      document.getElementById("signoffStatus").innerText = signoff
+        ? `Signed off by ${signoff.by} at ${signoff.time}.`
+        : "Not signed off yet.";
+    }
 
-      const day = currentDayHandovers();
-      const briefing = state.briefings[selectedDate];
-      let text = `ShiftFlow Handover Summary — ${formatDate(selectedDate)}\n\n`;
+    function saveAudit() {
+      const selects = Array.from(document.querySelectorAll(".auditScore"));
+      const score = Math.round(selects.reduce((sum, s) => sum + Number(s.value), 0) / selects.length);
 
-      if (briefing) {
-        text += `DAILY BRIEFING\n`;
-        text += `DMs: ${briefing.dms || "-"}\n`;
-        text += `Visitor number: ${briefing.visitors || "-"}\n`;
-        text += `Key points: ${briefing.points || "-"}\n`;
-        text += `Focus: ${briefing.focus || "-"}\n\n`;
-      }
+      state.audits.unshift({
+        id: makeId(),
+        date: selectedDate,
+        area: document.getElementById("auditArea").value,
+        score,
+        notes: document.getElementById("auditNotes").value.trim(),
+        by: currentUser()?.name || "Unknown"
+      });
 
-      Object.keys(structure).forEach(mainKey => {
-        const main = structure[mainKey];
-        text += `${main.name.toUpperCase()}\n`;
+      document.getElementById("auditNotes").value = "";
+      saveState();
+      toast(`Audit saved · ${score}%`);
+    }
 
-        Object.keys(main.sections).forEach(sectionKey => {
-          const section = main.sections[sectionKey];
-          const data = day[sectionKey];
+    function renderAuditScore() {
+      const selects = Array.from(document.querySelectorAll(".auditScore"));
+      const score = Math.round(selects.reduce((sum, s) => sum + Number(s.value), 0) / selects.length);
+      document.getElementById("auditScoreText").innerText = `Current audit score: ${score}%`;
+    }
 
-          text += `\n${section.name}\n`;
+    function exportSummary() {
+      const handovers = Object.values(dayHandovers());
+      const breaks = getTodayBreaks();
+      const over35 = getTodayOver35();
+      let text = `ShiftFlow Summary — ${formatDate(selectedDate)}\n\n`;
 
-          if (!data) {
-            text += `- No handover submitted.\n`;
-          } else {
-            text += `Status: ${data.status}\n`;
-            text += `Priority: ${data.priority}\n`;
-            text += `Submitted by: ${data.submittedBy} at ${data.updatedAt}\n`;
+      text += `BREAK CONTROL\n`;
+      text += `Breaks completed today: ${breaks.length}\n`;
+      text += `People over 35 minutes: ${over35.length}\n`;
+      over35.forEach(b => text += `- ${b.staffName}: ${b.duration} mins\n`);
+      text += `People with no break logged from planner: ${getPeopleNoBreakToday().map(s => s.name).join(", ") || "None"}\n\n`;
 
-            Object.keys(data.fields).forEach(question => {
-              text += `${question}: ${data.fields[question] || "-"}\n`;
-            });
-
-            if (data.actionRequired === "Action required") {
-              text += `ACTION REQUIRED: ${data.actionText}\n`;
-              text += `Owner: ${data.actionOwner || "-"}\n`;
-              text += `Due: ${data.actionDue || "-"}\n`;
-            }
-          }
+      text += `HANDOVERS\n`;
+      handovers.forEach(h => {
+        text += `\n${h.mainName} — ${h.sectionName}\n`;
+        text += `Status: ${h.status}\n`;
+        text += `Priority: ${h.priority}\n`;
+        text += `Submitted by: ${h.submittedByName}\n`;
+        Object.keys(h.answers).forEach(q => {
+          text += `${q}: ${h.answers[q] || "-"}\n`;
         });
-
-        text += `\n`;
+        if (h.actionRequired === "Action required") {
+          text += `ACTION: ${h.actionText}\n`;
+          text += `Owner: ${h.actionOwner || "-"}\n`;
+          text += `Due: ${h.actionDue || "-"}\n`;
+        }
       });
 
       const signoff = state.signoffs[selectedDate];
-      if (signoff) text += `FINAL SIGN-OFF: ${signoff.by} at ${signoff.time}\n`;
+      text += `\nFINAL SIGN-OFF\n${signoff ? `${signoff.by} at ${signoff.time}` : "Not signed off"}\n`;
 
       document.getElementById("exportText").value = text;
-      toast("Export generated");
+      toast("Export created");
     }
 
-    function applyCurrentUser() {
-      state.currentUser = document.getElementById("currentUserSelect").value;
-      saveState();
-      renderStaff();
-      toast(`Current user: ${state.currentUser}`);
-    }
-
-    function applySettings(show = true) {
-      const role = document.getElementById("roleSelect")?.value || state.currentRole || "Manager";
+    function applySettings(showToast = true) {
+      const role = document.getElementById("roleSelect")?.value || state.currentRole;
       const theme = document.getElementById("themeSelect")?.value || "light";
       const accent = document.getElementById("accentSelect")?.value || "#111111";
 
       state.currentRole = role;
-      document.getElementById("rolePill").innerText = role;
-      document.getElementById("roleText").innerText = `${role} Access${state.currentUser ? " · " + state.currentUser : ""}`;
       document.body.classList.toggle("dark", theme === "dark");
       document.documentElement.style.setProperty("--accent", accent);
 
-      document.getElementById("auditNav").style.opacity = role === "Supervisor" ? "0.45" : "1";
+      document.getElementById("rolePill").innerText = role;
+      document.getElementById("roleText").innerText = `${role} Access · ${currentUser()?.name || ""}`;
 
-      localStorage.setItem("shiftflow_settings", JSON.stringify({ role, theme, accent }));
+      localStorage.setItem("shiftflow_v3_settings", JSON.stringify({ theme, accent }));
       saveState();
 
-      if (show) toast("Settings applied");
+      if (showToast) toast("Settings applied");
+    }
+
+    function changeCurrentUser() {
+      state.currentUserId = document.getElementById("currentUserSelect").value;
+      saveState();
+      renderAll();
+      toast(`Current user: ${currentUser().name}`);
     }
 
     function resetPrototype() {
-      if (!confirm("Reset all prototype data?")) return;
+      if (!confirm("Reset all prototype data? Staff list will stay.")) return;
 
       const keepStaff = state.staff;
-      const keepUser = state.currentUser;
+      const keepUser = state.currentUserId;
       const keepRole = state.currentRole;
 
       state = {
-        currentUser: keepUser,
+        currentUserId: keepUser,
         currentRole: keepRole,
-        handovers: {},
-        tasks: {},
-        signoffs: {},
-        briefings: {},
-        audits: [],
         staff: keepStaff,
+        handovers: {},
+        drafts: {},
+        signoffs: {},
+        tasks: {},
+        breakPlanner: {},
         activeBreaks: {},
         breakHistory: [],
         conductNotes: [],
         incidents: [],
-        equipmentLogs: []
+        equipmentLogs: [],
+        audits: []
       };
 
       selectedDate = todayISO();
-      currentMain = "lobby";
-      currentSection = "lobbygeneral";
       saveState();
-      init();
+      renderAll();
       toast("Prototype reset");
-    }
-
-    function saveState() {
-      localStorage.setItem("shiftflow_state", JSON.stringify(state));
-    }
-
-    function loadState() {
-      const saved = JSON.parse(localStorage.getItem("shiftflow_state") || "{}");
-
-      state = {
-        currentUser: saved.currentUser || null,
-        currentRole: saved.currentRole || "Manager",
-        handovers: saved.handovers || {},
-        tasks: saved.tasks || {},
-        signoffs: saved.signoffs || {},
-        briefings: saved.briefings || {},
-        audits: saved.audits || [],
-        staff: saved.staff || ["James", "Ella", "Aaron", "Freya", "Noah"],
-        activeBreaks: saved.activeBreaks || {},
-        breakHistory: saved.breakHistory || [],
-        conductNotes: saved.conductNotes || [],
-        incidents: saved.incidents || [],
-        equipmentLogs: saved.equipmentLogs || []
-      };
-
-      const settings = JSON.parse(localStorage.getItem("shiftflow_settings") || "{}");
-
-      setTimeout(() => {
-        document.getElementById("roleSelect").value = state.currentRole || settings.role || "Manager";
-        if (settings.theme) document.getElementById("themeSelect").value = settings.theme;
-        if (settings.accent) document.getElementById("accentSelect").value = settings.accent;
-        applySettings(false);
-      }, 0);
-    }
-
-    function toast(message) {
-      const t = document.getElementById("toast");
-      t.innerText = message;
-      t.classList.add("show");
-      setTimeout(() => t.classList.remove("show"), 1700);
     }
 
     init();
