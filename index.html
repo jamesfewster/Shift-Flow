@@ -1498,7 +1498,350 @@
         border-right: 1px solid var(--line);
       }
     }
-  </style>
+ /* =========================
+   ShiftFlow v10.1 Compact UI Patch
+   Fixes: chunky spacing, overlapping time inputs, tall board zones,
+   softer premium cards, smaller type, cleaner board density.
+========================= */
+
+:root {
+  --font-xs: 10px;
+  --font-sm: 11px;
+  --font-md: 12px;
+  --font-lg: 14px;
+  --font-xl: 19px;
+  --font-xxl: 24px;
+
+  --r-sm: 12px;
+  --r-md: 15px;
+  --r-lg: 18px;
+  --r-xl: 22px;
+
+  --shadow: 0 8px 22px rgba(15, 23, 42, 0.055);
+}
+
+.app-shell {
+  max-width: 430px;
+}
+
+.topbar {
+  padding: 11px 14px 10px;
+}
+
+.topline {
+  font-size: 10px;
+  margin-bottom: 7px;
+}
+
+.brand-logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+}
+
+h1 {
+  font-size: 19px;
+  letter-spacing: -0.035em;
+}
+
+.subtitle {
+  font-size: 10.5px;
+  margin-top: 3px;
+}
+
+.user-pill {
+  padding: 6px 9px;
+  font-size: 10.5px;
+}
+
+.page,
+.subscreen {
+  padding: 12px;
+}
+
+.card {
+  border-radius: 18px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.compact-card {
+  border-radius: 16px;
+  padding: 11px;
+  margin-bottom: 9px;
+}
+
+.section-head {
+  margin: 14px 0 8px;
+}
+
+.section-title {
+  font-size: 15px;
+}
+
+.section-caption {
+  font-size: 10.5px;
+}
+
+.metric-grid {
+  gap: 7px;
+  margin-bottom: 9px;
+}
+
+.metric {
+  border-radius: 16px;
+  padding: 10px;
+  min-height: 58px;
+}
+
+.metric strong {
+  font-size: 19px;
+}
+
+.metric span {
+  font-size: 10px;
+}
+
+.tool-grid {
+  gap: 8px;
+}
+
+.tool-card {
+  min-height: 82px;
+  border-radius: 17px;
+  padding: 11px;
+}
+
+.tool-icon {
+  width: 29px;
+  height: 29px;
+  border-radius: 9px;
+  font-size: 15px;
+  margin-bottom: 9px;
+}
+
+.tool-card h3 {
+  font-size: 13px;
+}
+
+.tool-card p {
+  font-size: 10.5px;
+}
+
+label {
+  margin: 9px 0 5px;
+  font-size: 10.5px;
+}
+
+input,
+textarea,
+select {
+  min-width: 0;
+  border-radius: 13px;
+  padding: 9px 10px;
+  font-size: 12px;
+}
+
+textarea {
+  min-height: 72px;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+  min-height: 41px;
+  padding: 10px 12px;
+  font-size: 12px;
+  margin-top: 8px;
+  border-radius: 14px;
+}
+
+.btn-small,
+.btn-ghost {
+  padding: 7px 9px;
+  font-size: 10.5px;
+  border-radius: 12px;
+}
+
+.two-col,
+.three-col {
+  min-width: 0;
+}
+
+.two-col > *,
+.three-col > * {
+  min-width: 0;
+}
+
+/* Main fix for overlapping iOS time inputs on the Board form */
+#board .two-col {
+  grid-template-columns: 1fr;
+  gap: 7px;
+}
+
+#board input[type="time"] {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Board header tighter */
+.board-control-bar {
+  top: 80px;
+  margin: -12px -12px 10px;
+  padding: 10px 12px;
+}
+
+.board-summary-grid {
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.board-summary-item {
+  border-radius: 14px;
+  padding: 8px;
+}
+
+.board-summary-item strong {
+  font-size: 15px;
+}
+
+.board-summary-item span {
+  font-size: 9.5px;
+}
+
+.chip {
+  padding: 8px 10px;
+  font-size: 10.5px;
+}
+
+/* Board zone compact redesign */
+.board-zone-grid {
+  gap: 8px;
+}
+
+.board-zone {
+  border-radius: 17px;
+  padding: 10px;
+  min-height: unset;
+}
+
+.board-zone-head {
+  margin-bottom: 6px;
+}
+
+.board-zone h4 {
+  font-size: 14px;
+}
+
+.board-zone p {
+  font-size: 10.5px;
+}
+
+.board-zone .empty-state {
+  padding: 7px 9px !important;
+  border-radius: 12px;
+  font-size: 10.5px;
+  margin-top: 4px;
+  text-align: left;
+  border-style: dashed;
+}
+
+.magnet-row {
+  gap: 6px;
+}
+
+.magnet {
+  border-radius: 11px;
+  padding: 6px 8px;
+  font-size: 10.5px;
+}
+
+.mini-pill {
+  padding: 3px 6px;
+  font-size: 9px;
+}
+
+.board-compact .board-zone {
+  padding: 8px;
+  border-radius: 14px;
+}
+
+.board-compact .board-zone .empty-state {
+  padding: 6px 8px !important;
+}
+
+.board-compact .magnet {
+  padding: 5px 7px;
+  font-size: 10px;
+}
+
+/* Staff cards and break cards tighter */
+.staff-card,
+.break-card,
+.task-card,
+.audit-card,
+.account-card {
+  border-radius: 17px;
+  padding: 11px;
+  margin-bottom: 8px;
+}
+
+.staff-card h3,
+.break-card h4,
+.task-card h4,
+.audit-card h4,
+.account-card h4 {
+  font-size: 13px;
+}
+
+.staff-card p,
+.break-card p,
+.task-card p,
+.audit-card p,
+.account-card p {
+  font-size: 10.5px;
+}
+
+.profile-stat-grid {
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.profile-stat {
+  padding: 8px;
+  border-radius: 13px;
+}
+
+.profile-stat strong {
+  font-size: 16px;
+}
+
+.pill,
+.status-pill {
+  padding: 5px 8px;
+  font-size: 10px;
+}
+
+.bottom-nav {
+  padding: 6px 5px 13px;
+}
+
+.nav-btn {
+  font-size: 9px;
+  padding: 6px 0;
+  border-radius: 13px;
+}
+
+.nav-btn span {
+  font-size: 15px;
+}
+
+/* Hide broken app image if GitHub cannot find the icon file */
+.brand-logo:not([src]),
+.login-logo:not([src]) {
+  display: none;
+}
+   </style>
 </head>
 
 <body>
@@ -4623,50 +4966,66 @@ Ella Brown"
       if (warningEl) warningEl.innerText = warnings;
     }
 
-    function getBoardCoverageWarnings(areaKey = currentBoardArea) {
-      const warnings = [];
-      const board = state.shiftBoards[selectedDate]?.[areaKey] || {};
+ function getBoardCoverageWarnings(areaKey = currentBoardArea) {
+  const warnings = [];
+  const team = dayTeam();
 
-      Object.keys(board).forEach(zone => {
-        if (["Break", "Floating"].includes(zone)) return;
+  /* Do not scream warnings before a team has actually been added */
+  if (!team.length) return warnings;
 
-        const ids = board[zone] || [];
-        const activeIds = ids.filter(id => !state.activeBreaks[id]);
+  const board = state.shiftBoards[selectedDate]?.[areaKey] || {};
+  const assignedInArea = getAssignedStaffIdsForArea(areaKey);
 
-        if (ids.length === 0) {
-          warnings.push({
-            areaKey,
-            area: structure[areaKey].name,
-            zone,
-            level: "empty",
-            message: `${structure[areaKey].name} — ${zone} has no staff assigned.`
-          });
-        } else if (activeIds.length === 0) {
-          warnings.push({
-            areaKey,
-            area: structure[areaKey].name,
-            zone,
-            level: "break",
-            message: `${structure[areaKey].name} — ${zone} has staff assigned, but none active.`
-          });
-        } else if (activeIds.length === 1) {
-          const only = getStaff(activeIds[0]);
-          const status = getBreakStatusForStaff(activeIds[0]);
+  /* If this area has not been started yet, don't count every empty zone as a warning */
+  if (!assignedInArea.length) return warnings;
 
-          if (status.statusKey === "ready" || status.statusKey === "soon" || status.statusKey === "overdue") {
-            warnings.push({
-              areaKey,
-              area: structure[areaKey].name,
-              zone,
-              level: "risk",
-              message: `${structure[areaKey].name} — ${zone} only has ${only?.name || "one staff member"} active and they are ${status.label.toLowerCase()}.`
-            });
-          }
-        }
+  const priorityZones = {
+    lobby: ["Pass", "Tills", "Floor", "Frog", "Dragon"],
+    backlot: ["Pass 1", "Pass 2", "Tills 1", "Tills 2", "Floor", "BBB", "BOH"],
+    hogwarts: ["Host", "Runner", "Table Service"]
+  };
+
+  Object.keys(board).forEach(zone => {
+    if (["Break", "Floating"].includes(zone)) return;
+    if (!priorityZones[areaKey]?.includes(zone)) return;
+
+    const ids = board[zone] || [];
+    const activeIds = ids.filter(id => !state.activeBreaks[id]);
+
+    if (ids.length === 0) {
+      warnings.push({
+        areaKey,
+        area: structure[areaKey].name,
+        zone,
+        level: "empty",
+        message: `${structure[areaKey].name} — ${zone} has no staff assigned.`
       });
+    } else if (activeIds.length === 0) {
+      warnings.push({
+        areaKey,
+        area: structure[areaKey].name,
+        zone,
+        level: "break",
+        message: `${structure[areaKey].name} — ${zone} has staff assigned, but none active.`
+      });
+    } else if (activeIds.length === 1) {
+      const only = getStaff(activeIds[0]);
+      const status = getBreakStatusForStaff(activeIds[0]);
 
-      return warnings;
+      if (status.statusKey === "ready" || status.statusKey === "soon" || status.statusKey === "overdue") {
+        warnings.push({
+          areaKey,
+          area: structure[areaKey].name,
+          zone,
+          level: "risk",
+          message: `${structure[areaKey].name} — ${zone} only has ${only?.name || "one staff member"} active and they are ${status.label.toLowerCase()}.`
+        });
+      }
     }
+  });
+
+  return warnings;
+}
 
     function renderBoardCoverageWarnings() {
       const box = document.getElementById("boardCoverageWarnings");
