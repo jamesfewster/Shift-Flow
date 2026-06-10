@@ -4,36 +4,1037 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>ShiftFlow</title>
-  <link rel="apple-touch-icon" href="IMG_0867.jpeg">
-  <link rel="icon" type="image/jpeg" href="IMG_0867.jpeg">
+
   <style>
-    *{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
-    :root{--bg:#f5f5f7;--card:#fff;--panel:#fafafa;--text:#111;--muted:#777;--line:#ececec;--accent:#111;--green:#ddf8e8;--amber:#fff3cf;--red:#ffe2dc;--blue:#e4edff;--purple:#eee4ff;--lobby:#eee4ff;--backlot:#dff1ff;--hogwarts:#e4edff;--foodhall:#ffe6c8;--frog:#ffe3f4;--dragon:#ddf8e8;--boh:#fff6c8;--shadow:0 10px 28px rgba(0,0,0,.045)}
-    body{margin:0;background:var(--bg);color:var(--text);overscroll-behavior:none}
-    body.dark{--bg:#111;--card:#1b1b1d;--panel:#242426;--text:#f5f5f7;--muted:#aaa;--line:#333;--shadow:none}
-    .phone{max-width:430px;min-height:100vh;margin:0 auto;background:var(--card);position:relative;padding-bottom:104px}
-    .topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(18px);border-bottom:1px solid var(--line);padding:18px 16px 14px} body.dark .topbar,body.dark .bottom-nav{background:rgba(27,27,29,.94)}
-    .topline{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;font-weight:800;margin-bottom:12px;gap:8px}.title-row{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}h1{margin:0;font-size:29px;letter-spacing:-1px;line-height:1}.subtitle{margin:7px 0 0;color:var(--muted);font-size:13px;line-height:1.35}.role-pill{background:var(--accent);color:white;border-radius:999px;padding:8px 11px;font-size:12px;font-weight:900;white-space:nowrap}
-    .page{display:none;padding:16px}.page.active{display:block}.card,.stat,.row,.zone,.task-card,.pressure-card,.audit-question,.break-card{background:var(--panel);border:1px solid var(--line)}.card{border-radius:26px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
-    .hero{border-radius:30px;padding:20px;margin-bottom:14px;color:#111;background:linear-gradient(135deg,var(--green),#f8fff9)}.hero h2{margin:0;font-size:28px;letter-spacing:-.9px}.hero p{margin:8px 0 0;color:#444;font-size:13px;font-weight:650;line-height:1.35}
-    .dashboard-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}.stat{border-radius:20px;padding:14px}.stat h3{margin:0;font-size:23px;letter-spacing:-.7px}.stat p{margin:5px 0 0;color:var(--muted);font-size:12px;font-weight:800}.section-title{margin:22px 0 12px;font-size:18px;font-weight:950}
-    label{display:block;font-size:13px;font-weight:950;margin:13px 0 7px}input,textarea,select{width:100%;border:1px solid #e1e1e1;background:#fbfbfb;border-radius:16px;padding:13px;font-size:14px;outline:none;color:#111}body.dark input,body.dark textarea,body.dark select{background:#1b1b1d;color:white;border-color:var(--line)}textarea{min-height:76px;resize:vertical;line-height:1.35}button{cursor:pointer}.primary-btn,.secondary-btn,.tiny-btn,.chip,.status-btn,.quick-btn,.magnet{font-weight:950;border-radius:16px}.primary-btn,.secondary-btn{width:100%;padding:15px;font-size:15px;margin-top:12px}.primary-btn{border:none;background:var(--accent);color:white}.secondary-btn{background:var(--panel);color:var(--text);border:1px solid var(--line)}.tiny-btn{border:none;padding:10px 12px;background:var(--accent);color:white;font-size:12px;white-space:nowrap}.tiny-btn.light{background:var(--card);color:var(--text);border:1px solid var(--line)}
-    .chip-row,.quick-row,.magnet-row{display:flex;gap:9px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}.chip-row::-webkit-scrollbar,.quick-row::-webkit-scrollbar,.magnet-row::-webkit-scrollbar{display:none}.chip{border:none;padding:12px 14px;font-size:13px;white-space:nowrap;color:#111;opacity:.58;background:#f2f2f2}.chip.active{opacity:1;box-shadow:0 8px 20px rgba(0,0,0,.08);transform:translateY(-1px)}.quick-btn{border:1px solid var(--line);background:var(--card);color:var(--text);padding:9px 10px;font-size:12px;white-space:nowrap}
-    .two-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.three-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.ops-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.ops-grid button{margin-top:0;padding:13px 8px;font-size:12px}.row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;padding:13px;border-radius:18px;margin-bottom:9px}.row h4{margin:0;font-size:15px}.row p{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.35}.pill{border-radius:999px;border:1px solid var(--line);background:var(--card);padding:7px 10px;font-size:11px;font-weight:950;white-space:nowrap}.small{color:var(--muted);font-size:12px;line-height:1.4;margin:6px 0 0}.hidden{display:none!important}.panel{display:none}.panel.open{display:block}
-    .green{color:#167044}.amber{color:#a86500}.red{color:#b42318}.blue{color:#2d62b7}.green-bg{background:var(--green)}.amber-bg{background:var(--amber)}.red-bg{background:var(--red)}.blue-bg{background:var(--blue)}.purple-bg{background:var(--purple)}.lobby-bg{background:var(--lobby)}.backlot-bg{background:var(--backlot)}.hogwarts-bg{background:var(--hogwarts)}.foodhall-bg{background:var(--foodhall)}.frog-bg{background:var(--frog)}.dragon-bg{background:var(--dragon)}.boh-bg{background:var(--boh)}
-    .progress-shell{background:#ededed;height:12px;border-radius:999px;overflow:hidden;margin-top:9px}.progress-fill{height:100%;background:var(--accent);width:0%;transition:.25s ease;border-radius:999px}.pressure-grid{display:grid;gap:10px}.pressure-card{border-radius:24px;padding:15px;position:relative;overflow:hidden}.traffic-dot{width:16px;height:16px;border-radius:999px;display:inline-block;border:2px solid rgba(255,255,255,.8);box-shadow:0 0 0 1px rgba(0,0,0,.08)}.traffic-green{background:#18a058}.traffic-amber{background:#f5a623}.traffic-red{background:#e04436}.traffic-closed{background:#777}
-    .board-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.zone{min-height:142px;border-radius:22px;padding:12px;background:var(--panel);transition:.16s ease}.zone h4{margin:0 0 8px;font-size:14px}.zone.drop-hover{outline:3px solid var(--accent);transform:scale(1.015);background:var(--green)}.magnet{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--card);color:var(--text);padding:10px 12px;margin:3px 4px 6px 0;font-size:12px;box-shadow:0 6px 15px rgba(0,0,0,.05);user-select:none;touch-action:none}.magnet.supervisor{border-color:#111;box-shadow:inset 4px 0 0 #111,0 6px 15px rgba(0,0,0,.05)}.magnet.manager{border-color:#4169e1;box-shadow:inset 4px 0 0 #4169e1,0 6px 15px rgba(0,0,0,.05)}.magnet.admin{border-color:#7b61ff;box-shadow:inset 4px 0 0 #7b61ff,0 6px 15px rgba(0,0,0,.05)}.magnet.new-starter{border-color:#d06b28;box-shadow:inset 4px 0 0 #d06b28,0 6px 15px rgba(0,0,0,.05)}.magnet.probation{border-color:#b42318;box-shadow:inset 4px 0 0 #b42318,0 6px 15px rgba(0,0,0,.05)}.magnet.dragging{opacity:.35}.mini-badge{font-size:9px;font-weight:950;padding:4px 6px;border-radius:999px;background:#f1f1f1;color:#111;border:1px solid #e1e1e1}
-    .wizard-step{display:none}.wizard-step.active{display:block}.progress-bar{height:10px;background:#ececec;border-radius:999px;overflow:hidden;margin-top:10px}.progress-bar span{display:block;height:100%;background:var(--accent);border-radius:999px;width:0}.summary-output{background:#111;color:white;padding:18px;border-radius:24px;margin:14px 0;font-size:14px;line-height:1.45}.summary-output h3{margin:0 0 10px}.summary-output h4{margin:15px 0 7px}.summary-output ul{margin:0;padding-left:18px}.task-card,.break-card{padding:14px;border-radius:20px;margin-bottom:10px}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:18px;background:var(--panel)}table{width:100%;border-collapse:collapse;min-width:520px}th,td{padding:11px;border-bottom:1px solid var(--line);text-align:left;font-size:12px;vertical-align:middle}th{color:var(--muted);font-weight:950;background:rgba(0,0,0,.02)}td strong{font-size:13px}.graph-row{margin-bottom:13px}.graph-head{display:flex;justify-content:space-between;font-size:12px;font-weight:900;margin-bottom:5px;gap:10px}.bar{height:11px;background:#eee;border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;background:var(--accent);border-radius:999px}
-    .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);max-width:430px;width:100%;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 4px 18px;z-index:50}.nav-btn{border:none;background:transparent;color:#888;display:grid;gap:3px;place-items:center;font-size:9px;font-weight:950;padding:7px 0;border-radius:16px}.nav-btn span{font-size:18px;line-height:1}.nav-btn.active{background:#f2f2f2;color:#111}body.dark .nav-btn.active{background:#242426;color:white}.toast{position:fixed;bottom:108px;left:50%;transform:translateX(-50%);background:#111;color:white;padding:12px 16px;border-radius:999px;font-size:13px;font-weight:900;opacity:0;pointer-events:none;transition:.25s;z-index:99}.toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
-    .login-screen{position:fixed;inset:0;z-index:200;background:var(--card);display:grid;place-items:center;padding:18px}.login-card{width:min(390px,100%);background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:0 18px 50px rgba(0,0,0,.08)}.login-card h2{margin:0;font-size:32px;letter-spacing:-1px}.login-card p{color:var(--muted);font-size:13px;line-height:1.4}
-        .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.42);backdrop-filter:blur(10px);z-index:180;display:none;align-items:center;justify-content:center;padding:18px}
-    .modal-backdrop.open{display:flex}
-    .modal-card{width:min(396px,100%);max-height:86vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:32px;padding:16px;box-shadow:0 22px 70px rgba(0,0,0,.24)}
-    .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-    .modal-head h3{margin:0;font-size:18px}
-    .close-btn{width:42px;height:42px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:22px;font-weight:950;color:var(--text)}
-    .top-trump{border-radius:32px;padding:18px;margin-bottom:14px;color:#111;background:radial-gradient(circle at top right,rgba(255,255,255,.85),transparent 34%),linear-gradient(160deg,#f2f2f2,#fff);border:1px solid #ececec;box-shadow:0 16px 44px rgba(0,0,0,.09);overflow:hidden;position:relative}.top-trump::after{content:"";position:absolute;width:160px;height:160px;border-radius:999px;background:rgba(0,0,0,.04);right:-70px;bottom:-80px}.profile-top{position:relative;z-index:1;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.profile-top h2{margin:0;font-size:30px;letter-spacing:-1px}.profile-badges{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.profile-stat-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.profile-stat{background:rgba(255,255,255,.78);border:1px solid #eee;border-radius:18px;padding:12px}.profile-stat strong{display:block;font-size:20px}.profile-stat span{color:#666;font-size:11px;font-weight:900}
-    .subscreen{display:none}.subscreen.open{display:block}.main-live.hidden{display:none}
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg: #eef2f7;
+      --card: #ffffff;
+      --panel: #f7f9fc;
+      --text: #121417;
+      --muted: #6e7480;
+      --line: #e4e8ef;
+      --accent: #111111;
+      --soft-blue: #bfe8ff;
+      --soft-teal: #8ee8df;
+      --soft-green: #c7f3c0;
+      --soft-yellow: #ffe1a6;
+      --soft-purple: #d7b7ff;
+      --soft-red: #ffd2c9;
+      --soft-grey: #dfe5ed;
+      --shadow: 0 18px 45px rgba(26, 37, 54, 0.08);
+      --radius-lg: 32px;
+      --radius-md: 22px;
+    }
+
+    body.dark {
+      --bg: #0f1115;
+      --card: #181b21;
+      --panel: #20242c;
+      --text: #f5f7fb;
+      --muted: #a5adba;
+      --line: #303642;
+      --shadow: none;
+      --soft-grey: #2b3039;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      overscroll-behavior: none;
+    }
+
+    .phone {
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--bg);
+      position: relative;
+      padding-bottom: 106px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(238, 242, 247, 0.92);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+      padding: 18px 16px 14px;
+    }
+
+    body.dark .topbar {
+      background: rgba(15, 17, 21, 0.92);
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 31px;
+      letter-spacing: -1.2px;
+      line-height: 1;
+    }
+
+    .subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .role-pill {
+      background: var(--accent);
+      color: white;
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-size: 12px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .user-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 8px 11px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      color: var(--text);
+      font-weight: 950;
+      font-size: 12px;
+      max-width: 190px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      font-weight: 950;
+      color: #1b3c45;
+      background: #d9eef4;
+      flex-shrink: 0;
+    }
+
+    .page {
+      display: none;
+      padding: 16px;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .card,
+    .stat,
+    .row,
+    .zone,
+    .task-card,
+    .pressure-card,
+    .audit-question,
+    .break-card,
+    .account-card,
+    .health-tile {
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .card {
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .hero {
+      border-radius: 34px;
+      padding: 22px;
+      margin-bottom: 14px;
+      color: #0d2c32;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.75), transparent 34%),
+        linear-gradient(135deg, #9cf0e8, #d9f8ff);
+      box-shadow: var(--shadow);
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: -1px;
+    }
+
+    .hero p {
+      margin: 9px 0 0;
+      color: rgba(13, 44, 50, .75);
+      font-size: 13px;
+      font-weight: 750;
+      line-height: 1.35;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat {
+      border-radius: 24px;
+      padding: 14px;
+    }
+
+    .stat h3 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -0.8px;
+    }
+
+    .stat p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .section-title {
+      margin: 23px 0 12px;
+      font-size: 18px;
+      font-weight: 950;
+      letter-spacing: -0.2px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 950;
+      margin: 13px 0 7px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 18px;
+      padding: 14px;
+      font-size: 15px;
+      outline: none;
+      color: var(--text);
+    }
+
+    textarea {
+      min-height: 86px;
+      resize: vertical;
+      line-height: 1.35;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .tiny-btn,
+    .chip,
+    .status-btn,
+    .quick-btn,
+    .magnet {
+      font-weight: 950;
+      border-radius: 18px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      width: 100%;
+      padding: 16px;
+      font-size: 15px;
+      margin-top: 12px;
+    }
+
+    .primary-btn {
+      border: none;
+      background: var(--accent);
+      color: white;
+    }
+
+    .secondary-btn {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .tiny-btn {
+      border: none;
+      padding: 10px 12px;
+      background: var(--accent);
+      color: white;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .tiny-btn.light {
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .health-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .health-tile {
+      border-radius: 32px;
+      padding: 18px;
+      min-height: 92px;
+      display: grid;
+      grid-template-columns: 58px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .health-tile::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.35));
+      pointer-events: none;
+    }
+
+    .health-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.62);
+      font-size: 24px;
+      z-index: 1;
+    }
+
+    .health-tile h3 {
+      margin: 0;
+      font-size: 23px;
+      letter-spacing: -0.6px;
+      z-index: 1;
+    }
+
+    .health-tile p {
+      margin: 5px 0 0;
+      color: rgba(0,0,0,.58);
+      font-size: 13px;
+      font-weight: 850;
+      z-index: 1;
+    }
+
+    body.dark .health-tile p {
+      color: rgba(0,0,0,.64);
+    }
+
+    .health-arrow {
+      z-index: 1;
+      font-size: 25px;
+      font-weight: 950;
+      color: rgba(0,0,0,.58);
+    }
+
+    .tile-teal {
+      background: linear-gradient(135deg, #73e2da, #bdf7ef);
+      color: #093a3b;
+    }
+
+    .tile-blue {
+      background: linear-gradient(135deg, #a8dcff, #d8f0ff);
+      color: #073252;
+    }
+
+    .tile-yellow {
+      background: linear-gradient(135deg, #ffd05c, #ffe4a9);
+      color: #553a00;
+    }
+
+    .tile-green {
+      background: linear-gradient(135deg, #bdf5b2, #e2ffd8);
+      color: #113d19;
+    }
+
+    .tile-purple {
+      background: linear-gradient(135deg, #c9a6ff, #eadcff);
+      color: #3d1766;
+    }
+
+    .tile-grey {
+      background: linear-gradient(135deg, #dfe5ed, #eef3f9);
+      color: #2a333f;
+    }
+
+    .chip-row,
+    .quick-row,
+    .magnet-row {
+      display: flex;
+      gap: 9px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scrollbar-width: none;
+    }
+
+    .chip-row::-webkit-scrollbar,
+    .quick-row::-webkit-scrollbar,
+    .magnet-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      border: none;
+      padding: 12px 15px;
+      font-size: 13px;
+      white-space: nowrap;
+      color: #111;
+      opacity: .58;
+      background: #f2f2f2;
+    }
+
+    .chip.active {
+      opacity: 1;
+      box-shadow: 0 8px 20px rgba(0,0,0,.08);
+      transform: translateY(-1px);
+    }
+
+    .quick-btn {
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--text);
+      padding: 9px 10px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .two-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    .three-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 22px;
+      margin-bottom: 10px;
+    }
+
+    .row h4 {
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: -0.2px;
+    }
+
+    .row p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .pill {
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      padding: 7px 10px;
+      font-size: 11px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      margin: 6px 0 0;
+      font-weight: 700;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .panel {
+      display: none;
+    }
+
+    .panel.open {
+      display: block;
+    }
+
+    .green { color: #167044; }
+    .amber { color: #a86500; }
+    .red { color: #b42318; }
+    .blue { color: #2d62b7; }
+
+    .green-bg { background: var(--soft-green); }
+    .amber-bg { background: var(--soft-yellow); }
+    .red-bg { background: var(--soft-red); }
+    .blue-bg { background: var(--soft-blue); }
+    .purple-bg { background: var(--soft-purple); }
+    .grey-bg { background: var(--soft-grey); }
+
+    .progress-shell {
+      background: rgba(0,0,0,.08);
+      height: 13px;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: .25s ease;
+      border-radius: 999px;
+    }
+
+    .pressure-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .pressure-card {
+      border-radius: 28px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .traffic-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      display: inline-block;
+      border: 2px solid rgba(255,255,255,.8);
+      box-shadow: 0 0 0 1px rgba(0,0,0,.08);
+    }
+
+    .traffic-green { background: #18a058; }
+    .traffic-amber { background: #f5a623; }
+    .traffic-red { background: #e04436; }
+    .traffic-closed { background: #777; }
+
+    .board-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .zone {
+      min-height: 142px;
+      border-radius: 24px;
+      padding: 12px;
+      background: var(--card);
+      transition: .16s ease;
+    }
+
+    .zone h4 {
+      margin: 0 0 8px;
+      font-size: 14px;
+    }
+
+    .zone.drop-hover {
+      outline: 3px solid var(--accent);
+      transform: scale(1.015);
+      background: var(--soft-green);
+    }
+
+    .magnet {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      padding: 11px 13px;
+      margin: 3px 4px 7px 0;
+      font-size: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,.05);
+      user-select: none;
+      touch-action: none;
+    }
+
+    .magnet.supervisor {
+      border-color: #111;
+      box-shadow: inset 4px 0 0 #111, 0 6px 15px rgba(0,0,0,.05);
+    }
+
+    .magnet.manager {
+      border-color: #4169e1;
+      box-shadow: inset 4px 0 0 #4169e1, 0 6px 15px rgba(0,0,0,.05);
+    }
+
+    .magnet.admin {
+      border-color: #7b61ff;
+      box-shadow: inset 4px 0 0 #7b61ff, 0 6px 15px rgba(0,0,0,.05);
+    }
+
+    .magnet.new-starter {
+      border-color: #d06b28;
+      box-shadow: inset 4px 0 0 #d06b28, 0 6px 15px rgba(0,0,0,.05);
+    }
+
+    .magnet.probation {
+      border-color: #b42318;
+      box-shadow: inset 4px 0 0 #b42318, 0 6px 15px rgba(0,0,0,.05);
+    }
+
+    .magnet.dragging {
+      opacity: .35;
+    }
+
+    .mini-badge {
+      font-size: 9px;
+      font-weight: 950;
+      padding: 4px 6px;
+      border-radius: 999px;
+      background: #f1f1f1;
+      color: #111;
+      border: 1px solid #e1e1e1;
+    }
+
+    .wizard-step {
+      display: none;
+    }
+
+    .wizard-step.active {
+      display: block;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: rgba(0,0,0,.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress-bar span {
+      display: block;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+      width: 0;
+    }
+
+    .summary-output {
+      background: #111;
+      color: white;
+      padding: 18px;
+      border-radius: 28px;
+      margin: 14px 0;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .summary-output h3 {
+      margin: 0 0 10px;
+    }
+
+    .summary-output h4 {
+      margin: 15px 0 7px;
+    }
+
+    .summary-output ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .task-card,
+    .break-card,
+    .audit-question,
+    .account-card {
+      padding: 15px;
+      border-radius: 24px;
+      margin-bottom: 11px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--card);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 540px;
+    }
+
+    th,
+    td {
+      padding: 11px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      font-size: 12px;
+      vertical-align: middle;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 950;
+      background: rgba(0,0,0,.02);
+    }
+
+    td strong {
+      font-size: 13px;
+    }
+
+    .graph-row {
+      margin-bottom: 13px;
+    }
+
+    .graph-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 5px;
+      gap: 10px;
+    }
+
+    .bar {
+      height: 11px;
+      background: rgba(0,0,0,.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 430px;
+      width: 100%;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(18px);
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      padding: 8px 4px 18px;
+      z-index: 70;
+    }
+
+    body.dark .bottom-nav {
+      background: rgba(24,27,33,.92);
+    }
+
+    .nav-btn {
+      border: none;
+      background: transparent;
+      color: #858b96;
+      display: grid;
+      gap: 3px;
+      place-items: center;
+      font-size: 9px;
+      font-weight: 950;
+      padding: 7px 0;
+      border-radius: 17px;
+    }
+
+    .nav-btn span {
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .nav-btn.active {
+      background: var(--panel);
+      color: var(--text);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 108px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 900;
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s;
+      z-index: 120;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-4px);
+    }
+
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .login-card {
+      width: min(390px, 100%);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 34px;
+      padding: 22px;
+      box-shadow: 0 22px 70px rgba(0,0,0,.12);
+    }
+
+    .login-card h2 {
+      margin: 0;
+      font-size: 34px;
+      letter-spacing: -1.2px;
+    }
+
+    .login-card p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    .pin-input {
+      text-align: center;
+      letter-spacing: 7px;
+      font-size: 28px;
+      font-weight: 950;
+      padding: 15px;
+    }
+
+    .pin-pad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .pin-key {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: 22px;
+      height: 58px;
+      font-size: 23px;
+      font-weight: 950;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.42);
+      backdrop-filter: blur(10px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(396px, 100%);
+      max-height: 86vh;
+      overflow: auto;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 34px;
+      padding: 16px;
+      box-shadow: 0 22px 70px rgba(0,0,0,.24);
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .modal-head h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .close-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      font-size: 22px;
+      font-weight: 950;
+      color: var(--text);
+    }
+
+    .top-trump {
+      border-radius: 34px;
+      padding: 18px;
+      margin-bottom: 14px;
+      color: #111;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,.85), transparent 34%),
+        linear-gradient(160deg, #f2f2f2, #ffffff);
+      border: 1px solid #ececec;
+      box-shadow: 0 16px 44px rgba(0,0,0,.09);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .top-trump::after {
+      content: "";
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.04);
+      right: -70px;
+      bottom: -80px;
+    }
+
+    .profile-top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .profile-top h2 {
+      margin: 0;
+      font-size: 30px;
+      letter-spacing: -1px;
+    }
+
+    .profile-badges {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .profile-stat-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .profile-stat {
+      background: rgba(255,255,255,.78);
+      border: 1px solid #eee;
+      border-radius: 19px;
+      padding: 12px;
+    }
+
+    .profile-stat strong {
+      display: block;
+      font-size: 20px;
+    }
+
+    .profile-stat span {
+      color: #666;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .account-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .account-head h4 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: -0.3px;
+    }
+
+    .account-head p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .subscreen {
+      display: none;
+    }
+
+    .subscreen.open {
+      display: block;
+    }
+
+    .main-live.hidden {
+      display: none;
+    }
   </style>
 </head>
 
@@ -41,19 +1042,31 @@
   <div id="loginScreen" class="login-screen">
     <div class="login-card">
       <h2>ShiftFlow</h2>
-      <p>Prototype access for supervisors, managers and admins. This is local-only until real accounts are added later.</p>
+      <p>Enter your account PIN. Admins can change PINs and access levels inside Login Management.</p>
 
-      <label>Your name</label>
-      <select id="loginName"></select>
+      <label>Account</label>
+      <select id="loginAccount"></select>
 
-      <label>Access role</label>
-      <select id="loginRole">
-        <option>Supervisor</option>
-        <option>Manager</option>
-        <option>Admin</option>
-      </select>
+      <label>PIN</label>
+      <input id="loginPin" class="pin-input" inputmode="numeric" maxlength="6" placeholder="••••" />
+
+      <div class="pin-pad">
+        <button class="pin-key" onclick="tapPin('1')">1</button>
+        <button class="pin-key" onclick="tapPin('2')">2</button>
+        <button class="pin-key" onclick="tapPin('3')">3</button>
+        <button class="pin-key" onclick="tapPin('4')">4</button>
+        <button class="pin-key" onclick="tapPin('5')">5</button>
+        <button class="pin-key" onclick="tapPin('6')">6</button>
+        <button class="pin-key" onclick="tapPin('7')">7</button>
+        <button class="pin-key" onclick="tapPin('8')">8</button>
+        <button class="pin-key" onclick="tapPin('9')">9</button>
+        <button class="pin-key" onclick="clearPin()">Clear</button>
+        <button class="pin-key" onclick="tapPin('0')">0</button>
+        <button class="pin-key" onclick="backspacePin()">⌫</button>
+      </div>
 
       <button class="primary-btn" onclick="login()">Enter ShiftFlow</button>
+      <p class="small">Prototype only: PINs are stored locally in this browser until real accounts are added.</p>
     </div>
   </div>
 
@@ -145,8 +1158,13 @@
         <label>Role</label>
         <select id="editStaffRole">
           <option>General Assistant</option>
+          <option>Team Lead</option>
           <option>Supervisor</option>
-          <option>Manager</option>
+          <option>Shift Manager</option>
+          <option>Duty Manager</option>
+          <option>Senior Duty Manager</option>
+          <option>Operations Manager</option>
+          <option>Tour General Manager</option>
           <option>Admin</option>
           <option>Kitchen</option>
         </select>
@@ -157,6 +1175,7 @@
           <option>Backlot</option>
           <option>Hogwarts Table</option>
           <option>Flexible</option>
+          <option>Management</option>
         </select>
 
         <label>Staff status</label>
@@ -185,7 +1204,7 @@
     <div class="topbar">
       <div class="topline">
         <span id="todayText">Today</span>
-        <span id="roleText">Access</span>
+        <span id="topUserChip" class="user-chip">Logged out</span>
       </div>
 
       <div class="title-row">
@@ -196,12 +1215,11 @@
         <div id="rolePill" class="role-pill">Role</div>
       </div>
     </div>
-
-    <main id="home" class="page active">
+        <main id="home" class="page active">
       <div id="homeLive" class="main-live">
         <div class="hero">
           <h2 id="homeGreeting">Good evening</h2>
-          <p>Live traffic lights, today’s team and Shift Board. Everything else opens as a separate screen.</p>
+          <p>Traffic lights, today’s team and the live Shift Board stay on the first screen. Everything else opens as a clean tile.</p>
         </div>
 
         <div class="section-title">Live area pressure</div>
@@ -215,7 +1233,7 @@
           </div>
 
           <div id="pressureControls">
-            <p class="small">Anyone can update this live during the day.</p>
+            <p class="small">Anyone logged in can update this live during the day.</p>
 
             <label>Area</label>
             <select id="pressureArea">
@@ -240,15 +1258,60 @@
           <div id="pressureCards" class="pressure-grid" style="margin-top:14px;"></div>
         </div>
 
-        <div class="card">
-          <h3 style="margin-top:0;">Operations</h3>
-          <div class="ops-grid">
-            <button class="secondary-btn" onclick="openHomeTool('handoverTool')">Handover</button>
-            <button class="secondary-btn" onclick="openHomeTool('tasksTool')">Tasks</button>
-            <button class="secondary-btn" onclick="openHomeTool('summaryTool')">Summary</button>
-            <button class="secondary-btn" onclick="openHomeTool('calendarTool')">Calendar</button>
-            <button class="secondary-btn manager-only" onclick="openHomeTool('auditTool')">Checks</button>
-            <button class="secondary-btn manager-admin-only" onclick="openHomeTool('signoffTool')">Sign-Off</button>
+        <div class="section-title">Operations hub</div>
+        <div class="health-grid">
+          <div class="health-tile tile-teal" onclick="openHomeTool('handoverTool')">
+            <div class="health-icon">📝</div>
+            <div>
+              <h3>Handover</h3>
+              <p id="handoverTileText">0% complete</p>
+            </div>
+            <div class="health-arrow">›</div>
+          </div>
+
+          <div class="health-tile tile-yellow" onclick="openHomeTool('tasksTool')">
+            <div class="health-icon">✅</div>
+            <div>
+              <h3>Tasks</h3>
+              <p id="tasksTileText">No open tasks</p>
+            </div>
+            <div class="health-arrow">›</div>
+          </div>
+
+          <div class="health-tile tile-blue" onclick="openHomeTool('summaryTool')">
+            <div class="health-icon">📊</div>
+            <div>
+              <h3>Summary</h3>
+              <p>Opening overview and export-ready notes</p>
+            </div>
+            <div class="health-arrow">›</div>
+          </div>
+
+          <div class="health-tile tile-green" onclick="openHomeTool('calendarTool')">
+            <div class="health-icon">📅</div>
+            <div>
+              <h3>Calendar</h3>
+              <p>Review saved handover days</p>
+            </div>
+            <div class="health-arrow">›</div>
+          </div>
+
+          <div class="health-tile tile-purple manager-admin-only" onclick="openHomeTool('auditTool')">
+            <div class="health-icon">🔎</div>
+            <div>
+              <h3>Manager Checks</h3>
+              <p id="auditTileText">Audits and area checks</p>
+            </div>
+            <div class="health-arrow">›</div>
+          </div>
+
+          <div class="health-tile tile-grey manager-admin-only" onclick="openHomeTool('signoffTool')">
+            <div class="health-icon">🔐</div>
+            <div>
+              <h3>Final Sign-Off</h3>
+              <p id="signoffTileText">Not signed off yet</p>
+            </div>
+            <div class="health-arrow">›</div>
           </div>
         </div>
 
@@ -281,9 +1344,9 @@
           <p class="small">Drag staff magnets into the correct zone. The layout saves for the selected day.</p>
 
           <div class="chip-row">
-            <button id="boardLobbyChip" class="chip active lobby-bg" onclick="setBoardArea('lobby')">Lobby</button>
-            <button id="boardBacklotChip" class="chip backlot-bg" onclick="setBoardArea('backlot')">Backlot</button>
-            <button id="boardHogwartsChip" class="chip hogwarts-bg" onclick="setBoardArea('hogwarts')">Hogwarts</button>
+            <button id="boardLobbyChip" class="chip active" onclick="setBoardArea('lobby')">Lobby</button>
+            <button id="boardBacklotChip" class="chip" onclick="setBoardArea('backlot')">Backlot</button>
+            <button id="boardHogwartsChip" class="chip" onclick="setBoardArea('hogwarts')">Hogwarts</button>
           </div>
 
           <label>Unassigned magnets</label>
@@ -381,7 +1444,8 @@
           <div id="savedDaysList" style="margin-top:12px;"></div>
         </div>
       </div>
-            <div id="auditTool" class="subscreen">
+
+      <div id="auditTool" class="subscreen">
         <div class="card">
           <button class="tiny-btn light" onclick="closeHomeTool()">← Back to Today</button>
           <h3>Manager Checks</h3>
@@ -445,9 +1509,9 @@
         <div id="wizardStep1" class="wizard-step active">
           <div class="section-title">Pick area</div>
           <div class="card">
-            <button class="primary-btn lobby-bg" style="color:#111;" onclick="chooseWizardMain('lobby')">Lobby</button>
-            <button class="primary-btn backlot-bg" style="color:#111;" onclick="chooseWizardMain('backlot')">Backlot</button>
-            <button class="primary-btn hogwarts-bg" style="color:#111;" onclick="chooseWizardMain('hogwarts')">Hogwarts Table</button>
+            <button class="primary-btn" onclick="chooseWizardMain('lobby')">Lobby</button>
+            <button class="primary-btn" onclick="chooseWizardMain('backlot')">Backlot</button>
+            <button class="primary-btn" onclick="chooseWizardMain('hogwarts')">Hogwarts Table</button>
           </div>
         </div>
 
@@ -465,9 +1529,9 @@
           <div class="card">
             <label>Area status</label>
             <div class="three-grid">
-              <button class="status-btn selected" onclick="setWizardStatus('Green', this)">Green</button>
-              <button class="status-btn" onclick="setWizardStatus('Amber', this)">Amber</button>
-              <button class="status-btn" onclick="setWizardStatus('Red', this)">Red</button>
+              <button class="status-btn selected secondary-btn" onclick="setWizardStatus('Green', this)">Green</button>
+              <button class="status-btn secondary-btn" onclick="setWizardStatus('Amber', this)">Amber</button>
+              <button class="status-btn secondary-btn" onclick="setWizardStatus('Red', this)">Red</button>
             </div>
 
             <label>Priority</label>
@@ -595,8 +1659,13 @@
           <label>Role</label>
           <select id="newStaffRole">
             <option>General Assistant</option>
+            <option>Team Lead</option>
             <option>Supervisor</option>
-            <option>Manager</option>
+            <option>Shift Manager</option>
+            <option>Duty Manager</option>
+            <option>Senior Duty Manager</option>
+            <option>Operations Manager</option>
+            <option>Tour General Manager</option>
             <option>Admin</option>
             <option>Kitchen</option>
           </select>
@@ -607,6 +1676,7 @@
             <option>Backlot</option>
             <option>Hogwarts Table</option>
             <option>Flexible</option>
+            <option>Management</option>
           </select>
 
           <label>Staff status</label>
@@ -673,8 +1743,7 @@
 
       <div id="incidentList"></div>
     </main>
-
-    <main id="more" class="page">
+        <main id="more" class="page">
       <div class="section-title">Equipment log</div>
       <div class="card">
         <label>Equipment / item</label>
@@ -703,9 +1772,22 @@
 
       <div id="equipmentList"></div>
 
-      <div class="section-title manager-only">Audit history</div>
-      <div class="card manager-only">
+      <div class="section-title admin-only">Login Management</div>
+      <div class="card admin-only">
+        <h3 style="margin-top:0;">Manager & Supervisor Accounts</h3>
+        <p class="small">Admin-only. Change PINs, access levels and whether an account can log in.</p>
+        <div id="accountManagementList" style="margin-top:14px;"></div>
+      </div>
+
+      <div class="section-title manager-admin-only">Audit history</div>
+      <div class="card manager-admin-only">
         <div id="fullAuditHistory"></div>
+      </div>
+
+      <div class="section-title manager-admin-only">Audit trail</div>
+      <div class="card manager-admin-only">
+        <p class="small">Shows recent important actions and who completed them.</p>
+        <div id="auditTrailList" style="margin-top:12px;"></div>
       </div>
 
       <div class="section-title">Export</div>
@@ -716,16 +1798,6 @@
 
       <div class="section-title">Settings</div>
       <div class="card">
-        <label>Current user</label>
-        <select id="currentUserSelect" onchange="changeCurrentUser()"></select>
-
-        <label>Prototype access role</label>
-        <select id="roleSelect" onchange="applySettings()">
-          <option>Supervisor</option>
-          <option>Manager</option>
-          <option>Admin</option>
-        </select>
-
         <label>Appearance</label>
         <select id="themeSelect" onchange="applySettings()">
           <option value="light">Light</option>
@@ -738,6 +1810,7 @@
           <option value="#d06b28">Butterbeer Orange</option>
           <option value="#4169e1">Hogwarts Blue</option>
           <option value="#7b61ff">Lobby Purple</option>
+          <option value="#008b8b">Health Teal</option>
         </select>
 
         <button class="secondary-btn" onclick="logout()">Log out</button>
@@ -772,15 +1845,15 @@
   </div>
 
   <script>
-      const structure = {
+    const structure = {
       lobby: {
         name: "Lobby",
-        colour: "lobby-bg",
+        colour: "purple-bg",
         boardZones: ["Pass", "Tills", "Floor", "Frog", "Dragon", "Van", "Break", "Floating"],
         sections: {
           lobbygeneral: {
             name: "General Lobby",
-            colour: "lobby-bg",
+            colour: "purple-bg",
             desc: "Duty managers, visitor numbers, briefing, conduct, observations, service issues and safe/change.",
             required: ["WB DMs", "Visitor number", "Briefing: key points mentioned, who led the brief including PM", "Service issues in any Lobby areas"],
             fields: [
@@ -796,7 +1869,7 @@
           },
           foodhall: {
             name: "Food Hall",
-            colour: "foodhall-bg",
+            colour: "amber-bg",
             desc: "Sundae station, wastage, stock shortages, equipment and anything else.",
             required: ["Wastage: include stock from sundae station and drink fridges", "Broken/logged equipment", "Anything else to know"],
             fields: [
@@ -809,7 +1882,7 @@
           },
           frog: {
             name: "Frog",
-            colour: "frog-bg",
+            colour: "red-bg",
             desc: "Wastage, product availability, ice cream, equipment and anything else.",
             required: ["Wastage: list anything of high volume", "Any product unavailable during the day and the reasons"],
             fields: [
@@ -822,7 +1895,7 @@
           },
           dragon: {
             name: "Dragon",
-            colour: "dragon-bg",
+            colour: "green-bg",
             desc: "Wastage, stock availability, milk dates, equipment and anything else.",
             required: ["Wastage", "Stock availability: cakes, sandwiches, feature drink toppers", "Dates of milk"],
             fields: [
@@ -837,12 +1910,12 @@
       },
       backlot: {
         name: "Backlot",
-        colour: "backlot-bg",
+        colour: "blue-bg",
         boardZones: ["Pass 1", "Pass 2", "Tills 1", "Tills 2", "Floor", "BBB", "BOH", "Kitchen", "Break", "Floating"],
         sections: {
           backlotbbb: {
             name: "Backlot & BBB",
-            colour: "backlot-bg",
+            colour: "blue-bg",
             desc: "Briefing, safe/change, quality checks, tankards, ice cream, toppings, BBB product, BOH prep and equipment.",
             required: ["Briefing: key points mentioned, who led the brief including PM", "Quality checks: how often completed and results", "Broken/logged equipment"],
             fields: [
@@ -865,7 +1938,7 @@
           },
           boh: {
             name: "BOH Prep",
-            colour: "boh-bg",
+            colour: "grey-bg",
             desc: "BOH prep, wastage, date labelling, cleaning and equipment.",
             required: ["BOH prep: ensure prep completed is for day ahead, not on the day for the day", "Broken/logged equipment"],
             fields: [
@@ -881,12 +1954,12 @@
       },
       hogwarts: {
         name: "Hogwarts Table",
-        colour: "hogwarts-bg",
+        colour: "green-bg",
         boardZones: ["Host", "Runner", "Table Service", "Kitchen Link", "Break", "Floating"],
         sections: {
           hogwartstable: {
             name: "Hogwarts Table",
-            colour: "hogwarts-bg",
+            colour: "green-bg",
             desc: "Briefing, service issues, visitors, no-shows, checks, BB charged, stock and lamps.",
             required: ["Briefing: key points mentioned, who led the brief including PM", "Service issues", "Total visitors"],
             fields: [
@@ -924,27 +1997,77 @@
       "Hogwarts Table": { level: "Green", note: "Under control", updatedBy: "System", updatedAt: "-" }
     };
 
+    const defaultAccounts = [
+      { id:"acc_jf", staffId:"s_jf", name:"James Fewster", username:"james.fewster", pin:"5620", access:"Admin", active:true, title:"You / Admin", lastLogin:"Never" },
+      { id:"acc_mp", staffId:"s_mp", name:"Magdalena Polsakiewicz", username:"magdalena.polsakiewicz", pin:"1842", access:"Admin", active:true, title:"Tour General Manager", lastLogin:"Never" },
+      { id:"acc_se", staffId:"s_se", name:"Sara Edwards", username:"sara.edwards", pin:"0529", access:"Admin", active:true, title:"Operations Manager", lastLogin:"Never" },
+
+      { id:"acc_kl", staffId:"s_kl", name:"Kerri Long", username:"kerri.long", pin:"0314", access:"Manager", active:true, title:"Senior Duty Manager", lastLogin:"Never" },
+      { id:"acc_sc", staffId:"s_sc", name:"Samuel Chimbani", username:"samuel.chimbani", pin:"0681", access:"Manager", active:true, title:"Senior Duty Manager", lastLogin:"Never" },
+      { id:"acc_bc", staffId:"s_bc", name:"Billy Chuter", username:"billy.chuter", pin:"0256", access:"Manager", active:true, title:"Senior Duty Manager", lastLogin:"Never" },
+      { id:"acc_ss", staffId:"s_ss", name:"Stephen Sooby", username:"stephen.sooby", pin:"0903", access:"Manager", active:true, title:"Duty Manager", lastLogin:"Never" },
+
+      { id:"acc_lf", staffId:"s_lf", name:"Louisa Fowler", username:"louisa.fowler", pin:"0728", access:"Manager", active:true, title:"Shift Manager", lastLogin:"Never" },
+      { id:"acc_hh", staffId:"s_hh", name:"Herbie Hilsdon", username:"herbie.hilsdon", pin:"0164", access:"Manager", active:true, title:"Shift Manager", lastLogin:"Never" },
+      { id:"acc_fh", staffId:"s_fh", name:"Fiona Holmes", username:"fiona.holmes", pin:"0490", access:"Manager", active:true, title:"Shift Manager", lastLogin:"Never" },
+      { id:"acc_mo", staffId:"s_mo", name:"Megan Osullivan", username:"megan.osullivan", pin:"0835", access:"Manager", active:true, title:"Shift Manager", lastLogin:"Never" },
+      { id:"acc_ar", staffId:"s_ar", name:"Allyssa Remoroza", username:"allyssa.remoroza", pin:"0672", access:"Manager", active:true, title:"Shift Manager", lastLogin:"Never" },
+      { id:"acc_cf", staffId:"s_cf", name:"Charlotte Ford", username:"charlotte.ford", pin:"0381", access:"Manager", active:true, title:"Shift Manager", lastLogin:"Never" },
+
+      { id:"acc_js", staffId:"s_js", name:"Jessica Strong", username:"jessica.strong", pin:"0945", access:"Supervisor", active:true, title:"Events Supervisor", lastLogin:"Never" }
+    ];
+
+    const defaultStaff = [
+      { id:"s_jf", name:"James Fewster", clock:"JF", role:"Admin", area:"Management", status:"Standard" },
+      { id:"s_mp", name:"Magdalena Polsakiewicz", clock:"MP", role:"Tour General Manager", area:"Management", status:"Standard" },
+      { id:"s_se", name:"Sara Edwards", clock:"SE", role:"Operations Manager", area:"Management", status:"Standard" },
+      { id:"s_kl", name:"Kerri Long", clock:"KL", role:"Senior Duty Manager", area:"Management", status:"Standard" },
+      { id:"s_sc", name:"Samuel Chimbani", clock:"SC", role:"Senior Duty Manager", area:"Management", status:"Standard" },
+      { id:"s_bc", name:"Billy Chuter", clock:"BC", role:"Senior Duty Manager", area:"Management", status:"Standard" },
+      { id:"s_ss", name:"Stephen Sooby", clock:"SS", role:"Duty Manager", area:"Management", status:"Standard" },
+      { id:"s_lf", name:"Louisa Fowler", clock:"LF", role:"Shift Manager", area:"Management", status:"Standard" },
+      { id:"s_hh", name:"Herbie Hilsdon", clock:"HH", role:"Shift Manager", area:"Management", status:"Standard" },
+      { id:"s_fh", name:"Fiona Holmes", clock:"FH", role:"Shift Manager", area:"Management", status:"Standard" },
+      { id:"s_mo", name:"Megan Osullivan", clock:"MO", role:"Shift Manager", area:"Management", status:"Standard" },
+      { id:"s_ar", name:"Allyssa Remoroza", clock:"AR", role:"Shift Manager", area:"Management", status:"Standard" },
+      { id:"s_cf", name:"Charlotte Ford", clock:"CF", role:"Shift Manager", area:"Management", status:"Standard" },
+      { id:"s_js", name:"Jessica Strong", clock:"JS", role:"Supervisor", area:"Events", status:"Standard" },
+
+      { id:"s_fa", name:"Felicity Aboagyewaa", clock:"FA", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_va", name:"Veronica Appiah", clock:"VA", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_jd", name:"Janet Danquah", clock:"JD", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_pd", name:"Paris Drummond", clock:"PD", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_lf2", name:"Lucia-rose Fairlie", clock:"LF2", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_lh", name:"Lisa Hyde", clock:"LH", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_mh", name:"Maria Hyde", clock:"MH", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_mi", name:"Marie Ivemey", clock:"MI", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_ek", name:"Eva Kain", clock:"EK", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_ak", name:"Alex Kearns", clock:"AK", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_jk", name:"Jerlyn Kilakil", clock:"JK", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_jkv", name:"Jervyn Kilakil", clock:"JKV", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_fm", name:"Freya Martin", clock:"FM", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_tp", name:"Troy Painter", clock:"TP", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_ap", name:"Anabel Pomaa", clock:"AP", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_zt", name:"Zac Turpin", clock:"ZT", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_cw", name:"Cat West", clock:"CW", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_ww", name:"William Wright", clock:"WW", role:"Team Lead", area:"Flexible", status:"Standard" },
+      { id:"s_py", name:"Phebe Yeboaa", clock:"PY", role:"Team Lead", area:"Flexible", status:"Standard" }
+    ];
+
     let selectedDate = todayISO();
     let currentBoardArea = "lobby";
     let draggedStaffId = null;
     let currentTaskFilter = "Open";
     let activeHomeTool = null;
 
-    let wizard = {
-      main: null,
-      section: null,
-      status: "Green",
-      step: 1
-    };
-
-    let auditDraft = {
-      area: null,
-      questions: []
-    };
+    let wizard = { main: null, section: null, status: "Green", step: 1 };
+    let auditDraft = { area: null, questions: [] };
 
     let state = {
+      currentAccountId: null,
       currentUserId: null,
       currentRole: "Supervisor",
+      accounts: [],
       staff: [],
       handovers: {},
       drafts: {},
@@ -959,7 +2082,8 @@
       equipmentLogs: [],
       audits: [],
       attendanceLogs: [],
-      pressures: {}
+      pressures: {},
+      auditTrail: []
     };
 
     function todayISO() {
@@ -988,12 +2112,29 @@
       return Date.now().toString() + Math.random().toString(16).slice(2);
     }
 
+    function initials(name) {
+      return (name || "?")
+        .split(" ")
+        .map(part => part[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
+    }
+
+    function currentAccount() {
+      return state.accounts.find(a => a.id === state.currentAccountId) || null;
+    }
+
     function currentUser() {
       return state.staff.find(s => s.id === state.currentUserId) || state.staff[0];
     }
 
     function getStaff(id) {
       return state.staff.find(s => s.id === id);
+    }
+
+    function getAccount(id) {
+      return state.accounts.find(a => a.id === id);
     }
 
     function hasManagerAccess() {
@@ -1043,51 +2184,18 @@
       return mins >= 510 && mins <= 1320;
     }
 
-    function init() {
-      loadState();
-      loadVisualSettings();
-
-      document.getElementById("todayText").innerText = new Date().toLocaleDateString("en-GB", {
-        weekday: "long",
-        day: "numeric",
-        month: "short"
-      });
-
-      const dateInput = document.getElementById("selectedDateInput");
-      if (dateInput) dateInput.value = selectedDate;
-
-      renderAll();
-
-      if (!state.currentUserId) {
-        document.getElementById("loginScreen").classList.remove("hidden");
-      } else {
-        document.getElementById("loginScreen").classList.add("hidden");
-      }
-
-      setInterval(() => {
-        renderPressure();
-        renderHomeStatsOnly();
-      }, 60000);
-    }
-
     function saveState() {
-      localStorage.setItem("shiftflow_v7_state", JSON.stringify(state));
+      localStorage.setItem("shiftflow_v8_state", JSON.stringify(state));
     }
 
     function loadState() {
-      const saved = JSON.parse(localStorage.getItem("shiftflow_v7_state") || "{}");
-
-      const defaultStaff = [
-        { id: "s1", name: "James", clock: "10001", role: "Supervisor", area: "Backlot", status: "Standard" },
-        { id: "s2", name: "Ella", clock: "10002", role: "General Assistant", area: "Lobby", status: "Standard" },
-        { id: "s3", name: "Aaron", clock: "10003", role: "General Assistant", area: "Backlot", status: "Standard" },
-        { id: "s4", name: "Freya", clock: "10004", role: "General Assistant", area: "Lobby", status: "New Starter" },
-        { id: "s5", name: "Noah", clock: "10005", role: "General Assistant", area: "Hogwarts Table", status: "On Probation" }
-      ];
+      const saved = JSON.parse(localStorage.getItem("shiftflow_v8_state") || "{}");
 
       state = {
+        currentAccountId: saved.currentAccountId || null,
         currentUserId: saved.currentUserId || null,
         currentRole: saved.currentRole || "Supervisor",
+        accounts: saved.accounts && saved.accounts.length ? saved.accounts : defaultAccounts,
         staff: saved.staff && saved.staff.length ? saved.staff.map(s => ({ status: "Standard", ...s })) : defaultStaff,
         handovers: saved.handovers || {},
         drafts: saved.drafts || {},
@@ -1102,14 +2210,23 @@
         equipmentLogs: saved.equipmentLogs || [],
         audits: saved.audits || [],
         attendanceLogs: saved.attendanceLogs || [],
-        pressures: saved.pressures || {}
+        pressures: saved.pressures || {},
+        auditTrail: saved.auditTrail || []
       };
+
+      defaultAccounts.forEach(acc => {
+        if (!state.accounts.some(a => a.id === acc.id)) state.accounts.push(acc);
+      });
+
+      defaultStaff.forEach(staff => {
+        if (!state.staff.some(s => s.id === staff.id)) state.staff.push(staff);
+      });
 
       if (!state.currentUserId && state.staff.length) state.currentUserId = state.staff[0].id;
     }
 
     function loadVisualSettings() {
-      const settings = JSON.parse(localStorage.getItem("shiftflow_v7_settings") || "{}");
+      const settings = JSON.parse(localStorage.getItem("shiftflow_v8_settings") || "{}");
       document.body.classList.toggle("dark", settings.theme === "dark");
       document.documentElement.style.setProperty("--accent", settings.accent || "#111111");
 
@@ -1120,16 +2237,60 @@
       if (accentSelect) accentSelect.value = settings.accent || "#111111";
     }
 
+    function logAction(type, detail) {
+      state.auditTrail.unshift({
+        id: makeId(),
+        date: selectedDate,
+        type,
+        detail,
+        by: currentAccount()?.name || currentUser()?.name || "Unknown",
+        access: state.currentRole,
+        time: nowTime()
+      });
+
+      state.auditTrail = state.auditTrail.slice(0, 120);
+      saveState();
+    }
+
     function toast(message) {
       const t = document.getElementById("toast");
       t.innerText = message;
       t.classList.add("show");
       setTimeout(() => t.classList.remove("show"), 1700);
     }
+        function init() {
+      loadState();
+      loadVisualSettings();
+
+      document.getElementById("todayText").innerText = new Date().toLocaleDateString("en-GB", {
+        weekday: "long",
+        day: "numeric",
+        month: "short"
+      });
+
+      const dateInput = document.getElementById("selectedDateInput");
+      if (dateInput) dateInput.value = selectedDate;
+
+      renderAll();
+
+      if (!state.currentAccountId) {
+        document.getElementById("loginScreen").classList.remove("hidden");
+      } else {
+        document.getElementById("loginScreen").classList.add("hidden");
+      }
+
+      setInterval(() => {
+        renderPressure();
+        renderHomeTiles();
+        renderCurrentBreaks();
+      }, 60000);
+    }
 
     function renderAll() {
+      renderLoginAccounts();
       renderStaffSelects();
       renderPermissions();
+      renderTopUser();
       renderHome();
       renderTodayTeam();
       renderShiftBoard();
@@ -1138,29 +2299,104 @@
       renderConduct();
       renderIncidents();
       renderEquipment();
+      renderAccountManagement();
       renderAuditHistory();
+      renderAuditTrail();
       renderSignoff();
       renderSummary();
     }
 
-    function renderHomeStatsOnly() {
-      updateHandoverProgressBar();
-      renderPressure();
-      renderUrgentActions();
-      renderAreaStatusCards();
+    function renderTopUser() {
+      const account = currentAccount();
+      const user = currentUser();
+      const chip = document.getElementById("topUserChip");
+
+      if (!account) {
+        chip.innerHTML = "Logged out";
+        return;
+      }
+
+      chip.innerHTML = `
+        <span class="avatar" style="width:22px;height:22px;font-size:10px;">${initials(account.name)}</span>
+        ${account.name.split(" ")[0]} · ${state.currentRole}
+      `;
+
+      document.getElementById("rolePill").innerText = state.currentRole;
+    }
+
+    function renderLoginAccounts() {
+      const sel = document.getElementById("loginAccount");
+      if (!sel) return;
+
+      const currentVal = sel.value;
+      sel.innerHTML = "";
+
+      state.accounts
+        .filter(a => a.active)
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .forEach(a => {
+          sel.innerHTML += `<option value="${a.id}">${a.name} · ${a.title}</option>`;
+        });
+
+      if (currentVal && [...sel.options].some(o => o.value === currentVal)) {
+        sel.value = currentVal;
+      }
+    }
+
+    function tapPin(num) {
+      const input = document.getElementById("loginPin");
+      if (input.value.length >= 6) return;
+      input.value += num;
+    }
+
+    function clearPin() {
+      document.getElementById("loginPin").value = "";
+    }
+
+    function backspacePin() {
+      const input = document.getElementById("loginPin");
+      input.value = input.value.slice(0, -1);
     }
 
     function login() {
-      state.currentUserId = document.getElementById("loginName").value;
-      state.currentRole = document.getElementById("loginRole").value;
-      saveState();
+      const accountId = document.getElementById("loginAccount").value;
+      const pin = document.getElementById("loginPin").value.trim();
+      const account = getAccount(accountId);
+
+      if (!account) return toast("Choose an account");
+      if (!account.active) return toast("This account is disabled");
+      if (pin !== account.pin) {
+        document.getElementById("loginPin").value = "";
+        return toast("Incorrect PIN");
+      }
+
+      account.lastLogin = `${formatDate(todayISO())} ${nowTime()}`;
+
+      state.currentAccountId = account.id;
+      state.currentUserId = account.staffId;
+      state.currentRole = account.access;
+
+      document.getElementById("loginPin").value = "";
       document.getElementById("loginScreen").classList.add("hidden");
+
+      logAction("Login", `${account.name} logged in as ${account.access}`);
+      saveState();
       renderAll();
-      toast(`Welcome, ${currentUser().name}`);
+      toast(`Welcome, ${account.name.split(" ")[0]}`);
     }
 
     function logout() {
+      const account = currentAccount();
+      if (account) logAction("Logout", `${account.name} logged out`);
+
+      state.currentAccountId = null;
+      state.currentUserId = null;
+      state.currentRole = "Supervisor";
+      saveState();
+
       document.getElementById("loginScreen").classList.remove("hidden");
+      renderLoginAccounts();
+      renderTopUser();
     }
 
     function openPage(pageId, btn) {
@@ -1177,7 +2413,7 @@
         breaks: ["Breaks", "Plan, start, finish and analyse staff breaks."],
         staff: ["Staff", "Profiles, clock-in numbers, deployment and performance notes."],
         conduct: ["Conduct", "Shout-outs, conduct notes and incident logs."],
-        more: ["More", "Equipment, audit history, exports and settings."]
+        more: ["More", "Equipment, logins, exports and settings."]
       };
 
       document.getElementById("pageTitle").innerText = titles[pageId][0];
@@ -1187,7 +2423,9 @@
       if (pageId === "staff") renderStaffList();
       if (pageId === "more") {
         renderEquipment();
+        renderAccountManagement();
         renderAuditHistory();
+        renderAuditTrail();
       }
     }
 
@@ -1226,18 +2464,24 @@
 
     function closeHomeTool(smooth = true) {
       activeHomeTool = null;
+
       const homeLive = document.getElementById("homeLive");
       if (homeLive) homeLive.classList.remove("hidden");
+
       document.querySelectorAll("#home .subscreen").forEach(s => s.classList.remove("open"));
+
       document.getElementById("pageTitle").innerText = "Today";
       document.getElementById("pageSubtitle").innerText = "Live shift control.";
+
       if (smooth) window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function changeDate(date) {
       selectedDate = date;
+
       const dateInput = document.getElementById("selectedDateInput");
       if (dateInput) dateInput.value = date;
+
       closeAuditBuilder();
       renderAll();
       toast(`Viewing ${formatDate(selectedDate)}`);
@@ -1247,7 +2491,6 @@
       const el = document.getElementById(id);
       if (!el) return;
       el.classList.toggle("open");
-      if (id === "calendarPanel") renderSavedDays();
     }
 
     function renderPermissions() {
@@ -1266,9 +2509,10 @@
 
     function renderHome() {
       const user = currentUser();
-      document.getElementById("homeGreeting").innerText = `Good evening, ${user ? user.name : "there"}`;
+      document.getElementById("homeGreeting").innerText = `Good evening, ${user ? user.name.split(" ")[0] : "there"}`;
 
       renderPressure();
+      renderHomeTiles();
       updateHandoverProgressBar();
       renderTasksBoard();
       renderTodayProgress();
@@ -1278,7 +2522,28 @@
       renderSavedDays();
       renderAuditHistoryPreview();
     }
-        function getAllSectionKeys() {
+
+    function renderHomeTiles() {
+      const all = getAllSectionKeys();
+      const done = all.filter(k => dayHandovers()[k]).length;
+      const percent = all.length ? Math.round((done / all.length) * 100) : 0;
+
+      const openTasks = dayTasks().filter(t => taskStatus(t) !== "Complete").length;
+      const auditsToday = state.audits.filter(a => a.date === selectedDate).length;
+      const signoff = state.signoffs[selectedDate];
+
+      const handoverTile = document.getElementById("handoverTileText");
+      const tasksTile = document.getElementById("tasksTileText");
+      const auditTile = document.getElementById("auditTileText");
+      const signoffTile = document.getElementById("signoffTileText");
+
+      if (handoverTile) handoverTile.innerText = `${percent}% complete · ${done} of ${all.length} sections`;
+      if (tasksTile) tasksTile.innerText = openTasks ? `${openTasks} open / in progress` : "No open tasks";
+      if (auditTile) auditTile.innerText = auditsToday ? `${auditsToday} audit${auditsToday === 1 ? "" : "s"} today` : "Audits and area checks";
+      if (signoffTile) signoffTile.innerText = signoff ? `Signed by ${signoff.by}` : "Not signed off yet";
+    }
+
+    function getAllSectionKeys() {
       let keys = [];
       Object.values(structure).forEach(main => {
         keys = keys.concat(Object.keys(main.sections));
@@ -1402,6 +2667,7 @@
 
       document.getElementById("pressureNote").value = "";
 
+      logAction("Pressure update", `${area} set to ${level}`);
       saveState();
       renderPressure();
       renderAreaStatusCards();
@@ -1433,10 +2699,12 @@
       document.getElementById("taskOwner").value = "";
       document.getElementById("taskPriority").value = "Medium";
 
+      logAction("Task created", text);
       saveState();
       renderTasksBoard();
       renderUrgentActions();
       renderTodayProgress();
+      renderHomeTiles();
       renderSummary();
       toast("Task added");
     }
@@ -1464,10 +2732,12 @@
       task.status = status;
       task.done = status === "Complete";
 
+      logAction("Task updated", `${task.text} moved to ${status}`);
       saveState();
       renderTasksBoard();
       renderUrgentActions();
       renderTodayProgress();
+      renderHomeTiles();
       renderSummary();
       toast(`Task moved to ${status}`);
     }
@@ -1728,10 +2998,6 @@
         const pressureClass = pressure?.level === "Red" ? "red" : pressure?.level === "Amber" ? "amber" : "green";
         const dot = pressure?.level === "Red" ? "traffic-red" : pressure?.level === "Amber" ? "traffic-amber" : "traffic-green";
 
-        const auditButton = hasManagerAccess()
-          ? `<button class="tiny-btn light" onclick="event.stopPropagation(); openHomeTool('auditTool')">Audit</button>`
-          : "";
-
         box.innerHTML += `
           <div class="row ${main.colour}" onclick="openWizard('${mainKey}')">
             <div>
@@ -1739,10 +3005,7 @@
               <p>${done}/${keys.length} sections complete · ${urgent} urgent/action item${urgent === 1 ? "" : "s"}</p>
               <p><span class="traffic-dot ${dot}" style="width:10px;height:10px;"></span> Pressure: ${pressure?.level || "Green"} · ${pressure?.note || "Under control"}</p>
             </div>
-            <div>
-              <span class="pill ${pressureClass}">${done === keys.length ? "Complete" : "Open"}</span>
-              ${auditButton}
-            </div>
+            <span class="pill ${pressureClass}">${done === keys.length ? "Complete" : "Open"}</span>
           </div>
         `;
       });
@@ -1773,7 +3036,8 @@
         `;
       }).join("");
     }
-        function addToTodayTeam() {
+
+    function addToTodayTeam() {
       const staffId = document.getElementById("teamStaff").value;
       const startTime = document.getElementById("teamStartTime").value;
       const arrivalTime = document.getElementById("teamArrivalTime").value;
@@ -1800,14 +3064,13 @@
 
       team.sort((a, b) => a.startTime.localeCompare(b.startTime));
 
-      if (arrivalTime) {
-        createAttendanceFromTeam(staffId, startTime, arrivalTime);
-      }
+      if (arrivalTime) createAttendanceFromTeam(staffId, startTime, arrivalTime);
 
       document.getElementById("teamStartTime").value = "";
       document.getElementById("teamArrivalTime").value = "";
       document.getElementById("teamBreakTime").value = "";
 
+      logAction("Today team", `${getStaff(staffId)?.name || "Someone"} added to today’s team`);
       saveState();
       renderAll();
       toast("Added to Today’s Team");
@@ -1831,11 +3094,8 @@
         time: nowTime()
       };
 
-      if (existing) {
-        Object.assign(existing, log);
-      } else {
-        state.attendanceLogs.unshift(log);
-      }
+      if (existing) Object.assign(existing, log);
+      else state.attendanceLogs.unshift(log);
     }
 
     function minutesBetween(start, end) {
@@ -1857,6 +3117,7 @@
         });
       });
 
+      logAction("Today team", `${getStaff(staffId)?.name || "Someone"} removed from today’s team`);
       saveState();
       renderAll();
       toast("Removed from today");
@@ -1880,6 +3141,7 @@
         p.breakTime = d.toTimeString().slice(0, 5);
       });
 
+      logAction("Break planner", "Auto-suggested break times");
       saveState();
       renderAll();
       toast("Break times suggested");
@@ -1945,11 +3207,9 @@
 
     function getAssignedStaffCount() {
       let ids = new Set();
-
       Object.keys(structure).forEach(area => {
         getAssignedStaffIdsForArea(area).forEach(id => ids.add(id));
       });
-
       return ids.size;
     }
 
@@ -2014,8 +3274,8 @@
       const s = getStaff(staffId);
 
       const roleClass =
-        s?.role === "Supervisor" ? "supervisor" :
-        s?.role === "Manager" ? "manager" :
+        s?.role?.includes("Supervisor") ? "supervisor" :
+        s?.role?.includes("Manager") ? "manager" :
         s?.role === "Admin" ? "admin" : "";
 
       const statusClass =
@@ -2122,6 +3382,7 @@
         startBreak(staffId, false);
       }
 
+      logAction("Shift Board", `${getStaff(staffId)?.name || "Staff"} moved to ${structure[currentBoardArea].name} — ${zone}`);
       saveState();
     }
 
@@ -2387,10 +3648,13 @@
           source: `${data.mainName} — ${data.sectionName}`,
           priority: data.priority,
           status: "Open",
-          done: false
+          done: false,
+          createdBy: currentUser()?.name || "Unknown",
+          createdAt: nowTime()
         });
       }
 
+      logAction("Handover submitted", `${data.mainName} — ${data.sectionName}`);
       saveState();
       closeWizard();
       renderAll();
@@ -2442,6 +3706,8 @@
 
     function renderAuditQuestions() {
       const box = document.getElementById("auditQuestionList");
+      if (!box) return;
+
       box.innerHTML = "";
 
       auditDraft.questions.forEach((q, index) => {
@@ -2462,7 +3728,7 @@
 
             <label>Photo evidence</label>
             <input type="file" id="auditPhoto_${index}" accept="image/*" multiple onchange="updateAuditPhoto(${index}, this.files.length)" />
-            <span class="photo-note">${q.photoCount} photo${q.photoCount === 1 ? "" : "s"} selected</span>
+            <span class="small">${q.photoCount} photo${q.photoCount === 1 ? "" : "s"} selected</span>
 
             <label>Action required?</label>
             <select id="auditAction_${index}" onchange="updateAuditQuestion(${index}); renderAuditQuestions();">
@@ -2525,7 +3791,7 @@
       const audit = {
         ...auditDraft,
         score,
-        by: auditor?.name || "Unknown",
+        by: auditor?.name || currentUser()?.name || "Unknown",
         time: nowTime()
       };
 
@@ -2541,11 +3807,14 @@
             source: `Audit — ${audit.area}`,
             priority: q.result === "Fail" ? "Urgent" : "High",
             status: "Open",
-            done: false
+            done: false,
+            createdBy: currentUser()?.name || "Unknown",
+            createdAt: nowTime()
           });
         }
       });
 
+      logAction("Audit submitted", `${audit.area} audit · ${score}%`);
       saveState();
       closeAuditBuilder();
       renderAll();
@@ -2602,6 +3871,26 @@
           </div>
         `;
       }).join("");
+    }
+
+    function renderAuditTrail() {
+      const box = document.getElementById("auditTrailList");
+      if (!box) return;
+
+      if (!state.auditTrail.length) {
+        box.innerHTML = `<p class="small">No audit trail entries yet.</p>`;
+        return;
+      }
+
+      box.innerHTML = state.auditTrail.slice(0, 25).map(a => `
+        <div class="row">
+          <div>
+            <h4>${a.type}</h4>
+            <p>${formatDate(a.date)} · ${a.time} · ${a.by} · ${a.detail}</p>
+          </div>
+          <span class="pill">${a.access}</span>
+        </div>
+      `).join("");
     }
 
     function renderSummary() {
@@ -2703,8 +3992,8 @@
 
     function renderStaffSelects() {
       const selectIds = [
-        "loginName", "wizardSubmittedBy", "signoffBy", "teamStaff", "breakEmployee",
-        "breakFilterStaff", "conductStaff", "currentUserSelect", "auditBy"
+        "wizardSubmittedBy", "signoffBy", "teamStaff", "breakEmployee",
+        "breakFilterStaff", "conductStaff", "auditBy"
       ];
 
       selectIds.forEach(id => {
@@ -2720,16 +4009,10 @@
 
         if (currentVal && [...sel.options].some(o => o.value === currentVal)) {
           sel.value = currentVal;
-        } else if (["loginName", "wizardSubmittedBy", "signoffBy", "currentUserSelect", "auditBy"].includes(id)) {
+        } else if (["wizardSubmittedBy", "signoffBy", "auditBy"].includes(id)) {
           sel.value = state.currentUserId || state.staff[0]?.id;
         }
       });
-
-      document.getElementById("roleText").innerText = `${state.currentRole} Access · ${currentUser()?.name || ""}`;
-      document.getElementById("rolePill").innerText = state.currentRole;
-
-      const roleSelect = document.getElementById("roleSelect");
-      if (roleSelect) roleSelect.value = state.currentRole;
     }
 
     function addStaff() {
@@ -2746,7 +4029,7 @@
       state.staff.push({
         id: makeId(),
         name,
-        clock: clock || "No clock-in",
+        clock: clock || initials(name),
         role,
         area,
         status
@@ -2757,6 +4040,7 @@
       document.getElementById("newStaffStatus").value = "Standard";
       document.getElementById("addStaffPanel").classList.remove("open");
 
+      logAction("Staff added", name);
       saveState();
       renderAll();
       toast(`${name} added`);
@@ -2781,27 +4065,30 @@
         const team = dayTeam().find(t => t.staffId === s.id);
         const active = state.activeBreaks[s.id];
         const statusBadge = s.status && s.status !== "Standard" ? ` · ${s.status}` : "";
+        const account = state.accounts.find(a => a.staffId === s.id);
 
         box.innerHTML += `
           <div class="row" onclick="openStaffProfile('${s.id}')">
             <div>
               <h4>${s.name}</h4>
-              <p>${s.role} · ${s.area}${statusBadge} · Clock-in ${s.clock}</p>
+              <p>${s.role} · ${s.area}${statusBadge} · Clock ${s.clock}</p>
               <p>${stats.good} good · ${stats.bad} bad · ${stats.avgBreak}m avg break · ${stats.lateCount} late logs</p>
               <p>${team ? `Today: ${team.startTime} start · ${assignment || "Unassigned"}` : "Not added to today’s team"}${active ? " · On break" : ""}</p>
             </div>
-            <span class="pill">${active ? "Break" : s.status || "Open"}</span>
+            <span class="pill">${account ? account.access : active ? "Break" : s.status || "Open"}</span>
           </div>
         `;
       });
     }
-        function openStaffProfile(id) {
+
+    function openStaffProfile(id) {
       const s = getStaff(id);
       if (!s) return toast("Staff not found");
 
       const stats = getStaffStats(id);
       const team = dayTeam().find(t => t.staffId === id);
       const assignment = getStaffAssignment(id);
+      const account = state.accounts.find(a => a.staffId === id);
 
       document.getElementById("staffModal").classList.add("open");
 
@@ -2820,22 +4107,19 @@
         `<span class="pill">${s.area}</span>`
       ];
 
+      if (account) badges.push(`<span class="pill blue">${account.access} login</span>`);
+
       if (s.status && s.status !== "Standard") {
         badges.push(`<span class="pill ${s.status === "On Probation" ? "red" : "amber"}">${s.status}</span>`);
       }
 
-      if (state.activeBreaks[id]) {
-        badges.push(`<span class="pill blue">On break</span>`);
-      }
-
-      if (assignment) {
-        badges.push(`<span class="pill green">${assignment}</span>`);
-      }
+      if (state.activeBreaks[id]) badges.push(`<span class="pill blue">On break</span>`);
+      if (assignment) badges.push(`<span class="pill green">${assignment}</span>`);
 
       document.getElementById("profileBadges").innerHTML = badges.join("");
 
       document.getElementById("profileInfo").innerText =
-        `Clock-in number: ${s.clock}. Usual area: ${s.area}. Status: ${s.status || "Standard"}. Today: ${team ? `${team.startTime} scheduled, ${team.arrivalTime || "arrival not logged"}, ${team.breakTime || "no planned break"} break` : "not planned today"}. Assignment: ${assignment || "unassigned"}.`;
+        `Clock-in number: ${s.clock}. Usual area: ${s.area}. Status: ${s.status || "Standard"}. ${account ? `Login username: ${account.username}. Access: ${account.access}.` : "No login account attached."} Today: ${team ? `${team.startTime} scheduled, ${team.arrivalTime || "arrival not logged"}, ${team.breakTime || "no planned break"} break` : "not planned today"}. Assignment: ${assignment || "unassigned"}.`;
 
       document.getElementById("editStaffId").value = s.id;
       document.getElementById("editStaffName").value = s.name;
@@ -2908,6 +4192,10 @@
       staff.area = document.getElementById("editStaffArea").value;
       staff.status = document.getElementById("editStaffStatus").value;
 
+      const account = state.accounts.find(a => a.staffId === id);
+      if (account) account.name = staff.name;
+
+      logAction("Staff edited", staff.name);
       saveState();
       renderAll();
       openStaffProfile(id);
@@ -2947,6 +4235,7 @@
         team.arrivalTime = actual;
       }
 
+      logAction("Attendance log", `${staff?.name || "Staff"} · ${late > 0 ? `${late}m late` : "on time"}`);
       saveState();
       renderAll();
       openStaffProfile(staffId);
@@ -2966,6 +4255,85 @@
       const lateCount = attendance.filter(l => l.lateMinutes > 0).length;
 
       return { good, bad, totalBreaks, avgBreak, longestBreak, lateCount };
+    }
+
+    function renderAccountManagement() {
+      const box = document.getElementById("accountManagementList");
+      if (!box) return;
+
+      const accounts = state.accounts
+        .slice()
+        .sort((a, b) => {
+          const order = { Admin: 0, Manager: 1, Supervisor: 2 };
+          return (order[a.access] ?? 9) - (order[b.access] ?? 9) || a.name.localeCompare(b.name);
+        });
+
+      box.innerHTML = accounts.map(a => {
+        const staff = getStaff(a.staffId);
+
+        return `
+          <div class="account-card">
+            <div class="account-head">
+              <span class="avatar">${initials(a.name)}</span>
+              <div>
+                <h4>${a.name}</h4>
+                <p>${a.title} · ${a.username}</p>
+              </div>
+            </div>
+
+            <div class="two-grid">
+              <div>
+                <label>PIN</label>
+                <input id="pin_${a.id}" inputmode="numeric" maxlength="6" value="${a.pin}" />
+              </div>
+              <div>
+                <label>Access</label>
+                <select id="access_${a.id}">
+                  <option ${a.access === "Supervisor" ? "selected" : ""}>Supervisor</option>
+                  <option ${a.access === "Manager" ? "selected" : ""}>Manager</option>
+                  <option ${a.access === "Admin" ? "selected" : ""}>Admin</option>
+                </select>
+              </div>
+            </div>
+
+            <label>Account status</label>
+            <select id="active_${a.id}">
+              <option value="true" ${a.active ? "selected" : ""}>Active</option>
+              <option value="false" ${!a.active ? "selected" : ""}>Disabled</option>
+            </select>
+
+            <p class="small">Linked card: ${staff ? `${staff.role} · ${staff.area}` : "No staff card found"} · Last login: ${a.lastLogin || "Never"}</p>
+
+            <button class="primary-btn" onclick="saveAccountEdit('${a.id}')">Save Login</button>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function saveAccountEdit(accountId) {
+      if (!isAdmin()) return toast("Admin only");
+
+      const account = getAccount(accountId);
+      if (!account) return toast("Account not found");
+
+      const newPin = document.getElementById(`pin_${accountId}`).value.trim();
+      const newAccess = document.getElementById(`access_${accountId}`).value;
+      const newActive = document.getElementById(`active_${accountId}`).value === "true";
+
+      if (!/^\d{4,6}$/.test(newPin)) return toast("PIN must be 4–6 digits");
+
+      account.pin = newPin;
+      account.access = newAccess;
+      account.active = newActive;
+
+      if (state.currentAccountId === account.id) {
+        state.currentRole = newAccess;
+      }
+
+      logAction("Login edited", `${account.name} · ${newAccess} · ${newActive ? "Active" : "Disabled"}`);
+      saveState();
+      renderAll();
+      toast(`${account.name} login updated`);
     }
 
     function renderBreakPlannerTable() {
@@ -3033,6 +4401,8 @@
       if (state.activeBreaks[id]) return showToast ? toast(`${s.name} is already on break`) : null;
 
       state.activeBreaks[id] = Date.now();
+
+      logAction("Break started", s.name);
       saveState();
       renderBreaks();
       renderHome();
@@ -3064,6 +4434,7 @@
 
       delete state.activeBreaks[id];
 
+      logAction("Break finished", `${s.name} · ${duration}m`);
       saveState();
       renderBreaks();
       renderHome();
@@ -3313,6 +4684,7 @@
 
       document.getElementById("conductDetails").value = "";
 
+      logAction("Staff note", `${staff?.name || "Staff"} · ${document.getElementById("conductType").value}`);
       saveState();
       renderConduct();
       renderStaffList();
@@ -3344,17 +4716,21 @@
       const details = document.getElementById("incidentDetails").value.trim();
       if (!details) return toast("Add incident details");
 
+      const type = document.getElementById("incidentType").value;
+      const area = document.getElementById("incidentArea").value;
+
       state.incidents.unshift({
         id: makeId(),
         date: selectedDate,
-        type: document.getElementById("incidentType").value,
-        area: document.getElementById("incidentArea").value,
+        type,
+        area,
         details,
         by: currentUser()?.name || "Unknown"
       });
 
       document.getElementById("incidentDetails").value = "";
 
+      logAction("Incident logged", `${type} · ${area}`);
       saveState();
       renderIncidents();
       renderSummary();
@@ -3385,12 +4761,15 @@
       const name = document.getElementById("equipmentName").value.trim();
       if (!name) return toast("Add equipment name");
 
+      const area = document.getElementById("equipmentArea").value;
+      const status = document.getElementById("equipmentStatus").value;
+
       state.equipmentLogs.unshift({
         id: makeId(),
         date: selectedDate,
         name,
-        area: document.getElementById("equipmentArea").value,
-        status: document.getElementById("equipmentStatus").value,
+        area,
+        status,
         notes: document.getElementById("equipmentNotes").value.trim(),
         by: currentUser()?.name || "Unknown"
       });
@@ -3398,6 +4777,7 @@
       document.getElementById("equipmentName").value = "";
       document.getElementById("equipmentNotes").value = "";
 
+      logAction("Equipment logged", `${name} · ${area} · ${status}`);
       saveState();
       renderEquipment();
       renderHome();
@@ -3445,10 +4825,11 @@
       const staff = getStaff(document.getElementById("signoffBy").value);
 
       state.signoffs[selectedDate] = {
-        by: staff?.name || "Unknown",
+        by: staff?.name || currentUser()?.name || "Unknown",
         time: nowTime()
       };
 
+      logAction("Final sign-off", `${state.signoffs[selectedDate].by} signed off ${formatDate(selectedDate)}`);
       saveState();
       renderSignoff();
       renderHome();
@@ -3482,33 +4863,25 @@
       });
 
       text += `\nOPEN TASKS\n`;
-      if (!openTasks.length) {
-        text += `No open tasks.\n`;
-      } else {
+      if (!openTasks.length) text += `No open tasks.\n`;
+      else {
         openTasks.forEach(t => {
           text += `- ${t.priority}: ${t.text} | Owner: ${t.owner || "Unassigned"} | Status: ${taskStatus(t)}\n`;
         });
       }
 
       text += `\nTEAM DEPLOYMENT\n`;
-      if (deployment.length) {
-        deployment.forEach(d => text += `${d.area} — ${d.zone}: ${d.names}\n`);
-      } else {
-        text += `No deployment saved.\n`;
-      }
+      if (deployment.length) deployment.forEach(d => text += `${d.area} — ${d.zone}: ${d.names}\n`);
+      else text += `No deployment saved.\n`;
 
       text += `\nBREAK CONTROL\n`;
       text += `Breaks completed today: ${breaks.length}\n`;
       text += `People over 35 minutes: ${over35.length}\n`;
-
       over35.forEach(b => text += `- ${b.staffName}: ${b.duration} mins\n`);
       text += `People with no break logged from team: ${getPeopleNoBreakToday().map(s => s.name).join(", ") || "None"}\n\n`;
 
       text += `HANDOVERS\n`;
-
-      if (!handovers.length) {
-        text += `No handovers submitted.\n`;
-      }
+      if (!handovers.length) text += `No handovers submitted.\n`;
 
       handovers.forEach(h => {
         text += `\n${h.mainName} — ${h.sectionName}\n`;
@@ -3529,13 +4902,10 @@
 
       const audits = state.audits.filter(a => a.date === selectedDate);
       text += `\nAUDITS\n`;
-
-      if (!audits.length) {
-        text += `No audits submitted today.\n`;
-      } else {
+      if (!audits.length) text += `No audits submitted today.\n`;
+      else {
         audits.forEach(a => {
           text += `${a.area}: ${a.score}% by ${a.by}\n`;
-
           a.questions.filter(q => q.result !== "Pass").forEach(q => {
             text += `- ${q.question}: ${q.result} · ${q.note || "-"}\n`;
           });
@@ -3546,51 +4916,41 @@
       text += `\nFINAL SIGN-OFF\n${signoff ? `${signoff.by} at ${signoff.time}` : "Not signed off"}\n`;
 
       document.getElementById("exportText").value = text;
+      logAction("Export created", `Summary export for ${formatDate(selectedDate)}`);
+      saveState();
       toast("Export created");
     }
 
     function applySettings(showToast = true) {
-      const roleSelect = document.getElementById("roleSelect");
       const themeSelect = document.getElementById("themeSelect");
       const accentSelect = document.getElementById("accentSelect");
 
-      const role = roleSelect?.value || state.currentRole;
       const theme = themeSelect?.value || "light";
       const accent = accentSelect?.value || "#111111";
-
-      state.currentRole = role;
 
       document.body.classList.toggle("dark", theme === "dark");
       document.documentElement.style.setProperty("--accent", accent);
 
-      document.getElementById("rolePill").innerText = role;
-      document.getElementById("roleText").innerText = `${role} Access · ${currentUser()?.name || ""}`;
-
-      localStorage.setItem("shiftflow_v7_settings", JSON.stringify({ theme, accent }));
-      saveState();
-      renderPermissions();
+      localStorage.setItem("shiftflow_v8_settings", JSON.stringify({ theme, accent }));
 
       if (showToast) toast("Settings applied");
     }
 
-    function changeCurrentUser() {
-      state.currentUserId = document.getElementById("currentUserSelect").value;
-      saveState();
-      renderAll();
-      toast(`Current user: ${currentUser().name}`);
-    }
-
     function resetPrototype() {
       if (!isAdmin()) return toast("Admin only");
-      if (!confirm("Reset all prototype data? Staff list will stay.")) return;
+      if (!confirm("Reset all prototype data? Staff, accounts and PINs will stay.")) return;
 
       const keepStaff = state.staff;
+      const keepAccounts = state.accounts;
+      const keepAccount = state.currentAccountId;
       const keepUser = state.currentUserId;
       const keepRole = state.currentRole;
 
       state = {
+        currentAccountId: keepAccount,
         currentUserId: keepUser,
         currentRole: keepRole,
+        accounts: keepAccounts,
         staff: keepStaff,
         handovers: {},
         drafts: {},
@@ -3605,7 +4965,8 @@
         equipmentLogs: [],
         audits: [],
         attendanceLogs: [],
-        pressures: {}
+        pressures: {},
+        auditTrail: []
       };
 
       selectedDate = todayISO();
@@ -3618,6 +4979,10 @@
     document.addEventListener("keydown", function(event) {
       if (event.key === "Escape") {
         document.getElementById("staffModal").classList.remove("open");
+      }
+
+      if (event.key === "Enter" && !document.getElementById("loginScreen").classList.contains("hidden")) {
+        login();
       }
     });
 
