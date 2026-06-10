@@ -4,8 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>ShiftFlow</title>
-    <link rel="apple-touch-icon" href="IMG_0867.jpeg">
-  <link rel="icon" type="image/jpeg" href="IMG_0867.jpeg">
+
+  <link rel="icon" href="./magical_sf_monogram_with_swoosh.png?v=20" type="image/png">
+  <link rel="shortcut icon" href="./magical_sf_monogram_with_swoosh.png?v=20" type="image/png">
+  <link rel="apple-touch-icon" href="./magical_sf_monogram_with_swoosh.png?v=20">
+  <link rel="apple-touch-icon-precomposed" href="./magical_sf_monogram_with_swoosh.png?v=20">
+  <meta name="apple-mobile-web-app-title" content="ShiftFlow">
+  <meta name="application-name" content="ShiftFlow">
+  <meta name="theme-color" content="#111111">
 
   <style>
     * {
@@ -165,7 +171,9 @@
     .audit-question,
     .break-card,
     .account-card,
-    .health-tile {
+    .health-tile,
+    .break-person-card,
+    .alert-card {
       background: var(--card);
       border: 1px solid var(--line);
       box-shadow: var(--shadow);
@@ -360,10 +368,6 @@
       font-size: 13px;
       font-weight: 850;
       z-index: 1;
-    }
-
-    body.dark .health-tile p {
-      color: rgba(0,0,0,.64);
     }
 
     .health-arrow {
@@ -564,6 +568,95 @@
     .traffic-red { background: #e04436; }
     .traffic-closed { background: #777; }
 
+    .alert-card {
+      border-radius: 28px;
+      padding: 16px;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    .alert-card.show {
+      display: block;
+    }
+
+    .alert-card h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .alert-card p {
+      margin: 6px 0 0;
+      font-size: 13px;
+      font-weight: 800;
+      color: rgba(0,0,0,.62);
+    }
+
+    .break-main-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .break-person-card {
+      border-radius: 28px;
+      padding: 16px;
+      margin-bottom: 11px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .break-person-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 7px;
+      background: var(--soft-grey);
+    }
+
+    .break-person-card.break-ready::before { background: #18a058; }
+    .break-person-card.break-soon::before { background: #f5a623; }
+    .break-person-card.break-overdue::before { background: #e04436; }
+    .break-person-card.break-active::before { background: #4169e1; }
+    .break-person-card.break-long::before { background: #b42318; }
+    .break-person-card.break-done::before { background: #777; }
+
+    .break-card-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .break-card-head h4 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: -0.3px;
+    }
+
+    .break-card-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 750;
+    }
+
+    .break-status-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 11px;
+    }
+
+    .break-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
     .board-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -697,38 +790,6 @@
       padding: 15px;
       border-radius: 24px;
       margin-bottom: 11px;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      background: var(--card);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 540px;
-    }
-
-    th,
-    td {
-      padding: 11px;
-      border-bottom: 1px solid var(--line);
-      text-align: left;
-      font-size: 12px;
-      vertical-align: middle;
-    }
-
-    th {
-      color: var(--muted);
-      font-weight: 950;
-      background: rgba(0,0,0,.02);
-    }
-
-    td strong {
-      font-size: 13px;
     }
 
     .graph-row {
@@ -1039,7 +1100,6 @@
     }
   </style>
 </head>
-
 <body>
   <div id="loginScreen" class="login-screen">
     <div class="login-card">
@@ -1115,8 +1175,23 @@
             <span>Longest</span>
           </div>
           <div class="profile-stat">
+            <strong id="profileLateBreaks">0</strong>
+            <span>Late breaks</span>
+          </div>
+        </div>
+
+        <div class="profile-stat-grid">
+          <div class="profile-stat">
             <strong id="profileLate">0</strong>
-            <span>Late logs</span>
+            <span>Late starts</span>
+          </div>
+          <div class="profile-stat">
+            <strong id="profileBreakOver35">0</strong>
+            <span>Over 35m</span>
+          </div>
+          <div class="profile-stat">
+            <strong id="profileLastBreak">-</strong>
+            <span>Last break</span>
           </div>
         </div>
       </div>
@@ -1178,6 +1253,7 @@
           <option>Hogwarts Table</option>
           <option>Flexible</option>
           <option>Management</option>
+          <option>Events</option>
         </select>
 
         <label>Staff status</label>
@@ -1202,6 +1278,27 @@
     </div>
   </div>
 
+  <div id="breakAlertModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>Break over 35 minutes</h3>
+        <button class="close-btn" onclick="dismissBreakPopupOnly()">×</button>
+      </div>
+
+      <div class="card red-bg">
+        <h3 id="breakAlertName" style="margin-top:0;">Staff member</h3>
+        <p id="breakAlertText" class="small">This break has gone over 35 minutes.</p>
+      </div>
+
+      <label>Reason / note</label>
+      <textarea id="breakAlertReason" placeholder="Example: Actual late break, or manager forgot to finish due to rush..."></textarea>
+
+      <button class="primary-btn" onclick="logAsLateBreak()">Log as late break</button>
+      <button class="secondary-btn" onclick="dismissLongBreak()">Dismiss / manager forgot to finish</button>
+      <button class="secondary-btn" onclick="finishBreakFromAlert()">Finish break now</button>
+    </div>
+  </div>
+
   <div class="phone">
     <div class="topbar">
       <div class="topline">
@@ -1217,11 +1314,17 @@
         <div id="rolePill" class="role-pill">Role</div>
       </div>
     </div>
-        <main id="home" class="page active">
+
+    <main id="home" class="page active">
       <div id="homeLive" class="main-live">
         <div class="hero">
           <h2 id="homeGreeting">Good evening</h2>
           <p>Traffic lights, today’s team and the live Shift Board stay on the first screen. Everything else opens as a clean tile.</p>
+        </div>
+
+        <div id="todayBreakAlert" class="alert-card amber-bg">
+          <h3>Break attention needed</h3>
+          <p id="todayBreakAlertText">Someone needs a break soon.</p>
         </div>
 
         <div class="section-title">Live area pressure</div>
@@ -1417,8 +1520,7 @@
           <div id="tasksBoard" style="margin-top:12px;"></div>
         </div>
       </div>
-
-      <div id="summaryTool" class="subscreen">
+            <div id="summaryTool" class="subscreen">
         <div class="card">
           <button class="tiny-btn light" onclick="closeHomeTool()">← Back to Today</button>
           <h3>Opening Summary</h3>
@@ -1597,48 +1699,31 @@
         </div>
       </div>
 
-      <div class="section-title">Break Planner</div>
-      <div class="card">
-        <p class="small">Break Planner is powered by Today’s Team.</p>
-        <div id="breakPlannerTable"></div>
+      <div id="breakPageAlert" class="alert-card amber-bg">
+        <h3>Break warning</h3>
+        <p id="breakPageAlertText">Break attention needed.</p>
       </div>
 
-      <div class="section-title">Quick break log</div>
-      <div class="card">
-        <label>Employee</label>
-        <select id="breakEmployee"></select>
+      <div class="section-title">Active breaks</div>
+      <div id="activeBreakCards"></div>
 
-        <div class="two-grid">
-          <button class="primary-btn" onclick="startBreak()">Start Break</button>
-          <button class="secondary-btn" onclick="finishBreak()">Finish Break</button>
+      <div class="section-title">Next to go on break</div>
+      <div class="card">
+        <p class="small">Colour coded by urgency. Green = ready, amber = due soon, red = overdue or coverage risk.</p>
+        <div id="nextBreakList" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="section-title">Breaks completed</div>
+      <div class="card">
+        <div id="completedBreakList"></div>
+      </div>
+
+      <div class="section-title">Full break plan</div>
+      <div class="card">
+        <button class="secondary-btn" onclick="togglePanel('fullBreakPlanPanel')">View / Hide Full Break Plan</button>
+        <div id="fullBreakPlanPanel" class="panel" style="margin-top:12px;">
+          <div id="breakPlanList"></div>
         </div>
-      </div>
-
-      <div class="section-title">Current breaks</div>
-      <div id="currentBreaks"></div>
-
-      <div class="section-title">Multi-day break analytics</div>
-      <div class="card">
-        <h3 style="margin-top:0;">Average break by staff</h3>
-        <div id="staffBreakGraph"></div>
-
-        <h3>Average break by day</h3>
-        <div id="dailyBreakGraph"></div>
-
-        <h3>Pattern summary</h3>
-        <div id="breakPatternSummary"></div>
-      </div>
-
-      <div class="section-title">Break history</div>
-      <div class="card">
-        <label>Filter by staff</label>
-        <select id="breakFilterStaff" onchange="renderBreakHistory()"></select>
-
-        <label>Filter by date</label>
-        <input type="date" id="breakFilterDate" onchange="renderBreakHistory()" />
-
-        <button class="secondary-btn" onclick="clearBreakFilters()">Clear Filters</button>
-        <div id="breakHistoryList" style="margin-top:12px;"></div>
       </div>
     </main>
 
@@ -1679,6 +1764,7 @@
             <option>Hogwarts Table</option>
             <option>Flexible</option>
             <option>Management</option>
+            <option>Events</option>
           </select>
 
           <label>Staff status</label>
@@ -1745,7 +1831,8 @@
 
       <div id="incidentList"></div>
     </main>
-        <main id="more" class="page">
+
+    <main id="more" class="page">
       <div class="section-title">Equipment log</div>
       <div class="card">
         <label>Equipment / item</label>
@@ -1847,7 +1934,7 @@
   </div>
 
   <script>
-    const structure = {
+      const structure = {
       lobby: {
         name: "Lobby",
         colour: "purple-bg",
@@ -2000,7 +2087,7 @@
     };
 
     const defaultAccounts = [
-      { id:"acc_jf", staffId:"s_jf", name:"James Fewster", username:"james.fewster", pin:"5620", access:"Admin", active:true, title:"You / Admin", lastLogin:"Never" },
+      { id:"acc_jf", staffId:"s_jf", name:"James Fewster", username:"james.fewster", pin:"5620", access:"Admin", active:true, title:"Admin / Supervisor", lastLogin:"Never" },
       { id:"acc_mp", staffId:"s_mp", name:"Magdalena Polsakiewicz", username:"magdalena.polsakiewicz", pin:"1842", access:"Admin", active:true, title:"Tour General Manager", lastLogin:"Never" },
       { id:"acc_se", staffId:"s_se", name:"Sara Edwards", username:"sara.edwards", pin:"0529", access:"Admin", active:true, title:"Operations Manager", lastLogin:"Never" },
 
@@ -2016,7 +2103,27 @@
       { id:"acc_ar", staffId:"s_ar", name:"Allyssa Remoroza", username:"allyssa.remoroza", pin:"0672", access:"Manager", active:true, title:"Shift Manager", lastLogin:"Never" },
       { id:"acc_cf", staffId:"s_cf", name:"Charlotte Ford", username:"charlotte.ford", pin:"0381", access:"Manager", active:true, title:"Shift Manager", lastLogin:"Never" },
 
-      { id:"acc_js", staffId:"s_js", name:"Jessica Strong", username:"jessica.strong", pin:"0945", access:"Supervisor", active:true, title:"Events Supervisor", lastLogin:"Never" }
+      { id:"acc_js", staffId:"s_js", name:"Jessica Strong", username:"jessica.strong", pin:"0945", access:"Supervisor", active:true, title:"Events Supervisor", lastLogin:"Never" },
+
+      { id:"acc_fa", staffId:"s_fa", name:"Felicity Aboagyewaa", username:"felicity.aboagyewaa", pin:"1031", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_va", staffId:"s_va", name:"Veronica Appiah", username:"veronica.appiah", pin:"2042", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_jd", staffId:"s_jd", name:"Janet Danquah", username:"janet.danquah", pin:"3153", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_pd", staffId:"s_pd", name:"Paris Drummond", username:"paris.drummond", pin:"4264", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_lfr", staffId:"s_lf2", name:"Lucia-rose Fairlie", username:"luciarose.fairlie", pin:"5375", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_lh", staffId:"s_lh", name:"Lisa Hyde", username:"lisa.hyde", pin:"6486", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_mh", staffId:"s_mh", name:"Maria Hyde", username:"maria.hyde", pin:"7597", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_mi", staffId:"s_mi", name:"Marie Ivemey", username:"marie.ivemey", pin:"8608", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_ek", staffId:"s_ek", name:"Eva Kain", username:"eva.kain", pin:"9719", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_ak", staffId:"s_ak", name:"Alex Kearns", username:"alex.kearns", pin:"1820", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_jk", staffId:"s_jk", name:"Jerlyn Kilakil", username:"jerlyn.kilakil", pin:"2931", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_jkv", staffId:"s_jkv", name:"Jervyn Kilakil", username:"jervyn.kilakil", pin:"3042", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_fm", staffId:"s_fm", name:"Freya Martin", username:"freya.martin", pin:"4153", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_tp", staffId:"s_tp", name:"Troy Painter", username:"troy.painter", pin:"5264", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_ap", staffId:"s_ap", name:"Anabel Pomaa", username:"anabel.pomaa", pin:"6375", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_zt", staffId:"s_zt", name:"Zac Turpin", username:"zac.turpin", pin:"7486", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_cw", staffId:"s_cw", name:"Cat West", username:"cat.west", pin:"8597", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_ww", staffId:"s_ww", name:"William Wright", username:"william.wright", pin:"9608", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" },
+      { id:"acc_py", staffId:"s_py", name:"Phebe Yeboaa", username:"phebe.yeboaa", pin:"0719", access:"Supervisor", active:true, title:"Team Lead / Supervisor", lastLogin:"Never" }
     ];
 
     const defaultStaff = [
@@ -2061,6 +2168,7 @@
     let draggedStaffId = null;
     let currentTaskFilter = "Open";
     let activeHomeTool = null;
+    let breakAlertStaffId = null;
 
     let wizard = { main: null, section: null, status: "Green", step: 1 };
     let auditDraft = { area: null, questions: [] };
@@ -2085,7 +2193,8 @@
       audits: [],
       attendanceLogs: [],
       pressures: {},
-      auditTrail: []
+      auditTrail: [],
+      dismissedBreakAlerts: {}
     };
 
     function todayISO() {
@@ -2187,11 +2296,11 @@
     }
 
     function saveState() {
-      localStorage.setItem("shiftflow_v8_state", JSON.stringify(state));
+      localStorage.setItem("shiftflow_v9_state", JSON.stringify(state));
     }
 
     function loadState() {
-      const saved = JSON.parse(localStorage.getItem("shiftflow_v8_state") || "{}");
+      const saved = JSON.parse(localStorage.getItem("shiftflow_v9_state") || "{}");
 
       state = {
         currentAccountId: saved.currentAccountId || null,
@@ -2213,7 +2322,8 @@
         audits: saved.audits || [],
         attendanceLogs: saved.attendanceLogs || [],
         pressures: saved.pressures || {},
-        auditTrail: saved.auditTrail || []
+        auditTrail: saved.auditTrail || [],
+        dismissedBreakAlerts: saved.dismissedBreakAlerts || {}
       };
 
       defaultAccounts.forEach(acc => {
@@ -2228,7 +2338,7 @@
     }
 
     function loadVisualSettings() {
-      const settings = JSON.parse(localStorage.getItem("shiftflow_v8_settings") || "{}");
+      const settings = JSON.parse(localStorage.getItem("shiftflow_v9_settings") || "{}");
       document.body.classList.toggle("dark", settings.theme === "dark");
       document.documentElement.style.setProperty("--accent", settings.accent || "#111111");
 
@@ -2250,7 +2360,7 @@
         time: nowTime()
       });
 
-      state.auditTrail = state.auditTrail.slice(0, 120);
+      state.auditTrail = state.auditTrail.slice(0, 160);
       saveState();
     }
 
@@ -2260,7 +2370,8 @@
       t.classList.add("show");
       setTimeout(() => t.classList.remove("show"), 1700);
     }
-        function init() {
+
+    function init() {
       loadState();
       loadVisualSettings();
 
@@ -2284,11 +2395,12 @@
       setInterval(() => {
         renderPressure();
         renderHomeTiles();
-        renderCurrentBreaks();
+        renderTodayBreakAlert();
+        renderBreaks();
+        checkLongBreakAlerts();
       }, 60000);
     }
-
-    function renderAll() {
+        function renderAll() {
       renderLoginAccounts();
       renderStaffSelects();
       renderPermissions();
@@ -2306,11 +2418,11 @@
       renderAuditTrail();
       renderSignoff();
       renderSummary();
+      checkLongBreakAlerts();
     }
 
     function renderTopUser() {
       const account = currentAccount();
-      const user = currentUser();
       const chip = document.getElementById("topUserChip");
 
       if (!account) {
@@ -2367,6 +2479,7 @@
 
       if (!account) return toast("Choose an account");
       if (!account.active) return toast("This account is disabled");
+
       if (pin !== account.pin) {
         document.getElementById("loginPin").value = "";
         return toast("Incorrect PIN");
@@ -2412,7 +2525,7 @@
 
       const titles = {
         home: ["Today", "Live shift control."],
-        breaks: ["Breaks", "Plan, start, finish and analyse staff breaks."],
+        breaks: ["Breaks", "Live break control without spreadsheet clutter."],
         staff: ["Staff", "Profiles, clock-in numbers, deployment and performance notes."],
         conduct: ["Conduct", "Shout-outs, conduct notes and incident logs."],
         more: ["More", "Equipment, logins, exports and settings."]
@@ -2433,6 +2546,7 @@
 
     function openHomeTool(id) {
       activeHomeTool = id;
+
       document.getElementById("homeLive").classList.add("hidden");
       document.querySelectorAll("#home .subscreen").forEach(s => s.classList.remove("open"));
       document.getElementById(id).classList.add("open");
@@ -2515,6 +2629,7 @@
 
       renderPressure();
       renderHomeTiles();
+      renderTodayBreakAlert();
       updateHandoverProgressBar();
       renderTasksBoard();
       renderTodayProgress();
@@ -2543,6 +2658,41 @@
       if (tasksTile) tasksTile.innerText = openTasks ? `${openTasks} open / in progress` : "No open tasks";
       if (auditTile) auditTile.innerText = auditsToday ? `${auditsToday} audit${auditsToday === 1 ? "" : "s"} today` : "Audits and area checks";
       if (signoffTile) signoffTile.innerText = signoff ? `Signed by ${signoff.by}` : "Not signed off yet";
+    }
+
+    function renderTodayBreakAlert() {
+      const box = document.getElementById("todayBreakAlert");
+      const text = document.getElementById("todayBreakAlertText");
+      if (!box || !text) return;
+
+      const activeLong = getActiveBreaks()
+        .filter(b => b.minutes >= 35)
+        .sort((a, b) => b.minutes - a.minutes);
+
+      const next = getBreakQueue();
+      const overdue = next.filter(x => x.statusKey === "overdue");
+      const dueSoon = next.filter(x => x.statusKey === "soon" || x.statusKey === "ready");
+
+      if (activeLong.length) {
+        box.className = "alert-card show red-bg";
+        text.innerText = `${activeLong[0].staffName} has been on break for ${activeLong[0].minutes} minutes. Open Breaks to resolve.`;
+        return;
+      }
+
+      if (overdue.length) {
+        box.className = "alert-card show red-bg";
+        text.innerText = `${overdue.length} person${overdue.length === 1 ? "" : "s"} overdue for break. Next: ${overdue[0].staffName}.`;
+        return;
+      }
+
+      if (dueSoon.length) {
+        box.className = "alert-card show amber-bg";
+        text.innerText = `${dueSoon.length} break${dueSoon.length === 1 ? "" : "s"} due soon. Next: ${dueSoon[0].staffName} at ${dueSoon[0].breakTime}.`;
+        return;
+      }
+
+      box.className = "alert-card";
+      text.innerText = "";
     }
 
     function getAllSectionKeys() {
@@ -2783,8 +2933,7 @@
         `;
       }).join("");
     }
-
-    function renderTodayProgress() {
+        function renderTodayProgress() {
       const box = document.getElementById("todayProgress");
       if (!box) return;
 
@@ -2795,6 +2944,8 @@
       const planned = dayTeam().length;
       const teamAssigned = getAssignedStaffCount();
       const openTasks = dayTasks().filter(t => taskStatus(t) !== "Complete").length;
+      const activeLong = getActiveBreaks().filter(b => b.minutes >= 35).length;
+      const overdue = getBreakQueue().filter(b => b.statusKey === "overdue").length;
 
       box.innerHTML = `
         <div class="row">
@@ -2826,7 +2977,7 @@
             <h4>Break control</h4>
             <p>${getTodayBreaks().length} completed · ${Object.keys(state.activeBreaks).length} active · ${getPeopleNoBreakToday().length} not logged from team.</p>
           </div>
-          <span class="pill">${getTodayOver35().length} over 35m</span>
+          <span class="pill ${activeLong || overdue ? "red" : "green"}">${activeLong} over 35m · ${overdue} overdue</span>
         </div>
 
         <div class="row">
@@ -2882,9 +3033,18 @@
           });
         });
 
+      getActiveBreaks()
+        .filter(b => b.minutes >= 35)
+        .forEach(b => {
+          items.push({
+            title: `${b.staffName} break over 35 minutes`,
+            detail: `${b.minutes} minutes active. Resolve on Breaks page.`
+          });
+        });
+
       getTodayOver35().forEach(b => {
         items.push({
-          title: `${b.staffName} break over 35 minutes`,
+          title: `${b.staffName} completed break over 35 minutes`,
           detail: `${b.duration} minutes logged today.`
         });
       });
@@ -3107,6 +3267,17 @@
       return (eh * 60 + em) - (sh * 60 + sm);
     }
 
+    function timeToMinutes(time) {
+      if (!time) return null;
+      const [h, m] = time.split(":").map(Number);
+      return h * 60 + m;
+    }
+
+    function nowMinutes() {
+      const d = new Date();
+      return d.getHours() * 60 + d.getMinutes();
+    }
+
     function removeFromTodayTeam(staffId) {
       if (!isAdmin()) return toast("Admin only");
 
@@ -3165,6 +3336,7 @@
         const assignment = getStaffAssignment(t.staffId);
         const late = t.arrivalTime ? minutesBetween(t.startTime, t.arrivalTime) : 0;
         const lateText = t.arrivalTime ? (late > 0 ? `${late}m late` : "On time") : "Arrival not logged";
+        const breakInfo = getBreakStatusForStaff(t.staffId);
         const statusBadge = s?.status && s.status !== "Standard" ? ` · ${s.status}` : "";
 
         return `
@@ -3173,7 +3345,7 @@
               <h4>${s?.name || "Unknown"} · ${s?.clock || ""}</h4>
               <p>${s?.role || ""}${statusBadge}</p>
               <p>Scheduled ${t.startTime} · Arrival ${t.arrivalTime || "-"} · ${lateText}</p>
-              <p>Break ${t.breakTime || "not planned"} · ${assignment || "Unassigned"}</p>
+              <p>Break ${t.breakTime || "not planned"} · ${breakInfo.label} · ${assignment || "Unassigned"}</p>
             </div>
             <button class="tiny-btn light admin-only" onclick="event.stopPropagation(); removeFromTodayTeam('${t.staffId}')">Remove</button>
           </div>
@@ -3230,6 +3402,21 @@
       return null;
     }
 
+    function getStaffAssignmentParts(staffId) {
+      if (!state.shiftBoards[selectedDate]) return null;
+
+      for (const areaKey of Object.keys(structure)) {
+        const board = state.shiftBoards[selectedDate][areaKey] || {};
+        for (const zone of Object.keys(board)) {
+          if (board[zone].includes(staffId)) {
+            return { areaKey, areaName: structure[areaKey].name, zone };
+          }
+        }
+      }
+
+      return null;
+    }
+
     function renderUnassignedMagnets() {
       const box = document.getElementById("unassignedMagnets");
       if (!box) return;
@@ -3245,8 +3432,7 @@
       box.innerHTML = unassigned.map(t => magnetHTML(t.staffId)).join("");
       attachPointerDragHandlers();
     }
-
-    function renderBoardZones() {
+        function renderBoardZones() {
       const box = document.getElementById("boardZones");
       if (!box) return;
 
@@ -3274,9 +3460,10 @@
 
     function magnetHTML(staffId) {
       const s = getStaff(staffId);
+      const breakStatus = getBreakStatusForStaff(staffId);
 
       const roleClass =
-        s?.role?.includes("Supervisor") ? "supervisor" :
+        s?.role?.includes("Supervisor") || s?.role?.includes("Team Lead") ? "supervisor" :
         s?.role?.includes("Manager") ? "manager" :
         s?.role === "Admin" ? "admin" : "";
 
@@ -3287,6 +3474,7 @@
       const activeBreak = state.activeBreaks[staffId] ? `<span class="mini-badge">Break</span>` : "";
       const starter = s?.status === "New Starter" ? `<span class="mini-badge">New</span>` : "";
       const probation = s?.status === "On Probation" ? `<span class="mini-badge">Probation</span>` : "";
+      const warning = breakStatus.statusKey === "overdue" ? `<span class="mini-badge">Break overdue</span>` : "";
 
       return `
         <button class="magnet ${roleClass} ${statusClass}"
@@ -3295,7 +3483,7 @@
                 onclick="event.stopPropagation(); openStaffProfile('${staffId}')"
                 ondragstart="dragStaff(event, '${staffId}')"
                 ondragend="endDrag(event)">
-          ${s?.name || "Unknown"} ${activeBreak}${starter}${probation}
+          ${s?.name || "Unknown"} ${activeBreak}${warning}${starter}${probation}
         </button>
       `;
     }
@@ -3388,6 +3576,551 @@
       saveState();
     }
 
+    function getTodayBreaks() {
+      return state.breakHistory.filter(b => b.date === selectedDate);
+    }
+
+    function getTodayOver35() {
+      return getTodayBreaks().filter(b => b.duration > 35 || b.flag === "Late break");
+    }
+
+    function getActiveBreaks() {
+      return Object.keys(state.activeBreaks).map(id => {
+        const staff = getStaff(id);
+        const start = state.activeBreaks[id];
+        const minutes = Math.max(1, Math.round((Date.now() - start) / 60000));
+
+        return {
+          staffId: id,
+          staffName: staff?.name || "Unknown",
+          start,
+          minutes,
+          assignment: getStaffAssignment(id)
+        };
+      });
+    }
+
+    function getPeopleNoBreakToday() {
+      const completedIds = new Set(getTodayBreaks().map(b => b.staffId));
+      const activeIds = new Set(Object.keys(state.activeBreaks));
+
+      return dayTeam()
+        .filter(p => !completedIds.has(p.staffId) && !activeIds.has(p.staffId))
+        .map(p => ({
+          ...getStaff(p.staffId),
+          startTime: p.startTime,
+          breakTime: p.breakTime
+        }))
+        .filter(Boolean);
+    }
+
+    function getBreakStatusForStaff(staffId) {
+      const active = state.activeBreaks[staffId];
+      const completed = getTodayBreaks().find(b => b.staffId === staffId);
+      const team = dayTeam().find(t => t.staffId === staffId);
+
+      if (active) {
+        const minutes = Math.max(1, Math.round((Date.now() - active) / 60000));
+        if (minutes >= 35) {
+          return {
+            statusKey: "long",
+            label: `${minutes}m active · over 35`,
+            className: "break-long",
+            pillClass: "red"
+          };
+        }
+
+        return {
+          statusKey: "active",
+          label: `${minutes}m active`,
+          className: "break-active",
+          pillClass: "blue"
+        };
+      }
+
+      if (completed) {
+        return {
+          statusKey: "done",
+          label: `Done · ${completed.duration}m`,
+          className: "break-done",
+          pillClass: completed.duration > 35 || completed.flag === "Late break" ? "red" : "green"
+        };
+      }
+
+      if (!team || !team.breakTime) {
+        return {
+          statusKey: "none",
+          label: "No break planned",
+          className: "",
+          pillClass: ""
+        };
+      }
+
+      const diff = timeToMinutes(team.breakTime) - nowMinutes();
+
+      if (diff < -10) {
+        return {
+          statusKey: "overdue",
+          label: `${Math.abs(diff)}m overdue`,
+          className: "break-overdue",
+          pillClass: "red"
+        };
+      }
+
+      if (diff <= 0) {
+        return {
+          statusKey: "ready",
+          label: "Ready now",
+          className: "break-ready",
+          pillClass: "green"
+        };
+      }
+
+      if (diff <= 20) {
+        return {
+          statusKey: "soon",
+          label: `Due in ${diff}m`,
+          className: "break-soon",
+          pillClass: "amber"
+        };
+      }
+
+      return {
+        statusKey: "later",
+        label: `Due in ${diff}m`,
+        className: "",
+        pillClass: ""
+      };
+    }
+
+    function getBreakQueue() {
+      const completedIds = new Set(getTodayBreaks().map(b => b.staffId));
+      const activeIds = new Set(Object.keys(state.activeBreaks));
+
+      return dayTeam()
+        .filter(t => !completedIds.has(t.staffId) && !activeIds.has(t.staffId))
+        .map(t => {
+          const staff = getStaff(t.staffId);
+          const status = getBreakStatusForStaff(t.staffId);
+          const assignment = getStaffAssignmentParts(t.staffId);
+
+          return {
+            staffId: t.staffId,
+            staffName: staff?.name || "Unknown",
+            clock: staff?.clock || "",
+            role: staff?.role || "",
+            startTime: t.startTime,
+            breakTime: t.breakTime || "",
+            assignment,
+            ...status
+          };
+        })
+        .sort((a, b) => {
+          const order = { overdue: 0, ready: 1, soon: 2, later: 3, none: 4 };
+          return (order[a.statusKey] ?? 9) - (order[b.statusKey] ?? 9) || (timeToMinutes(a.breakTime) || 9999) - (timeToMinutes(b.breakTime) || 9999);
+        });
+    }
+
+    function renderBreaks() {
+      const completed = getTodayBreaks();
+      const active = getActiveBreaks();
+      const over35 = getTodayOver35();
+      const activeOver35 = active.filter(b => b.minutes >= 35);
+
+      const c = document.getElementById("breaksCompletedToday");
+      const a = document.getElementById("breaksActiveToday");
+      const o = document.getElementById("breaksOver35Today");
+
+      if (c) c.innerText = completed.length;
+      if (a) a.innerText = active.length;
+      if (o) o.innerText = over35.length + activeOver35.length;
+
+      renderBreakPageAlert();
+      renderActiveBreakCards();
+      renderNextBreakList();
+      renderCompletedBreakList();
+      renderFullBreakPlan();
+    }
+
+    function renderBreakPageAlert() {
+      const box = document.getElementById("breakPageAlert");
+      const text = document.getElementById("breakPageAlertText");
+      if (!box || !text) return;
+
+      const activeLong = getActiveBreaks().filter(b => b.minutes >= 35);
+      const overdue = getBreakQueue().filter(b => b.statusKey === "overdue");
+
+      if (activeLong.length) {
+        box.className = "alert-card show red-bg";
+        text.innerText = `${activeLong[0].staffName} is currently on ${activeLong[0].minutes} minutes. Resolve this before sign-off.`;
+        return;
+      }
+
+      if (overdue.length) {
+        box.className = "alert-card show red-bg";
+        text.innerText = `${overdue.length} person${overdue.length === 1 ? "" : "s"} overdue for break. Next: ${overdue[0].staffName}.`;
+        return;
+      }
+
+      const queue = getBreakQueue();
+      const dueSoon = queue.filter(b => b.statusKey === "ready" || b.statusKey === "soon");
+
+      if (dueSoon.length) {
+        box.className = "alert-card show amber-bg";
+        text.innerText = `${dueSoon[0].staffName} is ${dueSoon[0].label.toLowerCase()} for break.`;
+        return;
+      }
+
+      box.className = "alert-card";
+      text.innerText = "";
+    }
+
+    function renderActiveBreakCards() {
+      const box = document.getElementById("activeBreakCards");
+      if (!box) return;
+
+      const active = getActiveBreaks().sort((a, b) => b.minutes - a.minutes);
+
+      if (!active.length) {
+        box.innerHTML = `<div class="card"><p class="small">Nobody is currently on break.</p></div>`;
+        return;
+      }
+
+      box.innerHTML = active.map(b => {
+        const cardClass = b.minutes >= 35 ? "break-long" : "break-active";
+        const pillClass = b.minutes >= 35 ? "red" : b.minutes >= 30 ? "amber" : "blue";
+
+        return `
+          <div class="break-person-card ${cardClass}">
+            <div class="break-card-head">
+              <div>
+                <h4>${b.staffName}</h4>
+                <p>Started ${new Date(b.start).toLocaleTimeString("en-GB", { hour:"2-digit", minute:"2-digit" })} · ${b.assignment || "No board position"}</p>
+              </div>
+              <span class="pill ${pillClass}">${b.minutes}m</span>
+            </div>
+
+            <div class="break-status-strip">
+              <span class="pill ${pillClass}">${b.minutes >= 35 ? "Over 35m" : "On break"}</span>
+              ${b.minutes >= 30 && b.minutes < 35 ? `<span class="pill amber">Approaching limit</span>` : ""}
+            </div>
+
+            <div class="break-actions">
+              <button class="tiny-btn" onclick="finishBreak('${b.staffId}')">Finish</button>
+              <button class="tiny-btn light" onclick="openStaffProfile('${b.staffId}')">Profile</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderNextBreakList() {
+      const box = document.getElementById("nextBreakList");
+      if (!box) return;
+
+      const queue = getBreakQueue();
+
+      if (!queue.length) {
+        box.innerHTML = `<p class="small">Everyone on today’s team is either on break or has completed a break.</p>`;
+        return;
+      }
+
+      box.innerHTML = queue.map(person => {
+        const coverage = getCoverageWarning(person.staffId);
+        const coverageBadge = coverage.risk ? `<span class="pill red">Coverage risk</span>` : "";
+
+        return `
+          <div class="break-person-card ${person.className}">
+            <div class="break-card-head">
+              <div>
+                <h4>${person.staffName}</h4>
+                <p>${person.role} · ${person.clock}</p>
+                <p>Planned break: ${person.breakTime || "Not planned"} · ${person.assignment ? `${person.assignment.areaName} — ${person.assignment.zone}` : "Unassigned"}</p>
+              </div>
+              <span class="pill ${person.pillClass}">${person.label}</span>
+            </div>
+
+            <div class="break-status-strip">
+              <span class="pill ${person.pillClass}">${person.statusKey === "overdue" ? "Overdue" : person.statusKey === "ready" ? "Ready" : person.statusKey === "soon" ? "Due soon" : "Planned"}</span>
+              ${coverageBadge}
+            </div>
+
+            ${coverage.risk ? `<p class="small red">${coverage.message}</p>` : ""}
+
+            <div class="break-actions">
+              <button class="tiny-btn" onclick="startBreak('${person.staffId}')">Start break</button>
+              <button class="tiny-btn light" onclick="openStaffProfile('${person.staffId}')">Profile</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderCompletedBreakList() {
+      const box = document.getElementById("completedBreakList");
+      if (!box) return;
+
+      const completed = getTodayBreaks().slice().sort((a, b) => b.finish - a.finish);
+
+      if (!completed.length) {
+        box.innerHTML = `<p class="small">No completed breaks yet today.</p>`;
+        return;
+      }
+
+      box.innerHTML = completed.map(b => {
+        const startText = new Date(b.start).toLocaleTimeString("en-GB", { hour:"2-digit", minute:"2-digit" });
+        const finishText = new Date(b.finish).toLocaleTimeString("en-GB", { hour:"2-digit", minute:"2-digit" });
+        const late = b.duration > 35 || b.flag === "Late break";
+
+        return `
+          <div class="break-person-card break-done">
+            <div class="break-card-head">
+              <div>
+                <h4>${b.staffName}</h4>
+                <p>Completed ${startText}–${finishText} · Logged by ${b.loggedBy || "Unknown"}</p>
+                ${b.reason ? `<p>${b.reason}</p>` : ""}
+              </div>
+              <span class="pill ${late ? "red" : "green"}">${b.duration}m</span>
+            </div>
+
+            <div class="break-status-strip">
+              <span class="pill ${late ? "red" : "green"}">${b.flag || (late ? "Over 35m" : "Completed")}</span>
+              ${b.dismissed ? `<span class="pill amber">Dismissed</span>` : ""}
+            </div>
+
+            <div class="break-actions">
+              <button class="tiny-btn light" onclick="openStaffProfile('${b.staffId}')">Profile</button>
+              <button class="tiny-btn light admin-only" onclick="deleteBreakLog('${b.id}')">Delete</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      renderPermissions();
+    }
+
+    function renderFullBreakPlan() {
+      const box = document.getElementById("breakPlanList");
+      if (!box) return;
+
+      const team = dayTeam().slice().sort((a, b) => (a.breakTime || "99:99").localeCompare(b.breakTime || "99:99"));
+
+      if (!team.length) {
+        box.innerHTML = `<p class="small">No one has been added to Today’s Team yet.</p>`;
+        return;
+      }
+
+      box.innerHTML = team.map(t => {
+        const staff = getStaff(t.staffId);
+        const status = getBreakStatusForStaff(t.staffId);
+        const coverage = getCoverageWarning(t.staffId);
+        const assignment = getStaffAssignmentParts(t.staffId);
+
+        return `
+          <div class="break-person-card ${status.className}">
+            <div class="break-card-head">
+              <div>
+                <h4>${staff?.name || "Unknown"}</h4>
+                <p>Shift ${t.startTime || "-"} · Break ${t.breakTime || "-"} · ${assignment ? `${assignment.areaName} — ${assignment.zone}` : "Unassigned"}</p>
+                <p>${coverage.risk ? coverage.message : "Coverage okay"}</p>
+              </div>
+              <span class="pill ${status.pillClass}">${status.label}</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+        function getCoverageWarning(staffId) {
+      const assignment = getStaffAssignmentParts(staffId);
+
+      if (!assignment) {
+        return {
+          risk: false,
+          message: "No board position assigned."
+        };
+      }
+
+      if (assignment.zone === "Break" || assignment.zone === "Floating") {
+        return {
+          risk: false,
+          message: "No fixed position coverage risk."
+        };
+      }
+
+      const board = state.shiftBoards[selectedDate]?.[assignment.areaKey] || {};
+      const staffInZone = board[assignment.zone] || [];
+      const availableInZone = staffInZone.filter(id => id !== staffId && !state.activeBreaks[id]);
+
+      if (availableInZone.length === 0) {
+        return {
+          risk: true,
+          message: `Starting this break leaves ${assignment.areaName} — ${assignment.zone} with 0 active staff.`
+        };
+      }
+
+      return {
+        risk: false,
+        message: `${assignment.areaName} — ${assignment.zone} still has ${availableInZone.length} active staff.`
+      };
+    }
+
+    function startBreak(staffId = null, showToast = true) {
+      const id = staffId;
+      const s = getStaff(id);
+      if (!s) return toast("Choose staff");
+      if (state.activeBreaks[id]) return showToast ? toast(`${s.name} is already on break`) : null;
+
+      const coverage = getCoverageWarning(id);
+
+      if (coverage.risk) {
+        const proceed = confirm(`${coverage.message}\n\nStart break anyway?`);
+        if (!proceed) return;
+      }
+
+      state.activeBreaks[id] = Date.now();
+
+      logAction("Break started", `${s.name}${coverage.risk ? " · coverage warning accepted" : ""}`);
+      saveState();
+      renderBreaks();
+      renderHome();
+      renderStaffList();
+      renderSummary();
+
+      if (showToast) toast(`${s.name} started break`);
+    }
+
+    function finishBreak(staffId = null, options = {}) {
+      const id = staffId;
+      const s = getStaff(id);
+      if (!s) return toast("Choose staff");
+      if (!state.activeBreaks[id]) return toast(`${s.name} is not on break`);
+
+      const start = state.activeBreaks[id];
+      const finish = Date.now();
+      const duration = Math.max(1, Math.round((finish - start) / 60000));
+
+      const entry = {
+        id: makeId(),
+        staffId: id,
+        staffName: s.name,
+        date: selectedDate,
+        start,
+        finish,
+        duration,
+        loggedBy: currentUser()?.name || "Unknown",
+        flag: options.flag || (duration > 35 ? "Over 35m" : "Completed"),
+        reason: options.reason || "",
+        dismissed: options.dismissed || false
+      };
+
+      state.breakHistory.unshift(entry);
+      delete state.activeBreaks[id];
+
+      if (state.dismissedBreakAlerts[id]) delete state.dismissedBreakAlerts[id];
+
+      logAction("Break finished", `${s.name} · ${duration}m · ${entry.flag}`);
+      saveState();
+      renderBreaks();
+      renderHome();
+      renderStaffList();
+      renderSummary();
+      closeBreakAlertModal();
+
+      toast(`${s.name} finished break · ${duration}m`);
+    }
+
+    function deleteBreakLog(breakId) {
+      if (!isAdmin()) return toast("Admin only");
+
+      const entry = state.breakHistory.find(b => b.id === breakId);
+      if (!entry) return toast("Break log not found");
+
+      if (!confirm(`Delete ${entry.staffName}'s ${entry.duration}m break log?`)) return;
+
+      state.breakHistory = state.breakHistory.filter(b => b.id !== breakId);
+
+      logAction("Break log deleted", `${entry.staffName} · ${entry.duration}m`);
+      saveState();
+      renderAll();
+      toast("Break log deleted");
+    }
+
+    function checkLongBreakAlerts() {
+      const modal = document.getElementById("breakAlertModal");
+      if (!modal || modal.classList.contains("open")) return;
+
+      const activeLong = getActiveBreaks()
+        .filter(b => b.minutes >= 35)
+        .filter(b => !state.dismissedBreakAlerts[b.staffId])
+        .sort((a, b) => b.minutes - a.minutes);
+
+      if (!activeLong.length) return;
+
+      openBreakAlert(activeLong[0].staffId);
+    }
+
+    function openBreakAlert(staffId) {
+      const active = getActiveBreaks().find(b => b.staffId === staffId);
+      if (!active) return;
+
+      breakAlertStaffId = staffId;
+
+      document.getElementById("breakAlertName").innerText = active.staffName;
+      document.getElementById("breakAlertText").innerText =
+        `${active.staffName} has been on break for ${active.minutes} minutes. Was this an actual late break, or did the manager forget to finish it during a rush?`;
+
+      document.getElementById("breakAlertReason").value = "";
+      document.getElementById("breakAlertModal").classList.add("open");
+    }
+
+    function closeBreakAlertModal() {
+      document.getElementById("breakAlertModal").classList.remove("open");
+      breakAlertStaffId = null;
+    }
+
+    function dismissBreakPopupOnly() {
+      if (breakAlertStaffId) {
+        state.dismissedBreakAlerts[breakAlertStaffId] = true;
+        saveState();
+      }
+
+      closeBreakAlertModal();
+      toast("Alert dismissed for now");
+    }
+
+    function logAsLateBreak() {
+      if (!breakAlertStaffId) return;
+
+      const reason = document.getElementById("breakAlertReason").value.trim() || "Actual extended break";
+      finishBreak(breakAlertStaffId, {
+        flag: "Late break",
+        reason,
+        dismissed: false
+      });
+    }
+
+    function dismissLongBreak() {
+      if (!breakAlertStaffId) return;
+
+      const reason = document.getElementById("breakAlertReason").value.trim() || "Manager forgot to finish break due to busy period";
+      finishBreak(breakAlertStaffId, {
+        flag: "Dismissed long break",
+        reason,
+        dismissed: true
+      });
+    }
+
+    function finishBreakFromAlert() {
+      if (!breakAlertStaffId) return;
+
+      const reason = document.getElementById("breakAlertReason").value.trim();
+      finishBreak(breakAlertStaffId, {
+        flag: "Over 35m",
+        reason,
+        dismissed: false
+      });
+    }
+
     function openWizard(mainKey = null) {
       document.getElementById("handoverWizard").classList.remove("hidden");
 
@@ -3463,6 +4196,7 @@
 
     function showWizardStep(step) {
       wizard.step = step;
+
       document.querySelectorAll(".wizard-step").forEach(s => s.classList.remove("active"));
       document.getElementById(`wizardStep${step}`).classList.add("active");
 
@@ -3519,17 +4253,21 @@
       toggleWizardAction();
       setTimeout(() => updateWizardStatusButtons(), 0);
     }
-        function quickFill(id, text) {
+
+    function quickFill(id, text) {
       const el = document.getElementById(id);
       if (!el) return;
+
       el.value = text;
       saveDraft();
     }
 
     function setWizardStatus(status, btn) {
       wizard.status = status;
+
       document.querySelectorAll("#wizardStep3 .status-btn").forEach(b => b.classList.remove("selected"));
       btn.classList.add("selected");
+
       saveDraft();
     }
 
@@ -3574,6 +4312,7 @@
 
     function saveDraft() {
       if (!wizard.section) return;
+
       dayDrafts()[wizard.section] = collectWizardData();
       saveState();
     }
@@ -3583,6 +4322,7 @@
       const section = getSectionByKey(wizard.section);
 
       const missing = section.required.filter(q => !data.answers[q]);
+
       if (missing.length) {
         const proceed = confirm(`Important fields are empty:\n\n${missing.join("\n")}\n\nReview anyway?`);
         if (!proceed) return;
@@ -3623,8 +4363,7 @@
 
       showWizardStep(4);
     }
-
-    function submitHandover() {
+        function submitHandover() {
       const data = collectWizardData();
 
       if (dayHandovers()[wizard.section]) {
@@ -3902,12 +4641,7 @@
       const handovers = Object.values(dayHandovers());
       const urgent = getUrgentItems();
       const completedBreaks = getTodayBreaks();
-      const activeBreaks = Object.keys(state.activeBreaks).map(id => {
-        const staff = getStaff(id);
-        const mins = Math.max(1, Math.round((Date.now() - state.activeBreaks[id]) / 60000));
-        return { staffName: staff?.name || "Unknown", mins };
-      });
-
+      const activeBreaks = getActiveBreaks();
       const over35 = getTodayOver35();
       const noBreak = getPeopleNoBreakToday();
       const incidentsToday = state.incidents.filter(i => i.date === selectedDate);
@@ -3916,6 +4650,7 @@
       const deployment = getDeploymentSummary();
       const pressures = dayPressure();
       const openTasks = dayTasks().filter(t => taskStatus(t) !== "Complete");
+      const breakQueue = getBreakQueue();
 
       box.innerHTML = `
         <h4>Live area pressure</h4>
@@ -3923,31 +4658,26 @@
           ${Object.keys(pressures).map(area => `<li><strong>${area}:</strong> ${pressures[area].level} · ${pressures[area].note}</li>`).join("")}
         </ul>
 
-        <h4>Tasks</h4>
-        ${openTasks.length ? `<ul>${openTasks.map(t => `<li><strong>${t.priority}:</strong> ${t.text} · Owner: ${t.owner || "Unassigned"} · ${taskStatus(t)}</li>`).join("")}</ul>` : `<p>No open tasks.</p>`}
-
         <h4>Break control</h4>
         <ul>
-          <li><strong>Breaks completed today:</strong> ${completedBreaks.length}</li>
-          <li><strong>Currently on break:</strong> ${activeBreaks.length || 0}</li>
-          <li><strong>People over 35 minutes:</strong> ${over35.length || 0}</li>
-          <li><strong>People with no break logged from team:</strong> ${noBreak.length || 0}</li>
+          <li><strong>Completed:</strong> ${completedBreaks.length}</li>
+          <li><strong>Active:</strong> ${activeBreaks.length}</li>
+          <li><strong>Over 35 / late:</strong> ${over35.length + activeBreaks.filter(b => b.minutes >= 35).length}</li>
+          <li><strong>Next break:</strong> ${breakQueue[0] ? `${breakQueue[0].staffName} · ${breakQueue[0].label}` : "No pending breaks"}</li>
         </ul>
-
-        ${over35.length ? `
-          <h4>Over 35 minutes</h4>
-          <ul>${over35.map(b => `<li>${b.staffName} — ${b.duration} mins</li>`).join("")}</ul>
-        ` : ""}
 
         ${activeBreaks.length ? `
           <h4>Currently on break</h4>
-          <ul>${activeBreaks.map(b => `<li>${b.staffName} — ${b.mins} mins so far</li>`).join("")}</ul>
+          <ul>${activeBreaks.map(b => `<li>${b.staffName} — ${b.minutes} mins so far</li>`).join("")}</ul>
         ` : ""}
 
         ${noBreak.length ? `
           <h4>No break logged yet</h4>
-          <ul>${noBreak.map(s => `<li>${s.name} — starts ${s.startTime}</li>`).join("")}</ul>
+          <ul>${noBreak.map(s => `<li>${s.name} — planned ${s.breakTime || "not planned"}</li>`).join("")}</ul>
         ` : ""}
+
+        <h4>Tasks</h4>
+        ${openTasks.length ? `<ul>${openTasks.map(t => `<li><strong>${t.priority}:</strong> ${t.text} · Owner: ${t.owner || "Unassigned"} · ${taskStatus(t)}</li>`).join("")}</ul>` : `<p>No open tasks.</p>`}
 
         <h4>Team deployment</h4>
         ${deployment.length ? `<ul>${deployment.map(d => `<li><strong>${d.area} — ${d.zone}:</strong> ${d.names}</li>`).join("")}</ul>` : `<p>No Shift Board deployment saved yet.</p>`}
@@ -3994,8 +4724,7 @@
 
     function renderStaffSelects() {
       const selectIds = [
-        "wizardSubmittedBy", "signoffBy", "teamStaff", "breakEmployee",
-        "breakFilterStaff", "conductStaff", "auditBy"
+        "wizardSubmittedBy", "signoffBy", "teamStaff", "conductStaff", "auditBy"
       ];
 
       selectIds.forEach(id => {
@@ -4003,7 +4732,7 @@
         if (!sel) return;
 
         const currentVal = sel.value;
-        sel.innerHTML = id === "breakFilterStaff" ? `<option value="all">All staff</option>` : "";
+        sel.innerHTML = "";
 
         state.staff.forEach(s => {
           sel.innerHTML += `<option value="${s.id}">${s.name}${s.clock ? " · " + s.clock : ""}</option>`;
@@ -4047,113 +4776,157 @@
       renderAll();
       toast(`${name} added`);
     }
-
-    function renderStaffList() {
+        function renderStaffList() {
       const box = document.getElementById("staffList");
       if (!box) return;
 
-      const q = (document.getElementById("staffSearch")?.value || "").toLowerCase();
-      let staff = state.staff;
+      const search = (document.getElementById("staffSearch")?.value || "").toLowerCase().trim();
 
-      if (q) {
-        staff = staff.filter(s => `${s.name} ${s.clock} ${s.role} ${s.area} ${s.status}`.toLowerCase().includes(q));
+      const filtered = state.staff
+        .filter(s => {
+          const text = `${s.name} ${s.clock} ${s.role} ${s.area} ${s.status}`.toLowerCase();
+          return text.includes(search);
+        })
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+      if (!filtered.length) {
+        box.innerHTML = `<div class="card"><p class="small">No staff found.</p></div>`;
+        return;
       }
 
-      box.innerHTML = "";
-
-      staff.forEach(s => {
-        const stats = getStaffStats(s.id);
+      box.innerHTML = filtered.map(s => {
+        const stats = getStaffBreakStats(s.id);
+        const mentions = getStaffMentionStats(s.id);
+        const teamEntry = dayTeam().find(t => t.staffId === s.id);
+        const breakStatus = getBreakStatusForStaff(s.id);
         const assignment = getStaffAssignment(s.id);
-        const team = dayTeam().find(t => t.staffId === s.id);
-        const active = state.activeBreaks[s.id];
-        const statusBadge = s.status && s.status !== "Standard" ? ` · ${s.status}` : "";
-        const account = state.accounts.find(a => a.staffId === s.id);
+        const statusBadge = s.status && s.status !== "Standard" ? `<span class="pill ${s.status === "On Probation" ? "red" : "amber"}">${s.status}</span>` : "";
 
-        box.innerHTML += `
-          <div class="row" onclick="openStaffProfile('${s.id}')">
-            <div>
-              <h4>${s.name}</h4>
-              <p>${s.role} · ${s.area}${statusBadge} · Clock ${s.clock}</p>
-              <p>${stats.good} good · ${stats.bad} bad · ${stats.avgBreak}m avg break · ${stats.lateCount} late logs</p>
-              <p>${team ? `Today: ${team.startTime} start · ${assignment || "Unassigned"}` : "Not added to today’s team"}${active ? " · On break" : ""}</p>
+        return `
+          <div class="top-trump" onclick="openStaffProfile('${s.id}')">
+            <div class="profile-top">
+              <div>
+                <h2>${s.name}</h2>
+                <p class="small">${s.role} · ${s.area} · Clock ${s.clock}</p>
+              </div>
+              <span class="avatar">${initials(s.name)}</span>
             </div>
-            <span class="pill">${account ? account.access : active ? "Break" : s.status || "Open"}</span>
+
+            <div class="profile-badges">
+              <span class="pill">${teamEntry ? "On today" : "Directory"}</span>
+              <span class="pill ${breakStatus.pillClass}">${breakStatus.label}</span>
+              ${assignment ? `<span class="pill blue">${assignment}</span>` : ""}
+              ${statusBadge}
+            </div>
+
+            <div class="profile-stat-grid">
+              <div class="profile-stat">
+                <strong>${mentions.good}</strong>
+                <span>Good</span>
+              </div>
+              <div class="profile-stat">
+                <strong>${mentions.bad}</strong>
+                <span>Issues</span>
+              </div>
+              <div class="profile-stat">
+                <strong>${stats.avg}m</strong>
+                <span>Avg break</span>
+              </div>
+            </div>
           </div>
         `;
-      });
+      }).join("");
+
+      renderPermissions();
     }
 
-    function openStaffProfile(id) {
-      const s = getStaff(id);
-      if (!s) return toast("Staff not found");
+    function getStaffBreakStats(staffId) {
+      const logs = state.breakHistory.filter(b => b.staffId === staffId);
+      const durations = logs.map(b => b.duration);
 
-      const stats = getStaffStats(id);
-      const team = dayTeam().find(t => t.staffId === id);
-      const assignment = getStaffAssignment(id);
-      const account = state.accounts.find(a => a.staffId === id);
+      if (!logs.length) {
+        return {
+          total: 0,
+          avg: 0,
+          longest: 0,
+          late: 0,
+          over35: 0,
+          last: "-"
+        };
+      }
 
-      document.getElementById("staffModal").classList.add("open");
+      const total = logs.length;
+      const avg = Math.round(durations.reduce((a, b) => a + b, 0) / total);
+      const longest = Math.max(...durations);
+      const late = logs.filter(b => b.flag === "Late break").length;
+      const over35 = logs.filter(b => b.duration > 35 || b.flag === "Late break").length;
+      const last = `${logs[0].duration}m`;
+
+      return { total, avg, longest, late, over35, last };
+    }
+
+    function getStaffMentionStats(staffId) {
+      const notes = state.conductNotes.filter(n => n.staffId === staffId);
+      const good = notes.filter(n => n.type === "Shout-out" || n.type === "Training note").length;
+      const bad = notes.filter(n => n.type === "Conduct issue" || n.type === "Service issue").length;
+
+      return { good, bad };
+    }
+
+    function openStaffProfile(staffId) {
+      const s = getStaff(staffId);
+      if (!s) return;
+
+      const stats = getStaffBreakStats(staffId);
+      const mentions = getStaffMentionStats(staffId);
+      const account = state.accounts.find(a => a.staffId === staffId);
+      const assignment = getStaffAssignment(staffId);
+      const teamEntry = dayTeam().find(t => t.staffId === staffId);
+      const breakStatus = getBreakStatusForStaff(staffId);
 
       document.getElementById("profileName").innerText = s.name;
       document.getElementById("profileRole").innerText = `${s.role} · ${s.area}`;
       document.getElementById("profileClock").innerText = `Clock ${s.clock}`;
-      document.getElementById("profileGood").innerText = stats.good;
-      document.getElementById("profileBad").innerText = stats.bad;
-      document.getElementById("profileAvgBreak").innerText = `${stats.avgBreak}m`;
-      document.getElementById("profileBreaks").innerText = stats.totalBreaks;
-      document.getElementById("profileLongestBreak").innerText = `${stats.longestBreak}m`;
-      document.getElementById("profileLate").innerText = stats.lateCount;
+      document.getElementById("profileGood").innerText = mentions.good;
+      document.getElementById("profileBad").innerText = mentions.bad;
+      document.getElementById("profileAvgBreak").innerText = `${stats.avg}m`;
+      document.getElementById("profileBreaks").innerText = stats.total;
+      document.getElementById("profileLongestBreak").innerText = `${stats.longest}m`;
+      document.getElementById("profileLateBreaks").innerText = stats.late;
+      document.getElementById("profileLate").innerText = getStaffLateCount(staffId);
+      document.getElementById("profileBreakOver35").innerText = stats.over35;
+      document.getElementById("profileLastBreak").innerText = stats.last;
 
-      const badges = [
-        `<span class="pill">${s.role}</span>`,
-        `<span class="pill">${s.area}</span>`
-      ];
+      document.getElementById("profileBadges").innerHTML = `
+        <span class="pill">${s.status || "Standard"}</span>
+        <span class="pill">${teamEntry ? "On today" : "Not on today"}</span>
+        <span class="pill ${breakStatus.pillClass}">${breakStatus.label}</span>
+        ${assignment ? `<span class="pill blue">${assignment}</span>` : ""}
+        ${account ? `<span class="pill green">Login: ${account.access}</span>` : `<span class="pill">No login</span>`}
+      `;
 
-      if (account) badges.push(`<span class="pill blue">${account.access} login</span>`);
+      document.getElementById("profileInfo").innerHTML = `
+        <strong>Clock-in:</strong> ${s.clock}<br>
+        <strong>Role:</strong> ${s.role}<br>
+        <strong>Usual area:</strong> ${s.area}<br>
+        <strong>Status:</strong> ${s.status || "Standard"}<br>
+        <strong>Today:</strong> ${teamEntry ? `Start ${teamEntry.startTime}, break ${teamEntry.breakTime || "not planned"}` : "Not added to today’s team"}<br>
+        <strong>Current board:</strong> ${assignment || "Unassigned"}
+      `;
 
-      if (s.status && s.status !== "Standard") {
-        badges.push(`<span class="pill ${s.status === "On Probation" ? "red" : "amber"}">${s.status}</span>`);
-      }
-
-      if (state.activeBreaks[id]) badges.push(`<span class="pill blue">On break</span>`);
-      if (assignment) badges.push(`<span class="pill green">${assignment}</span>`);
-
-      document.getElementById("profileBadges").innerHTML = badges.join("");
-
-      document.getElementById("profileInfo").innerText =
-        `Clock-in number: ${s.clock}. Usual area: ${s.area}. Status: ${s.status || "Standard"}. ${account ? `Login username: ${account.username}. Access: ${account.access}.` : "No login account attached."} Today: ${team ? `${team.startTime} scheduled, ${team.arrivalTime || "arrival not logged"}, ${team.breakTime || "no planned break"} break` : "not planned today"}. Assignment: ${assignment || "unassigned"}.`;
-
-      document.getElementById("editStaffId").value = s.id;
+      document.getElementById("attendanceStaffId").value = staffId;
+      document.getElementById("editStaffId").value = staffId;
       document.getElementById("editStaffName").value = s.name;
       document.getElementById("editStaffClock").value = s.clock;
       document.getElementById("editStaffRole").value = s.role;
       document.getElementById("editStaffArea").value = s.area;
       document.getElementById("editStaffStatus").value = s.status || "Standard";
 
-      document.getElementById("attendanceStaffId").value = s.id;
-      document.getElementById("attendanceScheduled").value = team?.startTime || "";
-      document.getElementById("attendanceActual").value = team?.arrivalTime || "";
-      document.getElementById("attendanceNote").value = "";
-
-      const notes = state.conductNotes.filter(n => n.staffId === id).slice(0, 8);
-      const mentionBox = document.getElementById("profileMentions");
-
-      if (!notes.length) {
-        mentionBox.innerHTML = `<p class="small">No mentions logged yet.</p>`;
-      } else {
-        mentionBox.innerHTML = notes.map(n => `
-          <div class="row">
-            <div>
-              <h4>${n.type}</h4>
-              <p>${formatDate(n.date)} · ${n.details}</p>
-            </div>
-            <span class="pill">${n.type === "Shout-out" ? "Good" : "Note"}</span>
-          </div>
-        `).join("");
-      }
-
-      renderProfileAttendance(id);
+      renderProfileMentions(staffId);
+      renderProfileAttendance(staffId);
       renderPermissions();
+
+      document.getElementById("staffModal").classList.add("open");
     }
 
     function closeStaffModal(event = null) {
@@ -4161,9 +4934,33 @@
       document.getElementById("staffModal").classList.remove("open");
     }
 
-    function renderProfileAttendance(id) {
+    function getStaffLateCount(staffId) {
+      return state.attendanceLogs.filter(l => l.staffId === staffId && l.lateMinutes > 0).length;
+    }
+
+    function renderProfileMentions(staffId) {
+      const box = document.getElementById("profileMentions");
+      const notes = state.conductNotes.filter(n => n.staffId === staffId).slice(0, 8);
+
+      if (!notes.length) {
+        box.innerHTML = `<p class="small">No notes logged yet.</p>`;
+        return;
+      }
+
+      box.innerHTML = notes.map(n => `
+        <div class="row">
+          <div>
+            <h4>${n.type}</h4>
+            <p>${formatDate(n.date)} · ${n.by} · ${n.details}</p>
+          </div>
+          <span class="pill ${n.type === "Shout-out" ? "green" : n.type === "Conduct issue" ? "red" : "amber"}">${n.type}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderProfileAttendance(staffId) {
       const box = document.getElementById("profileAttendance");
-      const logs = state.attendanceLogs.filter(l => l.staffId === id).slice(0, 10);
+      const logs = state.attendanceLogs.filter(l => l.staffId === staffId).slice(0, 10);
 
       if (!logs.length) {
         box.innerHTML = `<p class="small">No attendance logs yet.</p>`;
@@ -4173,49 +4970,26 @@
       box.innerHTML = logs.map(l => `
         <div class="row">
           <div>
-            <h4>${formatDate(l.date)} · ${l.lateMinutes > 0 ? `${l.lateMinutes}m late` : "On time"}</h4>
-            <p>Scheduled ${l.scheduled || "-"} · Actual ${l.actual || "-"} · ${l.note || "No note"}</p>
+            <h4>${l.lateMinutes > 0 ? `${l.lateMinutes}m late` : "On time"}</h4>
+            <p>${formatDate(l.date)} · Scheduled ${l.scheduled} · Actual ${l.actual} · ${l.note}</p>
           </div>
-          <span class="pill ${l.lateMinutes > 0 ? "red" : "green"}">${l.lateMinutes > 0 ? "Late" : "On time"}</span>
+          <span class="pill ${l.lateMinutes > 0 ? "red" : "green"}">${l.source || "Manual"}</span>
         </div>
       `).join("");
-    }
-
-    function saveStaffEdit() {
-      if (!isAdmin()) return toast("Admin only");
-
-      const id = document.getElementById("editStaffId").value;
-      const staff = getStaff(id);
-      if (!staff) return toast("Staff not found");
-
-      staff.name = document.getElementById("editStaffName").value.trim() || staff.name;
-      staff.clock = document.getElementById("editStaffClock").value.trim() || staff.clock;
-      staff.role = document.getElementById("editStaffRole").value;
-      staff.area = document.getElementById("editStaffArea").value;
-      staff.status = document.getElementById("editStaffStatus").value;
-
-      const account = state.accounts.find(a => a.staffId === id);
-      if (account) account.name = staff.name;
-
-      logAction("Staff edited", staff.name);
-      saveState();
-      renderAll();
-      openStaffProfile(id);
-      toast("Staff updated");
     }
 
     function saveAttendanceLog() {
       if (!hasManagerAccess()) return toast("Manager/Admin only");
 
       const staffId = document.getElementById("attendanceStaffId").value;
-      const staff = getStaff(staffId);
       const scheduled = document.getElementById("attendanceScheduled").value;
       const actual = document.getElementById("attendanceActual").value;
       const note = document.getElementById("attendanceNote").value.trim();
 
-      if (!scheduled || !actual) return toast("Add scheduled and actual time");
+      if (!staffId || !scheduled || !actual) return toast("Add scheduled and actual time");
 
-      const late = Math.max(0, minutesBetween(scheduled, actual));
+      const staff = getStaff(staffId);
+      const lateMinutes = Math.max(0, minutesBetween(scheduled, actual));
 
       state.attendanceLogs.unshift({
         id: makeId(),
@@ -4224,473 +4998,76 @@
         date: selectedDate,
         scheduled,
         actual,
-        lateMinutes: late,
-        note: note || (late > 0 ? `${late} minute${late === 1 ? "" : "s"} late` : "On time"),
+        lateMinutes,
+        note: note || (lateMinutes > 0 ? `${lateMinutes} minute${lateMinutes === 1 ? "" : "s"} late` : "On time"),
         by: currentUser()?.name || "Unknown",
-        source: "Manual",
+        source: "Manual profile log",
         time: nowTime()
       });
 
-      const team = dayTeam().find(t => t.staffId === staffId);
-      if (team) {
-        team.startTime = scheduled;
-        team.arrivalTime = actual;
-      }
+      document.getElementById("attendanceScheduled").value = "";
+      document.getElementById("attendanceActual").value = "";
+      document.getElementById("attendanceNote").value = "";
 
-      logAction("Attendance log", `${staff?.name || "Staff"} · ${late > 0 ? `${late}m late` : "on time"}`);
+      logAction("Attendance log", `${staff?.name || "Staff"} · ${lateMinutes}m late`);
       saveState();
       renderAll();
       openStaffProfile(staffId);
-      toast("Attendance saved");
+      toast("Attendance logged");
     }
 
-    function getStaffStats(id) {
-      const notes = state.conductNotes.filter(n => n.staffId === id);
-      const breaks = state.breakHistory.filter(b => b.staffId === id);
-      const attendance = state.attendanceLogs.filter(l => l.staffId === id);
-
-      const good = notes.filter(n => n.type === "Shout-out").length;
-      const bad = notes.filter(n => n.type === "Conduct issue" || n.type === "Service issue").length;
-      const totalBreaks = breaks.length;
-      const avgBreak = breaks.length ? Math.round(breaks.reduce((sum, b) => sum + b.duration, 0) / breaks.length) : 0;
-      const longestBreak = breaks.length ? Math.max(...breaks.map(b => b.duration)) : 0;
-      const lateCount = attendance.filter(l => l.lateMinutes > 0).length;
-
-      return { good, bad, totalBreaks, avgBreak, longestBreak, lateCount };
-    }
-
-    function renderAccountManagement() {
-      const box = document.getElementById("accountManagementList");
-      if (!box) return;
-
-      const accounts = state.accounts
-        .slice()
-        .sort((a, b) => {
-          const order = { Admin: 0, Manager: 1, Supervisor: 2 };
-          return (order[a.access] ?? 9) - (order[b.access] ?? 9) || a.name.localeCompare(b.name);
-        });
-
-      box.innerHTML = accounts.map(a => {
-        const staff = getStaff(a.staffId);
-
-        return `
-          <div class="account-card">
-            <div class="account-head">
-              <span class="avatar">${initials(a.name)}</span>
-              <div>
-                <h4>${a.name}</h4>
-                <p>${a.title} · ${a.username}</p>
-              </div>
-            </div>
-
-            <div class="two-grid">
-              <div>
-                <label>PIN</label>
-                <input id="pin_${a.id}" inputmode="numeric" maxlength="6" value="${a.pin}" />
-              </div>
-              <div>
-                <label>Access</label>
-                <select id="access_${a.id}">
-                  <option ${a.access === "Supervisor" ? "selected" : ""}>Supervisor</option>
-                  <option ${a.access === "Manager" ? "selected" : ""}>Manager</option>
-                  <option ${a.access === "Admin" ? "selected" : ""}>Admin</option>
-                </select>
-              </div>
-            </div>
-
-            <label>Account status</label>
-            <select id="active_${a.id}">
-              <option value="true" ${a.active ? "selected" : ""}>Active</option>
-              <option value="false" ${!a.active ? "selected" : ""}>Disabled</option>
-            </select>
-
-            <p class="small">Linked card: ${staff ? `${staff.role} · ${staff.area}` : "No staff card found"} · Last login: ${a.lastLogin || "Never"}</p>
-
-            <button class="primary-btn" onclick="saveAccountEdit('${a.id}')">Save Login</button>
-          </div>
-        `;
-      }).join("");
-    }
-
-    function saveAccountEdit(accountId) {
+    function saveStaffEdit() {
       if (!isAdmin()) return toast("Admin only");
 
-      const account = getAccount(accountId);
-      if (!account) return toast("Account not found");
+      const staffId = document.getElementById("editStaffId").value;
+      const s = getStaff(staffId);
+      if (!s) return toast("Staff not found");
 
-      const newPin = document.getElementById(`pin_${accountId}`).value.trim();
-      const newAccess = document.getElementById(`access_${accountId}`).value;
-      const newActive = document.getElementById(`active_${accountId}`).value === "true";
+      s.name = document.getElementById("editStaffName").value.trim() || s.name;
+      s.clock = document.getElementById("editStaffClock").value.trim() || s.clock;
+      s.role = document.getElementById("editStaffRole").value;
+      s.area = document.getElementById("editStaffArea").value;
+      s.status = document.getElementById("editStaffStatus").value;
 
-      if (!/^\d{4,6}$/.test(newPin)) return toast("PIN must be 4–6 digits");
-
-      account.pin = newPin;
-      account.access = newAccess;
-      account.active = newActive;
-
-      if (state.currentAccountId === account.id) {
-        state.currentRole = newAccess;
+      const linkedAccount = state.accounts.find(a => a.staffId === staffId);
+      if (linkedAccount) {
+        linkedAccount.name = s.name;
+        linkedAccount.title = s.role;
       }
 
-      logAction("Login edited", `${account.name} · ${newAccess} · ${newActive ? "Active" : "Disabled"}`);
+      logAction("Staff edited", s.name);
       saveState();
       renderAll();
-      toast(`${account.name} login updated`);
-    }
-
-    function renderBreakPlannerTable() {
-      const box = document.getElementById("breakPlannerTable");
-      if (!box) return;
-
-      const team = dayTeam().sort((a, b) => a.startTime.localeCompare(b.startTime));
-
-      if (!team.length) {
-        box.innerHTML = `<p class="small">No staff added to Today’s Team yet.</p>`;
-        return;
-      }
-
-      box.innerHTML = `
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Staff</th>
-                <th>Start</th>
-                <th>Break</th>
-                <th>Board</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${team.map(p => {
-                const s = getStaff(p.staffId);
-                const active = state.activeBreaks[p.staffId];
-                const completed = getTodayBreaks().filter(b => b.staffId === p.staffId);
-                const latest = completed[0];
-                const assignment = getStaffAssignment(p.staffId);
-
-                let status = "Not started";
-                if (active) status = "On break";
-                if (latest) status = `Done ${latest.duration}m`;
-
-                return `
-                  <tr>
-                    <td><strong>${s?.name || "Unknown"}</strong><br><span class="small">${s?.clock || ""}</span></td>
-                    <td>${p.startTime}</td>
-                    <td>${p.breakTime || "-"}</td>
-                    <td>${assignment || "Unassigned"}</td>
-                    <td>${status}</td>
-                    <td>
-                      ${active
-                        ? `<button class="tiny-btn" onclick="finishBreak('${p.staffId}')">Finish</button>`
-                        : `<button class="tiny-btn light" onclick="startBreak('${p.staffId}')">Start</button>`
-                      }
-                    </td>
-                  </tr>
-                `;
-              }).join("")}
-            </tbody>
-          </table>
-        </div>
-      `;
-    }
-
-    function startBreak(staffId = null, showToast = true) {
-      const id = staffId || document.getElementById("breakEmployee").value;
-      const s = getStaff(id);
-      if (!s) return toast("Choose staff");
-      if (state.activeBreaks[id]) return showToast ? toast(`${s.name} is already on break`) : null;
-
-      state.activeBreaks[id] = Date.now();
-
-      logAction("Break started", s.name);
-      saveState();
-      renderBreaks();
-      renderHome();
-      renderStaffList();
-      renderSummary();
-      if (showToast) toast(`${s.name} started break`);
-    }
-
-    function finishBreak(staffId = null) {
-      const id = staffId || document.getElementById("breakEmployee").value;
-      const s = getStaff(id);
-      if (!s) return toast("Choose staff");
-      if (!state.activeBreaks[id]) return toast(`${s.name} is not on break`);
-
-      const start = state.activeBreaks[id];
-      const finish = Date.now();
-      const duration = Math.max(1, Math.round((finish - start) / 60000));
-
-      state.breakHistory.unshift({
-        id: makeId(),
-        staffId: id,
-        staffName: s.name,
-        date: selectedDate,
-        start,
-        finish,
-        duration,
-        loggedBy: currentUser()?.name || "Unknown"
-      });
-
-      delete state.activeBreaks[id];
-
-      logAction("Break finished", `${s.name} · ${duration}m`);
-      saveState();
-      renderBreaks();
-      renderHome();
-      renderStaffList();
-      renderSummary();
-      toast(`${s.name} finished break · ${duration}m`);
-    }
-
-    function getTodayBreaks() {
-      return state.breakHistory.filter(b => b.date === selectedDate);
-    }
-
-    function getTodayOver35() {
-      return getTodayBreaks().filter(b => b.duration > 35);
-    }
-
-    function getPeopleNoBreakToday() {
-      const completedIds = new Set(getTodayBreaks().map(b => b.staffId));
-      const activeIds = new Set(Object.keys(state.activeBreaks));
-
-      return dayTeam()
-        .filter(p => !completedIds.has(p.staffId) && !activeIds.has(p.staffId))
-        .map(p => ({
-          ...getStaff(p.staffId),
-          startTime: p.startTime
-        }))
-        .filter(Boolean);
-    }
-
-    function renderBreaks() {
-      const completed = getTodayBreaks();
-      const active = Object.keys(state.activeBreaks);
-      const over35 = getTodayOver35();
-
-      const c = document.getElementById("breaksCompletedToday");
-      const a = document.getElementById("breaksActiveToday");
-      const o = document.getElementById("breaksOver35Today");
-
-      if (c) c.innerText = completed.length;
-      if (a) a.innerText = active.length;
-      if (o) o.innerText = over35.length;
-
-      renderBreakPlannerTable();
-      renderCurrentBreaks();
-      renderBreakGraphs();
-      renderBreakHistory();
-    }
-
-    function renderCurrentBreaks() {
-      const box = document.getElementById("currentBreaks");
-      if (!box) return;
-
-      const active = Object.keys(state.activeBreaks);
-
-      if (!active.length) {
-        box.innerHTML = `<div class="card"><p class="small">Nobody is currently on break.</p></div>`;
-        return;
-      }
-
-      box.innerHTML = active.map(id => {
-        const s = getStaff(id);
-        const mins = Math.max(1, Math.round((Date.now() - state.activeBreaks[id]) / 60000));
-
-        return `
-          <div class="break-card">
-            <div class="row" style="margin:0; background:transparent; border:none; padding:0;">
-              <div>
-                <h4>${s?.name || "Unknown"}</h4>
-                <p>Started at ${new Date(state.activeBreaks[id]).toLocaleTimeString("en-GB", { hour:"2-digit", minute:"2-digit" })}</p>
-              </div>
-              <div>
-                <span class="pill ${mins > 35 ? "red" : mins > 30 ? "amber" : "green"}">${mins}m</span>
-                <button class="tiny-btn" onclick="finishBreak('${id}')">Finish</button>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    function renderBreakGraphs() {
-      renderStaffBreakGraph();
-      renderDailyBreakGraph();
-      renderBreakPatternSummary();
-    }
-
-    function renderStaffBreakGraph() {
-      const box = document.getElementById("staffBreakGraph");
-      if (!box) return;
-
-      if (!state.breakHistory.length) {
-        box.innerHTML = `<p class="small">No break data yet.</p>`;
-        return;
-      }
-
-      const byStaff = {};
-      state.breakHistory.forEach(b => {
-        if (!byStaff[b.staffName]) byStaff[b.staffName] = [];
-        byStaff[b.staffName].push(b.duration);
-      });
-
-      const rows = Object.keys(byStaff)
-        .map(name => {
-          const avg = Math.round(byStaff[name].reduce((a, b) => a + b, 0) / byStaff[name].length);
-          return { name, avg, count: byStaff[name].length };
-        })
-        .sort((a, b) => b.avg - a.avg);
-
-      const max = Math.max(...rows.map(r => r.avg), 40);
-
-      box.innerHTML = rows.map(r => `
-        <div class="graph-row">
-          <div class="graph-head">
-            <span>${r.name}</span>
-            <span>${r.avg}m avg · ${r.count} break${r.count === 1 ? "" : "s"}</span>
-          </div>
-          <div class="bar"><span style="width:${Math.min(100, (r.avg / max) * 100)}%"></span></div>
-        </div>
-      `).join("");
-    }
-
-    function renderDailyBreakGraph() {
-      const box = document.getElementById("dailyBreakGraph");
-      if (!box) return;
-
-      if (!state.breakHistory.length) {
-        box.innerHTML = `<p class="small">No daily break data yet.</p>`;
-        return;
-      }
-
-      const byDay = {};
-      state.breakHistory.forEach(b => {
-        if (!byDay[b.date]) byDay[b.date] = [];
-        byDay[b.date].push(b.duration);
-      });
-
-      const rows = Object.keys(byDay)
-        .sort()
-        .slice(-10)
-        .map(date => {
-          const avg = Math.round(byDay[date].reduce((a, b) => a + b, 0) / byDay[date].length);
-          return { date, avg, count: byDay[date].length };
-        });
-
-      const max = Math.max(...rows.map(r => r.avg), 40);
-
-      box.innerHTML = rows.map(r => `
-        <div class="graph-row">
-          <div class="graph-head">
-            <span>${formatDate(r.date)}</span>
-            <span>${r.avg}m avg · ${r.count} break${r.count === 1 ? "" : "s"}</span>
-          </div>
-          <div class="bar"><span style="width:${Math.min(100, (r.avg / max) * 100)}%"></span></div>
-        </div>
-      `).join("");
-    }
-
-    function renderBreakPatternSummary() {
-      const box = document.getElementById("breakPatternSummary");
-      if (!box) return;
-
-      if (!state.breakHistory.length) {
-        box.innerHTML = `<p class="small">Patterns will appear once breaks have been logged across multiple days.</p>`;
-        return;
-      }
-
-      const longest = [...state.breakHistory].sort((a, b) => b.duration - a.duration)[0];
-      const over35 = state.breakHistory.filter(b => b.duration > 35).length;
-      const todayMissing = getPeopleNoBreakToday().length;
-
-      box.innerHTML = `
-        <div class="row">
-          <div>
-            <h4>Longest recorded break</h4>
-            <p>${longest.staffName} · ${longest.duration}m · ${formatDate(longest.date)}</p>
-          </div>
-          <span class="pill ${longest.duration > 35 ? "red" : "green"}">${longest.duration}m</span>
-        </div>
-
-        <div class="row">
-          <div>
-            <h4>Extended breaks</h4>
-            <p>${over35} break${over35 === 1 ? "" : "s"} over 35 minutes across all saved days.</p>
-          </div>
-          <span class="pill">${over35}</span>
-        </div>
-
-        <div class="row">
-          <div>
-            <h4>Planner coverage today</h4>
-            <p>${todayMissing} team member${todayMissing === 1 ? "" : "s"} still without a completed or active break.</p>
-          </div>
-          <span class="pill">${todayMissing}</span>
-        </div>
-      `;
-    }
-
-    function renderBreakHistory() {
-      const box = document.getElementById("breakHistoryList");
-      if (!box) return;
-
-      const staffId = document.getElementById("breakFilterStaff")?.value || "all";
-      const date = document.getElementById("breakFilterDate")?.value || "";
-
-      let logs = state.breakHistory;
-      if (staffId !== "all") logs = logs.filter(b => b.staffId === staffId);
-      if (date) logs = logs.filter(b => b.date === date);
-
-      if (!logs.length) {
-        box.innerHTML = `<p class="small">No break logs match these filters.</p>`;
-        return;
-      }
-
-      box.innerHTML = logs.slice(0, 30).map(b => `
-        <div class="row">
-          <div>
-            <h4>${b.staffName}</h4>
-            <p>${formatDate(b.date)} · ${new Date(b.start).toLocaleTimeString("en-GB", { hour:"2-digit", minute:"2-digit" })}–${new Date(b.finish).toLocaleTimeString("en-GB", { hour:"2-digit", minute:"2-digit" })}</p>
-          </div>
-          <span class="pill ${b.duration > 35 ? "red" : b.duration > 30 ? "amber" : "green"}">${b.duration}m</span>
-        </div>
-      `).join("");
-    }
-
-    function clearBreakFilters() {
-      document.getElementById("breakFilterStaff").value = "all";
-      document.getElementById("breakFilterDate").value = "";
-      renderBreakHistory();
+      openStaffProfile(staffId);
+      toast("Staff updated");
     }
 
     function saveConduct() {
       const staffId = document.getElementById("conductStaff").value;
-      const staff = getStaff(staffId);
+      const type = document.getElementById("conductType").value;
       const details = document.getElementById("conductDetails").value.trim();
 
-      if (!details) return toast("Add note details");
+      if (!staffId || !details) return toast("Add staff and details");
+
+      const staff = getStaff(staffId);
 
       state.conductNotes.unshift({
         id: makeId(),
-        date: selectedDate,
-        type: document.getElementById("conductType").value,
         staffId,
         staffName: staff?.name || "Unknown",
+        type,
         details,
-        createdBy: currentUser()?.name || "Unknown"
+        date: selectedDate,
+        by: currentUser()?.name || "Unknown",
+        time: nowTime()
       });
 
       document.getElementById("conductDetails").value = "";
 
-      logAction("Staff note", `${staff?.name || "Staff"} · ${document.getElementById("conductType").value}`);
+      logAction("Staff note", `${type} · ${staff?.name || "Staff"}`);
       saveState();
       renderConduct();
       renderStaffList();
-      renderSummary();
       toast("Staff note saved");
     }
 
@@ -4703,36 +5080,38 @@
         return;
       }
 
-      box.innerHTML = state.conductNotes.slice(0, 12).map(n => `
+      box.innerHTML = state.conductNotes.slice(0, 15).map(n => `
         <div class="row">
           <div>
-            <h4>${n.type}: ${n.staffName}</h4>
-            <p>${formatDate(n.date)} · ${n.details}</p>
+            <h4>${n.staffName} · ${n.type}</h4>
+            <p>${formatDate(n.date)} at ${n.time} · ${n.by}</p>
+            <p>${n.details}</p>
           </div>
-          <span class="pill ${n.type === "Shout-out" ? "green" : "amber"}">${n.type === "Shout-out" ? "Good" : "Note"}</span>
+          <span class="pill ${n.type === "Shout-out" ? "green" : n.type === "Conduct issue" ? "red" : "amber"}">${n.type}</span>
         </div>
       `).join("");
     }
 
     function saveIncident() {
-      const details = document.getElementById("incidentDetails").value.trim();
-      if (!details) return toast("Add incident details");
-
       const type = document.getElementById("incidentType").value;
       const area = document.getElementById("incidentArea").value;
+      const details = document.getElementById("incidentDetails").value.trim();
+
+      if (!details) return toast("Add incident details");
 
       state.incidents.unshift({
         id: makeId(),
-        date: selectedDate,
         type,
         area,
         details,
-        by: currentUser()?.name || "Unknown"
+        date: selectedDate,
+        by: currentUser()?.name || "Unknown",
+        time: nowTime()
       });
 
       document.getElementById("incidentDetails").value = "";
 
-      logAction("Incident logged", `${type} · ${area}`);
+      logAction("Incident saved", `${type} · ${area}`);
       saveState();
       renderIncidents();
       renderSummary();
@@ -4748,43 +5127,45 @@
         return;
       }
 
-      box.innerHTML = state.incidents.slice(0, 10).map(i => `
+      box.innerHTML = state.incidents.slice(0, 12).map(i => `
         <div class="row">
           <div>
             <h4>${i.type} · ${i.area}</h4>
-            <p>${formatDate(i.date)} · ${i.details}</p>
+            <p>${formatDate(i.date)} at ${i.time} · ${i.by}</p>
+            <p>${i.details}</p>
           </div>
-          <span class="pill">${i.by}</span>
+          <span class="pill amber">Incident</span>
         </div>
       `).join("");
     }
 
     function saveEquipment() {
       const name = document.getElementById("equipmentName").value.trim();
-      if (!name) return toast("Add equipment name");
-
       const area = document.getElementById("equipmentArea").value;
       const status = document.getElementById("equipmentStatus").value;
+      const notes = document.getElementById("equipmentNotes").value.trim();
+
+      if (!name) return toast("Add equipment name");
 
       state.equipmentLogs.unshift({
         id: makeId(),
-        date: selectedDate,
         name,
         area,
         status,
-        notes: document.getElementById("equipmentNotes").value.trim(),
-        by: currentUser()?.name || "Unknown"
+        notes,
+        date: selectedDate,
+        by: currentUser()?.name || "Unknown",
+        time: nowTime()
       });
 
       document.getElementById("equipmentName").value = "";
       document.getElementById("equipmentNotes").value = "";
 
-      logAction("Equipment logged", `${name} · ${area} · ${status}`);
+      logAction("Equipment issue", `${name} · ${area} · ${status}`);
       saveState();
       renderEquipment();
-      renderHome();
       renderSummary();
-      toast("Equipment issue saved");
+      toast("Equipment saved");
     }
 
     function renderEquipment() {
@@ -4796,195 +5177,298 @@
         return;
       }
 
-      box.innerHTML = state.equipmentLogs.slice(0, 12).map(e => `
+      box.innerHTML = state.equipmentLogs.slice(0, 15).map(e => `
         <div class="row">
           <div>
-            <h4>${e.name} · ${e.area}</h4>
-            <p>${formatDate(e.date)} · ${e.notes || "No extra notes"}</p>
+            <h4>${e.name}</h4>
+            <p>${e.area} · ${e.status} · ${formatDate(e.date)} at ${e.time} · ${e.by}</p>
+            <p>${e.notes || "No notes"}</p>
           </div>
-          <span class="pill ${e.status === "Fixed" ? "green" : e.status === "Open" ? "red" : "amber"}">${e.status}</span>
+          <span class="pill ${e.status === "Fixed" ? "green" : "amber"}">${e.status}</span>
         </div>
       `).join("");
+    }
+        function renderAccountManagement() {
+      const box = document.getElementById("accountManagementList");
+      if (!box) return;
+
+      if (!isAdmin()) {
+        box.innerHTML = `<p class="small">Admin only.</p>`;
+        return;
+      }
+
+      box.innerHTML = state.accounts
+        .slice()
+        .sort((a, b) => {
+          const order = { Admin: 0, Manager: 1, Supervisor: 2 };
+          return (order[a.access] ?? 9) - (order[b.access] ?? 9) || a.name.localeCompare(b.name);
+        })
+        .map(a => {
+          const staff = getStaff(a.staffId);
+
+          return `
+            <div class="account-card">
+              <div class="account-head">
+                <span class="avatar">${initials(a.name)}</span>
+                <div>
+                  <h4>${a.name}</h4>
+                  <p>${a.title} · ${a.username}</p>
+                  <p>Linked staff: ${staff ? `${staff.name} · ${staff.clock}` : "Missing staff card"}</p>
+                  <p>Last login: ${a.lastLogin || "Never"}</p>
+                </div>
+              </div>
+
+              <div class="two-grid">
+                <div>
+                  <label>PIN</label>
+                  <input id="pin_${a.id}" value="${a.pin}" inputmode="numeric" maxlength="6" />
+                </div>
+                <div>
+                  <label>Access</label>
+                  <select id="access_${a.id}">
+                    <option ${a.access === "Supervisor" ? "selected" : ""}>Supervisor</option>
+                    <option ${a.access === "Manager" ? "selected" : ""}>Manager</option>
+                    <option ${a.access === "Admin" ? "selected" : ""}>Admin</option>
+                  </select>
+                </div>
+              </div>
+
+              <label>Account status</label>
+              <select id="active_${a.id}">
+                <option value="true" ${a.active ? "selected" : ""}>Active</option>
+                <option value="false" ${!a.active ? "selected" : ""}>Disabled</option>
+              </select>
+
+              <button class="primary-btn" onclick="saveAccountEdit('${a.id}')">Save Login</button>
+            </div>
+          `;
+        }).join("");
+    }
+
+    function saveAccountEdit(accountId) {
+      if (!isAdmin()) return toast("Admin only");
+
+      const account = getAccount(accountId);
+      if (!account) return toast("Account not found");
+
+      const newPin = document.getElementById(`pin_${accountId}`).value.trim();
+      const newAccess = document.getElementById(`access_${accountId}`).value;
+      const active = document.getElementById(`active_${accountId}`).value === "true";
+
+      if (!newPin || newPin.length < 4) return toast("PIN must be at least 4 digits");
+
+      account.pin = newPin;
+      account.access = newAccess;
+      account.active = active;
+
+      if (state.currentAccountId === account.id) {
+        state.currentRole = account.access;
+      }
+
+      logAction("Account edited", `${account.name} · ${account.access} · ${account.active ? "active" : "disabled"}`);
+      saveState();
+      renderAll();
+      toast("Login updated");
     }
 
     function finalSignoff() {
       if (!hasManagerAccess()) return toast("Manager/Admin only");
 
-      const all = getAllSectionKeys();
-      const done = all.filter(k => dayHandovers()[k]).length;
-      const urgent = getUrgentItems().length;
-      const missingBreaks = getPeopleNoBreakToday().length;
-      const openTasks = dayTasks().filter(t => taskStatus(t) !== "Complete").length;
+      const signerId = document.getElementById("signoffBy").value;
+      const signer = getStaff(signerId);
+      const activeLong = getActiveBreaks().filter(b => b.minutes >= 35);
+      const openTasks = dayTasks().filter(t => taskStatus(t) !== "Complete");
+      const overdueBreaks = getBreakQueue().filter(b => b.statusKey === "overdue");
 
-      if (done < all.length || urgent > 0 || missingBreaks > 0 || openTasks > 0) {
+      if (activeLong.length || overdueBreaks.length) {
         const proceed = confirm(
-          `Sign-off check:\n\n${done}/${all.length} handover sections complete\n${urgent} urgent actions\n${openTasks} open tasks\n${missingBreaks} team members without a break logged\n\nSign off anyway?`
+          `Break warnings are still active:\n\n` +
+          `${activeLong.length} active break(s) over 35 minutes\n` +
+          `${overdueBreaks.length} overdue planned break(s)\n\n` +
+          `Sign off anyway?`
         );
-
         if (!proceed) return;
       }
 
-      const staff = getStaff(document.getElementById("signoffBy").value);
+      if (openTasks.length) {
+        const proceed = confirm(`${openTasks.length} task(s) are still open/in progress. Sign off anyway?`);
+        if (!proceed) return;
+      }
 
       state.signoffs[selectedDate] = {
-        by: staff?.name || currentUser()?.name || "Unknown",
-        time: nowTime()
+        by: signer?.name || currentUser()?.name || "Unknown",
+        byId: signerId,
+        time: nowTime(),
+        date: selectedDate
       };
 
       logAction("Final sign-off", `${state.signoffs[selectedDate].by} signed off ${formatDate(selectedDate)}`);
       saveState();
-      renderSignoff();
-      renderHome();
-      renderSummary();
-      toast("Final sign-off saved");
+      renderAll();
+      toast("Day signed off");
     }
 
     function renderSignoff() {
-      const signoff = state.signoffs[selectedDate];
-      const box = document.getElementById("signoffStatus");
-      if (!box) return;
+      const status = document.getElementById("signoffStatus");
+      if (!status) return;
 
-      box.innerText = signoff
-        ? `Signed off by ${signoff.by} at ${signoff.time}.`
-        : "Not signed off yet.";
+      const signoff = state.signoffs[selectedDate];
+
+      if (signoff) {
+        status.innerText = `Signed off by ${signoff.by} at ${signoff.time}.`;
+      } else {
+        status.innerText = "Not signed off yet.";
+      }
     }
 
     function exportSummary() {
-      const handovers = Object.values(dayHandovers());
-      const breaks = getTodayBreaks();
-      const over35 = getTodayOver35();
-      const deployment = getDeploymentSummary();
-      const pressures = dayPressure();
-      const openTasks = dayTasks().filter(t => taskStatus(t) !== "Complete");
-
-      let text = `ShiftFlow Summary — ${formatDate(selectedDate)}\n\n`;
-
-      text += `LIVE AREA PRESSURE\n`;
-      Object.keys(pressures).forEach(area => {
-        text += `${area}: ${pressures[area].level} — ${pressures[area].note} — updated by ${pressures[area].updatedBy} at ${pressures[area].updatedAt}\n`;
-      });
-
-      text += `\nOPEN TASKS\n`;
-      if (!openTasks.length) text += `No open tasks.\n`;
-      else {
-        openTasks.forEach(t => {
-          text += `- ${t.priority}: ${t.text} | Owner: ${t.owner || "Unassigned"} | Status: ${taskStatus(t)}\n`;
-        });
-      }
-
-      text += `\nTEAM DEPLOYMENT\n`;
-      if (deployment.length) deployment.forEach(d => text += `${d.area} — ${d.zone}: ${d.names}\n`);
-      else text += `No deployment saved.\n`;
-
-      text += `\nBREAK CONTROL\n`;
-      text += `Breaks completed today: ${breaks.length}\n`;
-      text += `People over 35 minutes: ${over35.length}\n`;
-      over35.forEach(b => text += `- ${b.staffName}: ${b.duration} mins\n`);
-      text += `People with no break logged from team: ${getPeopleNoBreakToday().map(s => s.name).join(", ") || "None"}\n\n`;
-
-      text += `HANDOVERS\n`;
-      if (!handovers.length) text += `No handovers submitted.\n`;
-
-      handovers.forEach(h => {
-        text += `\n${h.mainName} — ${h.sectionName}\n`;
-        text += `Status: ${h.status}\n`;
-        text += `Priority: ${h.priority}\n`;
-        text += `Submitted by: ${h.submittedByName}\n`;
-
-        Object.keys(h.answers).forEach(q => {
-          text += `${q}: ${h.answers[q] || "-"}\n`;
-        });
-
-        if (h.actionRequired === "Action required") {
-          text += `ACTION: ${h.actionText}\n`;
-          text += `Owner: ${h.actionOwner || "-"}\n`;
-          text += `Due: ${h.actionDue || "-"}\n`;
-        }
-      });
-
-      const audits = state.audits.filter(a => a.date === selectedDate);
-      text += `\nAUDITS\n`;
-      if (!audits.length) text += `No audits submitted today.\n`;
-      else {
-        audits.forEach(a => {
-          text += `${a.area}: ${a.score}% by ${a.by}\n`;
-          a.questions.filter(q => q.result !== "Pass").forEach(q => {
-            text += `- ${q.question}: ${q.result} · ${q.note || "-"}\n`;
-          });
-        });
-      }
+      renderSummary();
 
       const signoff = state.signoffs[selectedDate];
-      text += `\nFINAL SIGN-OFF\n${signoff ? `${signoff.by} at ${signoff.time}` : "Not signed off"}\n`;
+      const handovers = Object.values(dayHandovers());
+      const tasks = dayTasks();
+      const openTasks = tasks.filter(t => taskStatus(t) !== "Complete");
+      const completedBreaks = getTodayBreaks();
+      const activeBreaks = getActiveBreaks();
+      const breakQueue = getBreakQueue();
+      const incidentsToday = state.incidents.filter(i => i.date === selectedDate);
+      const auditsToday = state.audits.filter(a => a.date === selectedDate);
+      const equipmentOpen = state.equipmentLogs.filter(e => e.status !== "Fixed");
+      const pressures = dayPressure();
 
-      document.getElementById("exportText").value = text;
-      logAction("Export created", `Summary export for ${formatDate(selectedDate)}`);
+      const lines = [];
+
+      lines.push(`ShiftFlow Handover Export — ${formatDate(selectedDate)}`);
+      lines.push(`Generated by: ${currentUser()?.name || "Unknown"} at ${nowTime()}`);
+      lines.push("");
+      lines.push("LIVE AREA PRESSURE");
+      Object.keys(pressures).forEach(area => {
+        lines.push(`- ${area}: ${pressures[area].level} — ${pressures[area].note}`);
+      });
+
+      lines.push("");
+      lines.push("BREAK CONTROL");
+      lines.push(`- Completed breaks: ${completedBreaks.length}`);
+      lines.push(`- Active breaks: ${activeBreaks.length}`);
+      lines.push(`- Next break: ${breakQueue[0] ? `${breakQueue[0].staffName} — ${breakQueue[0].label}` : "None pending"}`);
+      completedBreaks.slice(0, 12).forEach(b => {
+        lines.push(`  • ${b.staffName}: ${b.duration}m — ${b.flag}${b.reason ? ` — ${b.reason}` : ""}`);
+      });
+      activeBreaks.forEach(b => {
+        lines.push(`  • ACTIVE: ${b.staffName}: ${b.minutes}m so far`);
+      });
+
+      lines.push("");
+      lines.push("OPEN TASKS");
+      if (openTasks.length) {
+        openTasks.forEach(t => lines.push(`- ${t.priority}: ${t.text} — ${t.owner || "Unassigned"} — ${taskStatus(t)}`));
+      } else {
+        lines.push("- No open tasks.");
+      }
+
+      lines.push("");
+      lines.push("HANDOVER SECTIONS");
+      if (handovers.length) {
+        handovers.forEach(h => {
+          lines.push(`- ${h.mainName} / ${h.sectionName}: ${h.status} — ${h.priority}`);
+          lines.push(`  ${getMainNote(h)}`);
+        });
+      } else {
+        lines.push("- No handover sections submitted.");
+      }
+
+      lines.push("");
+      lines.push("AUDITS TODAY");
+      if (auditsToday.length) {
+        auditsToday.forEach(a => {
+          lines.push(`- ${a.area}: ${a.score}% — ${a.by} at ${a.time}`);
+          a.questions
+            .filter(q => q.result !== "Pass" || q.actionRequired === "Action required")
+            .forEach(q => lines.push(`  • ${q.question}: ${q.result} — ${q.note || "No note"}`));
+        });
+      } else {
+        lines.push("- No audits today.");
+      }
+
+      lines.push("");
+      lines.push("INCIDENTS TODAY");
+      if (incidentsToday.length) {
+        incidentsToday.forEach(i => lines.push(`- ${i.type} / ${i.area}: ${i.details}`));
+      } else {
+        lines.push("- No incidents logged today.");
+      }
+
+      lines.push("");
+      lines.push("OPEN EQUIPMENT ISSUES");
+      if (equipmentOpen.length) {
+        equipmentOpen.forEach(e => lines.push(`- ${e.name} / ${e.area}: ${e.status} — ${e.notes || "No notes"}`));
+      } else {
+        lines.push("- No open equipment issues.");
+      }
+
+      lines.push("");
+      lines.push("FINAL SIGN-OFF");
+      lines.push(signoff ? `Signed off by ${signoff.by} at ${signoff.time}` : "Not signed off yet.");
+
+      document.getElementById("exportText").value = lines.join("\n");
+
+      logAction("Export created", `Export created for ${formatDate(selectedDate)}`);
       saveState();
       toast("Export created");
     }
 
-    function applySettings(showToast = true) {
-      const themeSelect = document.getElementById("themeSelect");
-      const accentSelect = document.getElementById("accentSelect");
+    function applySettings() {
+      const theme = document.getElementById("themeSelect").value;
+      const accent = document.getElementById("accentSelect").value;
 
-      const theme = themeSelect?.value || "light";
-      const accent = accentSelect?.value || "#111111";
+      localStorage.setItem("shiftflow_v9_settings", JSON.stringify({ theme, accent }));
 
       document.body.classList.toggle("dark", theme === "dark");
       document.documentElement.style.setProperty("--accent", accent);
 
-      localStorage.setItem("shiftflow_v8_settings", JSON.stringify({ theme, accent }));
-
-      if (showToast) toast("Settings applied");
+      toast("Settings updated");
     }
 
     function resetPrototype() {
       if (!isAdmin()) return toast("Admin only");
-      if (!confirm("Reset all prototype data? Staff, accounts and PINs will stay.")) return;
 
-      const keepStaff = state.staff;
-      const keepAccounts = state.accounts;
-      const keepAccount = state.currentAccountId;
-      const keepUser = state.currentUserId;
-      const keepRole = state.currentRole;
+      const confirmReset = confirm(
+        "Reset all ShiftFlow prototype data?\n\nThis will clear handovers, tasks, breaks, staff edits, logins, conduct notes and settings on this device."
+      );
 
-      state = {
-        currentAccountId: keepAccount,
-        currentUserId: keepUser,
-        currentRole: keepRole,
-        accounts: keepAccounts,
-        staff: keepStaff,
-        handovers: {},
-        drafts: {},
-        signoffs: {},
-        tasks: {},
-        todayTeam: {},
-        shiftBoards: {},
-        activeBreaks: {},
-        breakHistory: [],
-        conductNotes: [],
-        incidents: [],
-        equipmentLogs: [],
-        audits: [],
-        attendanceLogs: [],
-        pressures: {},
-        auditTrail: []
-      };
+      if (!confirmReset) return;
+
+      localStorage.removeItem("shiftflow_v9_state");
+      localStorage.removeItem("shiftflow_v9_settings");
 
       selectedDate = todayISO();
-
-      saveState();
+      loadState();
+      loadVisualSettings();
       renderAll();
+
+      document.getElementById("loginScreen").classList.remove("hidden");
       toast("Prototype reset");
+    }
+
+    function openStaffFromAccount(accountId) {
+      const account = getAccount(accountId);
+      if (!account) return;
+      openStaffProfile(account.staffId);
+    }
+
+    function safeHTML(text) {
+      return String(text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
     document.addEventListener("keydown", function(event) {
       if (event.key === "Escape") {
-        document.getElementById("staffModal").classList.remove("open");
-      }
-
-      if (event.key === "Enter" && !document.getElementById("loginScreen").classList.contains("hidden")) {
-        login();
+        closeBreakAlertModal();
+        closeStaffModal();
       }
     });
 
