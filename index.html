@@ -22,7 +22,6 @@
       --muted: #777777;
       --line: #eeeeee;
       --accent: #111111;
-
       --lobby: #eee4ff;
       --backlot: #dff1ff;
       --hogwarts: #e4edff;
@@ -40,6 +39,7 @@
       margin: 0;
       background: var(--bg);
       color: var(--text);
+      overscroll-behavior: none;
     }
 
     body.dark {
@@ -607,10 +607,11 @@
     }
 
     .zone {
-      min-height: 115px;
+      min-height: 135px;
       border-radius: 22px;
       padding: 12px;
       background: var(--panel);
+      transition: 0.16s ease;
     }
 
     .zone h4 {
@@ -620,6 +621,8 @@
 
     .zone.drop-hover {
       outline: 3px solid var(--accent);
+      transform: scale(1.015);
+      background: var(--success);
     }
 
     .magnet {
@@ -629,16 +632,16 @@
       border: 1px solid var(--line);
       background: var(--card);
       color: var(--text);
-      padding: 9px 10px;
-      margin: 3px 4px 4px 0;
+      padding: 10px 12px;
+      margin: 3px 4px 6px 0;
       font-size: 12px;
       box-shadow: 0 6px 15px rgba(0,0,0,0.05);
       user-select: none;
+      touch-action: none;
     }
 
-    .magnet.selected {
-      background: var(--accent);
-      color: white;
+    .magnet.dragging {
+      opacity: 0.35;
     }
 
     .audit-question {
@@ -799,6 +802,13 @@
         <div class="hero">
           <h2 id="homeGreeting">Good evening</h2>
           <p>Set the team, plan the floor, control breaks and complete handovers from one place.</p>
+
+          <div class="chip-row" style="margin-top:12px;">
+            <button id="demoSupervisorChip" class="chip active" onclick="switchDemoRole('Supervisor')">Supervisor</button>
+            <button id="demoManagerChip" class="chip" onclick="switchDemoRole('Manager')">Manager</button>
+            <button id="demoAdminChip" class="chip" onclick="switchDemoRole('Admin')">Admin</button>
+          </div>
+
           <button id="startHandoverBtn" class="primary-btn" onclick="openWizard()">Start Today’s Handover</button>
         </div>
 
@@ -864,7 +874,7 @@
 
         <div class="section-title">Shift Board</div>
         <div class="card">
-          <p class="small">Tap a staff magnet, then tap a zone. On desktop, you can also drag and drop.</p>
+          <p class="small">Drag staff magnets into the correct zone. The layout saves for the selected day.</p>
 
           <div class="chip-row">
             <button id="boardLobbyChip" class="chip active lobby-bg" onclick="setBoardArea('lobby')">Lobby</button>
@@ -1495,7 +1505,7 @@
 
     let selectedDate = todayISO();
     let currentBoardArea = "lobby";
-    let selectedMagnetStaffId = null;
+    let draggedStaffId = null;
 
     let wizard = {
       main: null,
@@ -1589,10 +1599,10 @@
       return state.todayTeam[selectedDate];
     }
 
-    function dayBoard() {
+    function dayBoard(area = currentBoardArea) {
       if (!state.shiftBoards[selectedDate]) state.shiftBoards[selectedDate] = {};
-      if (!state.shiftBoards[selectedDate][currentBoardArea]) state.shiftBoards[selectedDate][currentBoardArea] = {};
-      return state.shiftBoards[selectedDate][currentBoardArea];
+      if (!state.shiftBoards[selectedDate][area]) state.shiftBoards[selectedDate][area] = {};
+      return state.shiftBoards[selectedDate][area];
     }
 
     function init() {
@@ -1633,11 +1643,11 @@
     }
 
     function saveState() {
-      localStorage.setItem("shiftflow_v4_state", JSON.stringify(state));
+      localStorage.setItem("shiftflow_v5_state", JSON.stringify(state));
     }
 
     function loadState() {
-      const saved = JSON.parse(localStorage.getItem("shiftflow_v4_state") || "{}");
+      const saved = JSON.parse(localStorage.getItem("shiftflow_v5_state") || "{}");
 
       const defaultStaff = [
         { id: "s1", name: "James", clock: "10001", role: "Supervisor", area: "Backlot" },
@@ -1688,6 +1698,17 @@
       document.getElementById("loginScreen").classList.remove("hidden");
     }
 
+    function switchDemoRole(role) {
+      state.currentRole = role;
+
+      const roleSelect = document.getElementById("roleSelect");
+      if (roleSelect) roleSelect.value = role;
+
+      saveState();
+      renderAll();
+      toast(`Demo role: ${role}`);
+    }
+
     function openPage(pageId, btn) {
       document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
       document.getElementById(pageId).classList.add("active");
@@ -1717,7 +1738,6 @@
     function changeDate(date) {
       selectedDate = date;
       document.getElementById("selectedDateInput").value = date;
-      selectedMagnetStaffId = null;
       closeAuditBuilder();
       renderAll();
       toast(`Viewing ${formatDate(selectedDate)}`);
@@ -1742,6 +1762,10 @@
       document.querySelectorAll(".admin-only").forEach(el => {
         el.classList.toggle("hidden", !isAdmin());
       });
+
+      document.getElementById("demoSupervisorChip")?.classList.toggle("active", state.currentRole === "Supervisor");
+      document.getElementById("demoManagerChip")?.classList.toggle("active", state.currentRole === "Manager");
+      document.getElementById("demoAdminChip")?.classList.toggle("active", state.currentRole === "Admin");
     }
 
     function renderHome() {
@@ -1907,10 +1931,11 @@
       });
 
       state.equipmentLogs.filter(e => e.status !== "Fixed").forEach(e => unresolved.push({ date: e.date, equipment: e }));
+
       state.audits.forEach(a => {
-        a.questions.filter(q => q.actionRequired === "Action required" || q.result === "Fail" || q.result === "Major issue").forEach(q => {
-          unresolved.push({ date: a.date, audit: a, question: q });
-        });
+        a.questions
+          .filter(q => q.actionRequired === "Action required" || q.result === "Fail" || q.result === "Major issue")
+          .forEach(q => unresolved.push({ date: a.date, audit: a, question: q }));
       });
 
       if (!unresolved.length) {
@@ -1918,10 +1943,9 @@
         return;
       }
 
-      box.innerHTML = "";
-      unresolved.slice(0, 7).forEach(item => {
+      box.innerHTML = unresolved.slice(0, 7).map(item => {
         if (item.h) {
-          box.innerHTML += `
+          return `
             <div class="row">
               <div>
                 <h4>${item.h.mainName} — ${item.h.sectionName}</h4>
@@ -1930,8 +1954,10 @@
               <span class="pill amber">Open</span>
             </div>
           `;
-        } else if (item.equipment) {
-          box.innerHTML += `
+        }
+
+        if (item.equipment) {
+          return `
             <div class="row">
               <div>
                 <h4>${item.equipment.name}</h4>
@@ -1940,18 +1966,18 @@
               <span class="pill amber">${item.equipment.status}</span>
             </div>
           `;
-        } else {
-          box.innerHTML += `
-            <div class="row">
-              <div>
-                <h4>Audit: ${item.audit.area}</h4>
-                <p>${formatDate(item.date)} · ${item.question.question} · ${item.question.note || "Action required"}</p>
-              </div>
-              <span class="pill red">${item.question.result}</span>
-            </div>
-          `;
         }
-      });
+
+        return `
+          <div class="row">
+            <div>
+              <h4>Audit: ${item.audit.area}</h4>
+              <p>${formatDate(item.date)} · ${item.question.question} · ${item.question.note || "Action required"}</p>
+            </div>
+            <span class="pill red">${item.question.result}</span>
+          </div>
+        `;
+      }).join("");
     }
 
     function renderAreaStatusCards() {
@@ -1997,10 +2023,9 @@
         return;
       }
 
-      box.innerHTML = "";
-      days.forEach(day => {
+      box.innerHTML = days.map(day => {
         const count = Object.keys(state.handovers[day] || {}).length;
-        box.innerHTML += `
+        return `
           <div class="row" onclick="changeDate('${day}')">
             <div>
               <h4>${formatDate(day)}</h4>
@@ -2009,7 +2034,7 @@
             <span class="pill">${day === selectedDate ? "Viewing" : "Open"}</span>
           </div>
         `;
-      });
+      }).join("");
     }
 
     function addToTodayTeam() {
@@ -2047,13 +2072,10 @@
       state.todayTeam[selectedDate] = dayTeam().filter(t => t.staffId !== staffId);
 
       Object.keys(structure).forEach(area => {
-        const previousArea = currentBoardArea;
-        currentBoardArea = area;
-        const board = dayBoard();
+        const board = dayBoard(area);
         Object.keys(board).forEach(zone => {
           board[zone] = board[zone].filter(id => id !== staffId);
         });
-        currentBoardArea = previousArea;
       });
 
       saveState();
@@ -2070,6 +2092,7 @@
 
     function autoPlanBreaks() {
       const team = dayTeam().sort((a, b) => a.startTime.localeCompare(b.startTime));
+
       team.forEach((p, index) => {
         const base = suggestBreakTime(p.startTime);
         const [h, m] = base.split(":").map(Number);
@@ -2111,7 +2134,6 @@
 
     function setBoardArea(area) {
       currentBoardArea = area;
-      selectedMagnetStaffId = null;
 
       document.querySelectorAll("#boardLobbyChip, #boardBacklotChip, #boardHogwartsChip").forEach(b => b.classList.remove("active"));
       if (area === "lobby") document.getElementById("boardLobbyChip").classList.add("active");
@@ -2136,9 +2158,11 @@
 
     function getAssignedStaffCount() {
       let ids = new Set();
+
       Object.keys(structure).forEach(area => {
         getAssignedStaffIdsForArea(area).forEach(id => ids.add(id));
       });
+
       return ids.size;
     }
 
@@ -2168,6 +2192,7 @@
       }
 
       box.innerHTML = unassigned.map(t => magnetHTML(t.staffId)).join("");
+      attachPointerDragHandlers();
     }
 
     function renderBoardZones() {
@@ -2179,48 +2204,43 @@
         if (!board[zone]) board[zone] = [];
 
         return `
-          <div class="zone" 
-               ondragover="allowDrop(event)" 
-               ondragleave="this.classList.remove('drop-hover')" 
-               ondrop="dropStaff(event, '${zone}')"
-               onclick="tapZone('${zone}')">
+          <div class="zone"
+               data-zone="${zone}"
+               ondragover="allowDrop(event)"
+               ondragleave="this.classList.remove('drop-hover')"
+               ondrop="dropStaff(event, '${zone}')">
             <h4>${zone}</h4>
-            <div>${board[zone].map(id => magnetHTML(id)).join("") || `<p class="small">Tap magnet here</p>`}</div>
+            <div>${board[zone].map(id => magnetHTML(id)).join("") || `<p class="small">Drop staff here</p>`}</div>
           </div>
         `;
       }).join("");
 
       saveState();
+      attachPointerDragHandlers();
     }
 
     function magnetHTML(staffId) {
       const s = getStaff(staffId);
-      const selected = selectedMagnetStaffId === staffId ? "selected" : "";
       return `
-        <button class="magnet ${selected}" 
+        <button class="magnet"
+                data-staff-id="${staffId}"
                 draggable="true"
                 ondragstart="dragStaff(event, '${staffId}')"
-                onclick="event.stopPropagation(); selectMagnet('${staffId}')">
+                ondragend="endDrag(event)">
           ${s?.name || "Unknown"}
         </button>
       `;
     }
 
-    function selectMagnet(staffId) {
-      selectedMagnetStaffId = selectedMagnetStaffId === staffId ? null : staffId;
-      renderShiftBoard();
-    }
-
-    function tapZone(zone) {
-      if (!selectedMagnetStaffId) return;
-      moveStaffToZone(selectedMagnetStaffId, zone);
-      selectedMagnetStaffId = null;
-      renderAll();
-      toast("Shift Board updated");
-    }
-
     function dragStaff(event, staffId) {
+      draggedStaffId = staffId;
       event.dataTransfer.setData("staffId", staffId);
+      event.currentTarget.classList.add("dragging");
+    }
+
+    function endDrag(event) {
+      event.currentTarget.classList.remove("dragging");
+      document.querySelectorAll(".zone").forEach(z => z.classList.remove("drop-hover"));
     }
 
     function allowDrop(event) {
@@ -2231,10 +2251,55 @@
     function dropStaff(event, zone) {
       event.preventDefault();
       event.currentTarget.classList.remove("drop-hover");
-      const staffId = event.dataTransfer.getData("staffId");
+      const staffId = event.dataTransfer.getData("staffId") || draggedStaffId;
+      if (!staffId) return;
+
       moveStaffToZone(staffId, zone);
+      draggedStaffId = null;
       renderAll();
       toast("Shift Board updated");
+    }
+
+    function attachPointerDragHandlers() {
+      document.querySelectorAll(".magnet").forEach(magnet => {
+        magnet.onpointerdown = function(event) {
+          if (event.pointerType === "mouse") return;
+
+          const staffId = magnet.dataset.staffId;
+          draggedStaffId = staffId;
+          magnet.classList.add("dragging");
+
+          function onMove(moveEvent) {
+            const x = moveEvent.clientX;
+            const y = moveEvent.clientY;
+            document.querySelectorAll(".zone").forEach(z => z.classList.remove("drop-hover"));
+            const el = document.elementFromPoint(x, y);
+            const zone = el?.closest?.(".zone");
+            if (zone) zone.classList.add("drop-hover");
+          }
+
+          function onUp(upEvent) {
+            document.removeEventListener("pointermove", onMove);
+            document.removeEventListener("pointerup", onUp);
+
+            const el = document.elementFromPoint(upEvent.clientX, upEvent.clientY);
+            const zoneEl = el?.closest?.(".zone");
+
+            magnet.classList.remove("dragging");
+            document.querySelectorAll(".zone").forEach(z => z.classList.remove("drop-hover"));
+
+            if (zoneEl) {
+              moveStaffToZone(staffId, zoneEl.dataset.zone);
+              draggedStaffId = null;
+              renderAll();
+              toast("Shift Board updated");
+            }
+          }
+
+          document.addEventListener("pointermove", onMove);
+          document.addEventListener("pointerup", onUp);
+        };
+      });
     }
 
     function moveStaffToZone(staffId, zone) {
@@ -3538,7 +3603,7 @@
       document.getElementById("rolePill").innerText = role;
       document.getElementById("roleText").innerText = `${role} Access · ${currentUser()?.name || ""}`;
 
-      localStorage.setItem("shiftflow_v4_settings", JSON.stringify({ theme, accent }));
+      localStorage.setItem("shiftflow_v5_settings", JSON.stringify({ theme, accent }));
       saveState();
       renderPermissions();
 
