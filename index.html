@@ -22,6 +22,7 @@
       --muted: #777777;
       --line: #eeeeee;
       --accent: #111111;
+
       --lobby: #eee4ff;
       --backlot: #dff1ff;
       --hogwarts: #e4edff;
@@ -29,10 +30,12 @@
       --frog: #ffe3f4;
       --dragon: #ddf8e8;
       --boh: #fff6c8;
-      --danger: #ffe2dc;
-      --success: #ddf8e8;
-      --warning: #fff3cf;
-      --blue: #e4edff;
+
+      --green-bg: #ddf8e8;
+      --amber-bg: #fff3cf;
+      --red-bg: #ffe2dc;
+      --blue-bg: #e4edff;
+      --purple-bg: #eee4ff;
     }
 
     body {
@@ -133,9 +136,10 @@
     .stat,
     .row,
     .break-card,
-    .staff-profile,
     .zone,
-    .audit-question {
+    .audit-question,
+    .task-card,
+    .pressure-card {
       background: var(--panel);
       border: 1px solid var(--line);
     }
@@ -152,7 +156,7 @@
       padding: 20px;
       margin-bottom: 14px;
       color: #111;
-      background: var(--success);
+      background: var(--green-bg);
     }
 
     .hero h2 {
@@ -392,6 +396,12 @@
     .red { color: #b42318; }
     .blue { color: #2d62b7; }
 
+    .green-bg { background: var(--green-bg); }
+    .amber-bg { background: var(--amber-bg); }
+    .red-bg { background: var(--red-bg); }
+    .blue-bg { background: var(--blue-bg); }
+    .purple-bg { background: var(--purple-bg); }
+
     .lobby-bg { background: var(--lobby); }
     .backlot-bg { background: var(--backlot); }
     .hogwarts-bg { background: var(--hogwarts); }
@@ -399,10 +409,6 @@
     .frog-bg { background: var(--frog); }
     .dragon-bg { background: var(--dragon); }
     .boh-bg { background: var(--boh); }
-    .danger-bg { background: var(--danger); }
-    .success-bg { background: var(--success); }
-    .warning-bg { background: var(--warning); }
-    .blue-bg { background: var(--blue); }
 
     .hidden {
       display: none !important;
@@ -445,6 +451,22 @@
       font-size: 12px;
       line-height: 1.4;
       margin: 6px 0 0;
+    }
+
+    .progress-shell {
+      background: #ededed;
+      height: 12px;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 9px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: 0.25s ease;
+      border-radius: 999px;
     }
 
     .wizard-step {
@@ -555,15 +577,34 @@
       border-radius: 999px;
     }
 
-    .staff-profile {
-      border-radius: 28px;
+    .top-trump {
+      border-radius: 32px;
       padding: 18px;
       margin-bottom: 14px;
-      background: linear-gradient(160deg, #ffffff, #f7f7f7);
       color: #111;
+      background:
+        radial-gradient(circle at top right, rgba(255,255,255,0.85), transparent 34%),
+        linear-gradient(160deg, #f2f2f2, #ffffff);
+      border: 1px solid #ececec;
+      box-shadow: 0 16px 44px rgba(0,0,0,0.09);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .top-trump::after {
+      content: "";
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.04);
+      right: -70px;
+      bottom: -80px;
     }
 
     .profile-top {
+      position: relative;
+      z-index: 1;
       display: flex;
       justify-content: space-between;
       gap: 12px;
@@ -572,10 +613,22 @@
 
     .profile-top h2 {
       margin: 0;
-      font-size: 28px;
+      font-size: 30px;
+      letter-spacing: -1px;
+    }
+
+    .profile-badges {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px;
     }
 
     .profile-stat-grid {
+      position: relative;
+      z-index: 1;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
@@ -607,7 +660,7 @@
     }
 
     .zone {
-      min-height: 135px;
+      min-height: 142px;
       border-radius: 22px;
       padding: 12px;
       background: var(--panel);
@@ -622,7 +675,7 @@
     .zone.drop-hover {
       outline: 3px solid var(--accent);
       transform: scale(1.015);
-      background: var(--success);
+      background: var(--green-bg);
     }
 
     .magnet {
@@ -640,8 +693,43 @@
       touch-action: none;
     }
 
+    .magnet.supervisor {
+      border-color: #111;
+      box-shadow: inset 4px 0 0 #111, 0 6px 15px rgba(0,0,0,0.05);
+    }
+
+    .magnet.manager {
+      border-color: #4169e1;
+      box-shadow: inset 4px 0 0 #4169e1, 0 6px 15px rgba(0,0,0,0.05);
+    }
+
+    .magnet.admin {
+      border-color: #7b61ff;
+      box-shadow: inset 4px 0 0 #7b61ff, 0 6px 15px rgba(0,0,0,0.05);
+    }
+
+    .magnet.new-starter {
+      border-color: #d06b28;
+      box-shadow: inset 4px 0 0 #d06b28, 0 6px 15px rgba(0,0,0,0.05);
+    }
+
+    .magnet.probation {
+      border-color: #b42318;
+      box-shadow: inset 4px 0 0 #b42318, 0 6px 15px rgba(0,0,0,0.05);
+    }
+
     .magnet.dragging {
       opacity: 0.35;
+    }
+
+    .mini-badge {
+      font-size: 9px;
+      font-weight: 950;
+      padding: 4px 6px;
+      border-radius: 999px;
+      background: #f1f1f1;
+      color: #111;
+      border: 1px solid #e1e1e1;
     }
 
     .audit-question {
@@ -661,6 +749,62 @@
       color: var(--muted);
       margin-top: 6px;
     }
+
+    .task-card {
+      border-radius: 22px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+
+    .task-card h4 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .task-card p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .pressure-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .pressure-card {
+      border-radius: 24px;
+      padding: 15px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pressure-card h4 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .pressure-card p {
+      margin: 5px 0 0;
+      font-size: 12px;
+      color: #444;
+      font-weight: 700;
+    }
+
+    .traffic-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      display: inline-block;
+      border: 2px solid rgba(255,255,255,0.8);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.08);
+    }
+
+    .traffic-green { background: #18a058; }
+    .traffic-amber { background: #f5a623; }
+    .traffic-red { background: #e04436; }
+    .traffic-closed { background: #777; }
 
     .bottom-nav {
       position: fixed;
@@ -802,13 +946,6 @@
         <div class="hero">
           <h2 id="homeGreeting">Good evening</h2>
           <p>Set the team, plan the floor, control breaks and complete handovers from one place.</p>
-
-          <div class="chip-row" style="margin-top:12px;">
-            <button id="demoSupervisorChip" class="chip active" onclick="switchDemoRole('Supervisor')">Supervisor</button>
-            <button id="demoManagerChip" class="chip" onclick="switchDemoRole('Manager')">Manager</button>
-            <button id="demoAdminChip" class="chip" onclick="switchDemoRole('Admin')">Admin</button>
-          </div>
-
           <button id="startHandoverBtn" class="primary-btn" onclick="openWizard()">Start Today’s Handover</button>
         </div>
 
@@ -825,6 +962,50 @@
             <h3 id="homeBreaks">0</h3>
             <p>Breaks</p>
           </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top:0;">Handover progress</h3>
+          <p class="small" id="handoverProgressText">0% complete</p>
+          <div class="progress-shell">
+            <div id="handoverProgressFill" class="progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="section-title">Live area pressure</div>
+        <div class="card">
+          <div id="tourOpenStatus" class="row">
+            <div>
+              <h4>Tour status</h4>
+              <p>Checking opening hours...</p>
+            </div>
+            <span class="pill">Live</span>
+          </div>
+
+          <div id="pressureControls">
+            <p class="small">Anyone can update this live during the day. Use it to show where support is needed.</p>
+
+            <label>Area</label>
+            <select id="pressureArea">
+              <option>Lobby</option>
+              <option>Backlot</option>
+              <option>Hogwarts Table</option>
+            </select>
+
+            <label>Pressure level</label>
+            <select id="pressureLevel">
+              <option>Green - Quiet / under control</option>
+              <option>Amber - Busy / monitor closely</option>
+              <option>Red - Heavy queue / support needed</option>
+            </select>
+
+            <label>Update note</label>
+            <input id="pressureNote" placeholder="Example: Frog queue building, send support..." />
+
+            <button class="primary-btn" onclick="updatePressure()">Update Area Pressure</button>
+          </div>
+
+          <div id="pressureCards" class="pressure-grid" style="margin-top:14px;"></div>
         </div>
 
         <div class="two-grid">
@@ -851,6 +1032,38 @@
           <div id="savedDaysList" style="margin-top:12px;"></div>
         </div>
 
+        <div class="section-title">Tasks board</div>
+        <div class="card">
+          <label>New task</label>
+          <input id="taskText" placeholder="Example: Check Dragon milk labels..." />
+
+          <div class="two-grid">
+            <div>
+              <label>Owner</label>
+              <input id="taskOwner" placeholder="Opening supervisor..." />
+            </div>
+            <div>
+              <label>Priority</label>
+              <select id="taskPriority">
+                <option>Low</option>
+                <option selected>Medium</option>
+                <option>High</option>
+                <option>Urgent</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="primary-btn" onclick="addManualTask()">Add Task</button>
+
+          <div class="chip-row" style="margin-top:14px;">
+            <button id="taskOpenChip" class="chip active" onclick="setTaskFilter('Open')">Open</button>
+            <button id="taskProgressChip" class="chip" onclick="setTaskFilter('In Progress')">In Progress</button>
+            <button id="taskDoneChip" class="chip" onclick="setTaskFilter('Complete')">Complete</button>
+          </div>
+
+          <div id="tasksBoard" style="margin-top:12px;"></div>
+        </div>
+
         <div class="section-title">Today’s team</div>
         <div class="card">
           <button class="primary-btn" onclick="togglePanel('todayTeamPanel')">Set Up Today’s Team</button>
@@ -859,8 +1072,11 @@
             <label>Staff member</label>
             <select id="teamStaff"></select>
 
-            <label>Start time</label>
+            <label>Scheduled start time</label>
             <input type="time" id="teamStartTime" />
+
+            <label>Actual arrival time</label>
+            <input type="time" id="teamArrivalTime" />
 
             <label>Planned break</label>
             <input type="time" id="teamBreakTime" />
@@ -1030,8 +1246,7 @@
         </div>
       </div>
     </main>
-
-    <main id="breaks" class="page">
+        <main id="breaks" class="page">
       <div class="dashboard-grid">
         <div class="stat">
           <h3 id="breaksCompletedToday">0</h3>
@@ -1097,7 +1312,7 @@
 
       <div class="card">
         <label>Search staff</label>
-        <input id="staffSearch" oninput="renderStaffList()" placeholder="Search by name, clock-in, role..." />
+        <input id="staffSearch" oninput="renderStaffList()" placeholder="Search by name, clock-in, role, status..." />
 
         <button class="primary-btn admin-only" onclick="togglePanel('addStaffPanel')">+ Add Employee</button>
 
@@ -1125,6 +1340,13 @@
             <option>Flexible</option>
           </select>
 
+          <label>Staff status</label>
+          <select id="newStaffStatus">
+            <option>Standard</option>
+            <option>New Starter</option>
+            <option>On Probation</option>
+          </select>
+
           <button class="primary-btn" onclick="addStaff()">Save Employee</button>
         </div>
       </div>
@@ -1132,7 +1354,7 @@
       <div id="staffList"></div>
 
       <div id="staffProfilePanel" class="hidden">
-        <div class="staff-profile">
+        <div id="profileCard" class="top-trump">
           <div class="profile-top">
             <div>
               <h2 id="profileName">Name</h2>
@@ -1140,6 +1362,8 @@
             </div>
             <span id="profileClock" class="pill">Clock</span>
           </div>
+
+          <div id="profileBadges" class="profile-badges"></div>
 
           <div class="profile-stat-grid">
             <div class="profile-stat">
@@ -1155,11 +1379,47 @@
               <span>Avg break</span>
             </div>
           </div>
+
+          <div class="profile-stat-grid">
+            <div class="profile-stat">
+              <strong id="profileBreaks">0</strong>
+              <span>Total breaks</span>
+            </div>
+            <div class="profile-stat">
+              <strong id="profileLongestBreak">0m</strong>
+              <span>Longest</span>
+            </div>
+            <div class="profile-stat">
+              <strong id="profileLate">0</strong>
+              <span>Late logs</span>
+            </div>
+          </div>
         </div>
 
         <div class="card">
           <h3 style="margin-top:0;">Staff information</h3>
           <p id="profileInfo" class="small"></p>
+        </div>
+
+        <div class="card manager-admin-only">
+          <h3 style="margin-top:0;">Attendance / lateness log</h3>
+          <input type="hidden" id="attendanceStaffId" />
+
+          <div class="two-grid">
+            <div>
+              <label>Scheduled start</label>
+              <input type="time" id="attendanceScheduled" />
+            </div>
+            <div>
+              <label>Actual arrival</label>
+              <input type="time" id="attendanceActual" />
+            </div>
+          </div>
+
+          <label>Note</label>
+          <input id="attendanceNote" placeholder="Example: 8 mins late, messaged ahead..." />
+
+          <button class="primary-btn" onclick="saveAttendanceLog()">Save Attendance Log</button>
         </div>
 
         <div class="card admin-only">
@@ -1189,12 +1449,24 @@
             <option>Flexible</option>
           </select>
 
+          <label>Staff status</label>
+          <select id="editStaffStatus">
+            <option>Standard</option>
+            <option>New Starter</option>
+            <option>On Probation</option>
+          </select>
+
           <button class="primary-btn" onclick="saveStaffEdit()">Save Changes</button>
         </div>
 
         <div class="card">
           <h3 style="margin-top:0;">Latest mentions</h3>
           <div id="profileMentions"></div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top:0;">Attendance history</h3>
+          <div id="profileAttendance"></div>
         </div>
 
         <button class="secondary-btn" onclick="closeStaffProfile()">Close Profile</button>
@@ -1292,8 +1564,8 @@
         <textarea id="exportText" style="min-height:220px;margin-top:12px;"></textarea>
       </div>
 
-      <div class="section-title admin-only">Settings</div>
-      <div class="card admin-only">
+      <div class="section-title">Settings</div>
+      <div class="card">
         <label>Current user</label>
         <select id="currentUserSelect" onchange="changeCurrentUser()"></select>
 
@@ -1319,14 +1591,14 @@
         </select>
 
         <button class="secondary-btn" onclick="logout()">Log out</button>
-        <button class="secondary-btn" onclick="resetPrototype()">Reset Prototype Data</button>
+        <button class="secondary-btn admin-only" onclick="resetPrototype()">Reset Prototype Data</button>
       </div>
 
       <div class="section-title">Access info</div>
       <div class="card">
         <p class="small"><strong>Supervisor:</strong> handovers, breaks, staff viewing, conduct notes, equipment issues and exports.</p>
-        <p class="small"><strong>Manager:</strong> supervisor tools plus audits, manager checks, final sign-off and audit history.</p>
-        <p class="small"><strong>Admin:</strong> everything plus staff editing, app settings and reset controls.</p>
+        <p class="small"><strong>Manager:</strong> supervisor tools plus audits, manager checks, final sign-off, audit history and attendance logging.</p>
+        <p class="small"><strong>Admin:</strong> everything plus staff editing, probation/new starter status, app settings and reset controls.</p>
       </div>
     </main>
 
@@ -1357,7 +1629,7 @@
   </div>
 
   <script>
-      const structure = {
+    const structure = {
       lobby: {
         name: "Lobby",
         colour: "lobby-bg",
@@ -1503,9 +1775,16 @@
       "Team presentation and service standards"
     ];
 
+    const pressureDefaults = {
+      "Lobby": { level: "Green", note: "Under control", updatedBy: "System", updatedAt: "-" },
+      "Backlot": { level: "Green", note: "Under control", updatedBy: "System", updatedAt: "-" },
+      "Hogwarts Table": { level: "Green", note: "Under control", updatedBy: "System", updatedAt: "-" }
+    };
+
     let selectedDate = todayISO();
     let currentBoardArea = "lobby";
     let draggedStaffId = null;
+    let currentTaskFilter = "Open";
 
     let wizard = {
       main: null,
@@ -1534,7 +1813,9 @@
       conductNotes: [],
       incidents: [],
       equipmentLogs: [],
-      audits: []
+      audits: [],
+      attendanceLogs: [],
+      pressures: {}
     };
 
     function todayISO() {
@@ -1605,6 +1886,19 @@
       return state.shiftBoards[selectedDate][area];
     }
 
+    function dayPressure() {
+      if (!state.pressures[selectedDate]) {
+        state.pressures[selectedDate] = JSON.parse(JSON.stringify(pressureDefaults));
+      }
+      return state.pressures[selectedDate];
+    }
+
+    function isTourOpen() {
+      const now = new Date();
+      const mins = now.getHours() * 60 + now.getMinutes();
+      return mins >= 510 && mins <= 1320;
+    }
+
     function init() {
       loadState();
 
@@ -1623,6 +1917,11 @@
       } else {
         document.getElementById("loginScreen").classList.add("hidden");
       }
+
+      setInterval(() => {
+        renderPressure();
+        renderHomeStatsOnly();
+      }, 60000);
     }
 
     function renderAll() {
@@ -1642,25 +1941,34 @@
       applySettings(false);
     }
 
+    function renderHomeStatsOnly() {
+      const allSectionKeys = getAllSectionKeys();
+      const done = allSectionKeys.filter(k => dayHandovers()[k]).length;
+      document.getElementById("homeSectionsDone").innerText = `${done}/${allSectionKeys.length}`;
+      document.getElementById("homeUrgent").innerText = getUrgentItems().length;
+      document.getElementById("homeBreaks").innerText = getTodayBreaks().length;
+      updateHandoverProgressBar();
+    }
+
     function saveState() {
-      localStorage.setItem("shiftflow_v5_state", JSON.stringify(state));
+      localStorage.setItem("shiftflow_v6_state", JSON.stringify(state));
     }
 
     function loadState() {
-      const saved = JSON.parse(localStorage.getItem("shiftflow_v5_state") || "{}");
+      const saved = JSON.parse(localStorage.getItem("shiftflow_v6_state") || "{}");
 
       const defaultStaff = [
-        { id: "s1", name: "James", clock: "10001", role: "Supervisor", area: "Backlot" },
-        { id: "s2", name: "Ella", clock: "10002", role: "General Assistant", area: "Lobby" },
-        { id: "s3", name: "Aaron", clock: "10003", role: "General Assistant", area: "Backlot" },
-        { id: "s4", name: "Freya", clock: "10004", role: "General Assistant", area: "Lobby" },
-        { id: "s5", name: "Noah", clock: "10005", role: "General Assistant", area: "Hogwarts Table" }
+        { id: "s1", name: "James", clock: "10001", role: "Supervisor", area: "Backlot", status: "Standard" },
+        { id: "s2", name: "Ella", clock: "10002", role: "General Assistant", area: "Lobby", status: "Standard" },
+        { id: "s3", name: "Aaron", clock: "10003", role: "General Assistant", area: "Backlot", status: "Standard" },
+        { id: "s4", name: "Freya", clock: "10004", role: "General Assistant", area: "Lobby", status: "New Starter" },
+        { id: "s5", name: "Noah", clock: "10005", role: "General Assistant", area: "Hogwarts Table", status: "On Probation" }
       ];
 
       state = {
         currentUserId: saved.currentUserId || null,
         currentRole: saved.currentRole || "Supervisor",
-        staff: saved.staff && saved.staff.length ? saved.staff : defaultStaff,
+        staff: saved.staff && saved.staff.length ? saved.staff.map(s => ({ status: "Standard", ...s })) : defaultStaff,
         handovers: saved.handovers || {},
         drafts: saved.drafts || {},
         signoffs: saved.signoffs || {},
@@ -1672,7 +1980,9 @@
         conductNotes: saved.conductNotes || [],
         incidents: saved.incidents || [],
         equipmentLogs: saved.equipmentLogs || [],
-        audits: saved.audits || []
+        audits: saved.audits || [],
+        attendanceLogs: saved.attendanceLogs || [],
+        pressures: saved.pressures || {}
       };
 
       if (!state.currentUserId && state.staff.length) state.currentUserId = state.staff[0].id;
@@ -1684,8 +1994,7 @@
       t.classList.add("show");
       setTimeout(() => t.classList.remove("show"), 1700);
     }
-
-    function login() {
+        function login() {
       state.currentUserId = document.getElementById("loginName").value;
       state.currentRole = document.getElementById("loginRole").value;
       saveState();
@@ -1696,17 +2005,6 @@
 
     function logout() {
       document.getElementById("loginScreen").classList.remove("hidden");
-    }
-
-    function switchDemoRole(role) {
-      state.currentRole = role;
-
-      const roleSelect = document.getElementById("roleSelect");
-      if (roleSelect) roleSelect.value = role;
-
-      saveState();
-      renderAll();
-      toast(`Demo role: ${role}`);
     }
 
     function openPage(pageId, btn) {
@@ -1762,10 +2060,6 @@
       document.querySelectorAll(".admin-only").forEach(el => {
         el.classList.toggle("hidden", !isAdmin());
       });
-
-      document.getElementById("demoSupervisorChip")?.classList.toggle("active", state.currentRole === "Supervisor");
-      document.getElementById("demoManagerChip")?.classList.toggle("active", state.currentRole === "Manager");
-      document.getElementById("demoAdminChip")?.classList.toggle("active", state.currentRole === "Admin");
     }
 
     function renderHome() {
@@ -1784,6 +2078,9 @@
       const hasDraft = Object.keys(dayDrafts()).length > 0;
       document.getElementById("startHandoverBtn").innerText = hasDraft ? "Continue Today’s Handover" : "Start Today’s Handover";
 
+      updateHandoverProgressBar();
+      renderPressure();
+      renderTasksBoard();
       renderTodayProgress();
       renderUrgentActions();
       renderUnresolvedIssues();
@@ -1814,6 +2111,211 @@
       return null;
     }
 
+    function updateHandoverProgressBar() {
+      const all = getAllSectionKeys();
+      const done = all.filter(k => dayHandovers()[k]).length;
+      const percent = all.length ? Math.round((done / all.length) * 100) : 0;
+
+      document.getElementById("handoverProgressText").innerText =
+        `${percent}% complete · ${done} of ${all.length} sections submitted`;
+
+      document.getElementById("handoverProgressFill").style.width = `${percent}%`;
+    }
+
+    function renderPressure() {
+      const open = isTourOpen();
+      const statusBox = document.getElementById("tourOpenStatus");
+      const controls = document.getElementById("pressureControls");
+      const pressureCards = document.getElementById("pressureCards");
+
+      if (!statusBox || !pressureCards) return;
+
+      if (!open) {
+        statusBox.className = "row";
+        statusBox.innerHTML = `
+          <div>
+            <h4>Tour is not open</h4>
+            <p>Live pressure controls are hidden outside 08:30–22:00.</p>
+          </div>
+          <span class="pill">Closed</span>
+        `;
+
+        if (controls) controls.classList.add("hidden");
+
+        pressureCards.innerHTML = Object.keys(pressureDefaults).map(area => `
+          <div class="pressure-card">
+            <div class="row" style="margin:0;">
+              <div>
+                <h4>${area}</h4>
+                <p>Tour is not open</p>
+              </div>
+              <span class="traffic-dot traffic-closed"></span>
+            </div>
+          </div>
+        `).join("");
+
+        return;
+      }
+
+      if (controls) controls.classList.remove("hidden");
+
+      statusBox.className = "row green-bg";
+      statusBox.innerHTML = `
+        <div>
+          <h4>Tour is open</h4>
+          <p>Live pressure system active until 22:00.</p>
+        </div>
+        <span class="pill green">Live</span>
+      `;
+
+      const pressure = dayPressure();
+
+      pressureCards.innerHTML = Object.keys(pressure).map(area => {
+        const p = pressure[area];
+        const colourClass = p.level === "Red" ? "red-bg" : p.level === "Amber" ? "amber-bg" : "green-bg";
+        const dotClass = p.level === "Red" ? "traffic-red" : p.level === "Amber" ? "traffic-amber" : "traffic-green";
+
+        return `
+          <div class="pressure-card ${colourClass}">
+            <div class="row" style="margin:0; background:transparent; border:none; padding:0;">
+              <div>
+                <h4>${area}</h4>
+                <p>${p.level} · ${p.note || "No note"}</p>
+                <p>Updated by ${p.updatedBy || "Unknown"} · ${p.updatedAt || "-"}</p>
+              </div>
+              <span class="traffic-dot ${dotClass}"></span>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function updatePressure() {
+      if (!isTourOpen()) return toast("Tour is not open");
+
+      const area = document.getElementById("pressureArea").value;
+      const levelRaw = document.getElementById("pressureLevel").value;
+      const note = document.getElementById("pressureNote").value.trim();
+
+      const level = levelRaw.startsWith("Red") ? "Red" : levelRaw.startsWith("Amber") ? "Amber" : "Green";
+
+      dayPressure()[area] = {
+        level,
+        note: note || (level === "Green" ? "Under control" : level === "Amber" ? "Busy, monitor closely" : "Support needed"),
+        updatedBy: currentUser()?.name || "Unknown",
+        updatedAt: nowTime()
+      };
+
+      document.getElementById("pressureNote").value = "";
+
+      saveState();
+      renderPressure();
+      renderAreaStatusCards();
+      renderSummaryIfOpen();
+      toast(`${area} pressure updated`);
+    }
+
+    function addManualTask() {
+      const text = document.getElementById("taskText").value.trim();
+      const owner = document.getElementById("taskOwner").value.trim();
+      const priority = document.getElementById("taskPriority").value;
+
+      if (!text) return toast("Add task details");
+
+      dayTasks().push({
+        id: makeId(),
+        text,
+        owner: owner || "Unassigned",
+        due: selectedDate,
+        source: "Manual task",
+        priority,
+        status: "Open",
+        done: false,
+        createdBy: currentUser()?.name || "Unknown",
+        createdAt: nowTime()
+      });
+
+      document.getElementById("taskText").value = "";
+      document.getElementById("taskOwner").value = "";
+      document.getElementById("taskPriority").value = "Medium";
+
+      saveState();
+      renderTasksBoard();
+      renderUrgentActions();
+      renderSummaryIfOpen();
+      toast("Task added");
+    }
+
+    function setTaskFilter(status) {
+      currentTaskFilter = status;
+
+      document.getElementById("taskOpenChip").classList.toggle("active", status === "Open");
+      document.getElementById("taskProgressChip").classList.toggle("active", status === "In Progress");
+      document.getElementById("taskDoneChip").classList.toggle("active", status === "Complete");
+
+      renderTasksBoard();
+    }
+
+    function taskStatus(task) {
+      if (task.status) return task.status;
+      if (task.done) return "Complete";
+      return "Open";
+    }
+
+    function updateTaskStatus(taskId, status) {
+      const task = dayTasks().find(t => t.id === taskId);
+      if (!task) return;
+
+      task.status = status;
+      task.done = status === "Complete";
+
+      saveState();
+      renderTasksBoard();
+      renderUrgentActions();
+      renderSummaryIfOpen();
+      toast(`Task moved to ${status}`);
+    }
+
+    function renderTasksBoard() {
+      const box = document.getElementById("tasksBoard");
+      if (!box) return;
+
+      document.getElementById("taskOpenChip")?.classList.toggle("active", currentTaskFilter === "Open");
+      document.getElementById("taskProgressChip")?.classList.toggle("active", currentTaskFilter === "In Progress");
+      document.getElementById("taskDoneChip")?.classList.toggle("active", currentTaskFilter === "Complete");
+
+      const tasks = dayTasks().filter(t => taskStatus(t) === currentTaskFilter);
+
+      if (!tasks.length) {
+        box.innerHTML = `<p class="small">No ${currentTaskFilter.toLowerCase()} tasks.</p>`;
+        return;
+      }
+
+      box.innerHTML = tasks.map(t => {
+        const status = taskStatus(t);
+        const priorityClass = t.priority === "Urgent" ? "red" : t.priority === "High" ? "amber" : "green";
+
+        return `
+          <div class="task-card">
+            <div class="row" style="margin:0; padding:0; background:transparent; border:none;">
+              <div>
+                <h4>${t.text}</h4>
+                <p>${t.source || "Task"} · Owner: ${t.owner || "Unassigned"} · Due: ${t.due || selectedDate}</p>
+                <p>Priority: ${t.priority || "Medium"} · Status: ${status}</p>
+              </div>
+              <span class="pill ${priorityClass}">${t.priority || "Medium"}</span>
+            </div>
+
+            <div class="three-grid" style="margin-top:10px;">
+              <button class="tiny-btn light" onclick="updateTaskStatus('${t.id}', 'Open')">Open</button>
+              <button class="tiny-btn light" onclick="updateTaskStatus('${t.id}', 'In Progress')">Progress</button>
+              <button class="tiny-btn" onclick="updateTaskStatus('${t.id}', 'Complete')">Complete</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
     function renderTodayProgress() {
       const box = document.getElementById("todayProgress");
       const all = getAllSectionKeys();
@@ -1822,6 +2324,7 @@
       const signoff = state.signoffs[selectedDate];
       const planned = dayTeam().length;
       const teamAssigned = getAssignedStaffCount();
+      const openTasks = dayTasks().filter(t => taskStatus(t) !== "Complete").length;
 
       box.innerHTML = `
         <div class="row">
@@ -1830,6 +2333,13 @@
             <p>${done} of ${all.length} submitted · ${drafts} draft${drafts === 1 ? "" : "s"}</p>
           </div>
           <span class="pill">${Math.round((done / all.length) * 100)}%</span>
+        </div>
+        <div class="row">
+          <div>
+            <h4>Tasks board</h4>
+            <p>${openTasks} open/in-progress task${openTasks === 1 ? "" : "s"} for today.</p>
+          </div>
+          <span class="pill">${openTasks}</span>
         </div>
         <div class="row">
           <div>
@@ -1864,18 +2374,15 @@
         return;
       }
 
-      box.innerHTML = "";
-      urgent.forEach(item => {
-        box.innerHTML += `
-          <div class="row">
-            <div>
-              <h4>${item.title}</h4>
-              <p>${item.detail}</p>
-            </div>
-            <span class="pill red">Urgent</span>
+      box.innerHTML = urgent.map(item => `
+        <div class="row">
+          <div>
+            <h4>${item.title}</h4>
+            <p>${item.detail}</p>
           </div>
-        `;
-      });
+          <span class="pill red">Urgent</span>
+        </div>
+      `).join("");
     }
 
     function getUrgentItems() {
@@ -1890,7 +2397,7 @@
         }
       });
 
-      dayTasks().filter(t => !t.done).forEach(t => {
+      dayTasks().filter(t => taskStatus(t) !== "Complete" && (t.priority === "Urgent" || t.priority === "High")).forEach(t => {
         items.push({
           title: t.source || "Open task",
           detail: t.text
@@ -1902,6 +2409,15 @@
           title: `${b.staffName} break over 35 minutes`,
           detail: `${b.duration} minutes logged today.`
         });
+      });
+
+      Object.entries(dayPressure()).forEach(([area, p]) => {
+        if (p.level === "Red") {
+          items.push({
+            title: `${area} pressure is red`,
+            detail: p.note || "Support needed."
+          });
+        }
       });
 
       state.equipmentLogs
@@ -1993,6 +2509,11 @@
           return h && (h.status === "Red" || h.priority === "Urgent" || h.actionRequired === "Action required");
         }).length;
 
+        const pressureName = main.name === "Hogwarts Table" ? "Hogwarts Table" : main.name;
+        const pressure = dayPressure()[pressureName];
+        const pressureClass = pressure?.level === "Red" ? "red" : pressure?.level === "Amber" ? "amber" : "green";
+        const dot = pressure?.level === "Red" ? "traffic-red" : pressure?.level === "Amber" ? "traffic-amber" : "traffic-green";
+
         const auditButton = hasManagerAccess()
           ? `<button class="tiny-btn light" onclick="event.stopPropagation(); openAuditBuilder('${main.name}')">Audit</button>`
           : "";
@@ -2002,9 +2523,10 @@
             <div>
               <h4>${main.name}</h4>
               <p>${done}/${keys.length} sections complete · ${urgent} urgent/action item${urgent === 1 ? "" : "s"}</p>
+              <p><span class="traffic-dot ${dot}" style="width:10px;height:10px;"></span> Pressure: ${pressure?.level || "Green"} · ${pressure?.note || "Under control"}</p>
             </div>
             <div>
-              <span class="pill">${done === keys.length ? "Complete" : "Open"}</span>
+              <span class="pill ${pressureClass}">${done === keys.length ? "Complete" : "Open"}</span>
               ${auditButton}
             </div>
           </div>
@@ -2036,34 +2558,76 @@
         `;
       }).join("");
     }
-
-    function addToTodayTeam() {
+        function addToTodayTeam() {
       const staffId = document.getElementById("teamStaff").value;
       const startTime = document.getElementById("teamStartTime").value;
+      const arrivalTime = document.getElementById("teamArrivalTime").value;
       const breakTime = document.getElementById("teamBreakTime").value;
 
-      if (!staffId || !startTime) return toast("Add staff and start time");
+      if (!staffId || !startTime) return toast("Add staff and scheduled start time");
 
       const team = dayTeam();
       const existing = team.find(t => t.staffId === staffId);
 
       if (existing) {
         existing.startTime = startTime;
+        existing.arrivalTime = arrivalTime || existing.arrivalTime || "";
         existing.breakTime = breakTime || existing.breakTime || suggestBreakTime(startTime);
       } else {
         team.push({
           id: makeId(),
           staffId,
           startTime,
+          arrivalTime: arrivalTime || "",
           breakTime: breakTime || suggestBreakTime(startTime)
         });
       }
 
       team.sort((a, b) => a.startTime.localeCompare(b.startTime));
 
+      if (arrivalTime) {
+        createAttendanceFromTeam(staffId, startTime, arrivalTime);
+      }
+
+      document.getElementById("teamStartTime").value = "";
+      document.getElementById("teamArrivalTime").value = "";
+      document.getElementById("teamBreakTime").value = "";
+
       saveState();
       renderAll();
       toast("Added to Today’s Team");
+    }
+
+    function createAttendanceFromTeam(staffId, scheduled, actual) {
+      const late = minutesBetween(scheduled, actual);
+      const existing = state.attendanceLogs.find(l => l.staffId === staffId && l.date === selectedDate && l.source === "Today’s Team");
+
+      const log = {
+        id: existing?.id || makeId(),
+        staffId,
+        staffName: getStaff(staffId)?.name || "Unknown",
+        date: selectedDate,
+        scheduled,
+        actual,
+        lateMinutes: late > 0 ? late : 0,
+        note: late > 0 ? `${late} minute${late === 1 ? "" : "s"} late` : "On time",
+        by: currentUser()?.name || "Unknown",
+        source: "Today’s Team",
+        time: nowTime()
+      };
+
+      if (existing) {
+        Object.assign(existing, log);
+      } else {
+        state.attendanceLogs.unshift(log);
+      }
+    }
+
+    function minutesBetween(start, end) {
+      if (!start || !end) return 0;
+      const [sh, sm] = start.split(":").map(Number);
+      const [eh, em] = end.split(":").map(Number);
+      return (eh * 60 + em) - (sh * 60 + sm);
     }
 
     function removeFromTodayTeam(staffId) {
@@ -2118,11 +2682,15 @@
       box.innerHTML = team.map(t => {
         const s = getStaff(t.staffId);
         const assignment = getStaffAssignment(t.staffId);
+        const late = t.arrivalTime ? minutesBetween(t.startTime, t.arrivalTime) : 0;
+        const lateText = t.arrivalTime ? (late > 0 ? `${late}m late` : "On time") : "Arrival not logged";
+
         return `
           <div class="row">
             <div>
               <h4>${s?.name || "Unknown"} · ${s?.clock || ""}</h4>
-              <p>Start ${t.startTime} · Break ${t.breakTime || "not planned"} · ${assignment || "Unassigned"}</p>
+              <p>Scheduled ${t.startTime} · Arrival ${t.arrivalTime || "-"} · ${lateText}</p>
+              <p>Break ${t.breakTime || "not planned"} · ${assignment || "Unassigned"}</p>
             </div>
             <button class="tiny-btn light admin-only" onclick="removeFromTodayTeam('${t.staffId}')">Remove</button>
           </div>
@@ -2221,13 +2789,26 @@
 
     function magnetHTML(staffId) {
       const s = getStaff(staffId);
+      const roleClass =
+        s?.role === "Supervisor" ? "supervisor" :
+        s?.role === "Manager" ? "manager" :
+        s?.role === "Admin" ? "admin" : "";
+
+      const statusClass =
+        s?.status === "New Starter" ? "new-starter" :
+        s?.status === "On Probation" ? "probation" : "";
+
+      const activeBreak = state.activeBreaks[staffId] ? `<span class="mini-badge">Break</span>` : "";
+      const starter = s?.status === "New Starter" ? `<span class="mini-badge">New</span>` : "";
+      const probation = s?.status === "On Probation" ? `<span class="mini-badge">Probation</span>` : "";
+
       return `
-        <button class="magnet"
+        <button class="magnet ${roleClass} ${statusClass}"
                 data-staff-id="${staffId}"
                 draggable="true"
                 ondragstart="dragStaff(event, '${staffId}')"
                 ondragend="endDrag(event)">
-          ${s?.name || "Unknown"}
+          ${s?.name || "Unknown"} ${activeBreak}${starter}${probation}
         </button>
       `;
     }
@@ -2521,7 +3102,7 @@
           <span class="pill">${data.status}</span>
         </div>
         ${data.actionRequired === "Action required" ? `
-          <div class="row danger-bg">
+          <div class="row red-bg">
             <div>
               <h4>Action required</h4>
               <p>${data.actionText}</p>
@@ -2564,6 +3145,7 @@
           due: data.actionDue || selectedDate,
           source: `${data.mainName} — ${data.sectionName}`,
           priority: data.priority,
+          status: "Open",
           done: false
         });
       }
@@ -2725,6 +3307,7 @@
             due: q.actionDue || selectedDate,
             source: `Audit — ${audit.area}`,
             priority: q.result === "Fail" ? "Urgent" : "High",
+            status: "Open",
             done: false
           });
         }
@@ -2824,8 +3407,18 @@
       const equipmentOpen = state.equipmentLogs.filter(e => e.status !== "Fixed");
       const auditsToday = state.audits.filter(a => a.date === selectedDate);
       const deployment = getDeploymentSummary();
+      const pressures = dayPressure();
+      const openTasks = dayTasks().filter(t => taskStatus(t) !== "Complete");
 
       box.innerHTML = `
+        <h4>Live area pressure</h4>
+        <ul>
+          ${Object.keys(pressures).map(area => `<li><strong>${area}:</strong> ${pressures[area].level} · ${pressures[area].note}</li>`).join("")}
+        </ul>
+
+        <h4>Tasks</h4>
+        ${openTasks.length ? `<ul>${openTasks.map(t => `<li><strong>${t.priority}:</strong> ${t.text} · Owner: ${t.owner || "Unassigned"} · ${taskStatus(t)}</li>`).join("")}</ul>` : `<p>No open tasks.</p>`}
+
         <h4>Break control</h4>
         <ul>
           <li><strong>Breaks completed today:</strong> ${completedBreaks.length}</li>
@@ -2927,6 +3520,7 @@
       const clock = document.getElementById("newStaffClock").value.trim();
       const role = document.getElementById("newStaffRole").value;
       const area = document.getElementById("newStaffArea").value;
+      const status = document.getElementById("newStaffStatus").value;
 
       if (!name) return toast("Add staff name");
 
@@ -2935,11 +3529,13 @@
         name,
         clock: clock || "No clock-in",
         role,
-        area
+        area,
+        status
       });
 
       document.getElementById("newStaffName").value = "";
       document.getElementById("newStaffClock").value = "";
+      document.getElementById("newStaffStatus").value = "Standard";
       document.getElementById("addStaffPanel").classList.remove("open");
 
       saveState();
@@ -2953,7 +3549,7 @@
       let staff = state.staff;
 
       if (q) {
-        staff = staff.filter(s => `${s.name} ${s.clock} ${s.role} ${s.area}`.toLowerCase().includes(q));
+        staff = staff.filter(s => `${s.name} ${s.clock} ${s.role} ${s.area} ${s.status}`.toLowerCase().includes(q));
       }
 
       box.innerHTML = "";
@@ -2964,15 +3560,17 @@
         const team = dayTeam().find(t => t.staffId === s.id);
         const active = state.activeBreaks[s.id];
 
+        const statusBadge = s.status && s.status !== "Standard" ? ` · ${s.status}` : "";
+
         box.innerHTML += `
           <div class="row" onclick="openStaffProfile('${s.id}')">
             <div>
               <h4>${s.name}</h4>
-              <p>${s.role} · ${s.area} · Clock-in ${s.clock}</p>
-              <p>${stats.good} good · ${stats.bad} bad · ${stats.avgBreak}m avg break</p>
+              <p>${s.role} · ${s.area}${statusBadge} · Clock-in ${s.clock}</p>
+              <p>${stats.good} good · ${stats.bad} bad · ${stats.avgBreak}m avg break · ${stats.lateCount} late logs</p>
               <p>${team ? `Today: ${team.startTime} start · ${assignment || "Unassigned"}` : "Not added to today’s team"}${active ? " · On break" : ""}</p>
             </div>
-            <span class="pill">${active ? "Break" : "Open"}</span>
+            <span class="pill">${active ? "Break" : s.status || "Open"}</span>
           </div>
         `;
       });
@@ -2991,23 +3589,51 @@
       document.getElementById("profileGood").innerText = stats.good;
       document.getElementById("profileBad").innerText = stats.bad;
       document.getElementById("profileAvgBreak").innerText = `${stats.avgBreak}m`;
+      document.getElementById("profileBreaks").innerText = stats.totalBreaks;
+      document.getElementById("profileLongestBreak").innerText = `${stats.longestBreak}m`;
+      document.getElementById("profileLate").innerText = stats.lateCount;
+
+      const badges = [
+        `<span class="pill">${s.role}</span>`,
+        `<span class="pill">${s.area}</span>`
+      ];
+
+      if (s.status && s.status !== "Standard") {
+        badges.push(`<span class="pill ${s.status === "On Probation" ? "red" : "amber"}">${s.status}</span>`);
+      }
+
+      if (state.activeBreaks[id]) {
+        badges.push(`<span class="pill blue">On break</span>`);
+      }
+
+      if (assignment) {
+        badges.push(`<span class="pill green">${assignment}</span>`);
+      }
+
+      document.getElementById("profileBadges").innerHTML = badges.join("");
 
       document.getElementById("profileInfo").innerText =
-        `Clock-in number: ${s.clock}. Usual area: ${s.area}. Today: ${team ? `${team.startTime} start, ${team.breakTime || "no planned break"}` : "not planned today"}. Assignment: ${assignment || "unassigned"}. Total breaks logged: ${stats.totalBreaks}. Longest break: ${stats.longestBreak}m.`;
+        `Clock-in number: ${s.clock}. Usual area: ${s.area}. Status: ${s.status || "Standard"}. Today: ${team ? `${team.startTime} scheduled, ${team.arrivalTime || "arrival not logged"}, ${team.breakTime || "no planned break"} break` : "not planned today"}. Assignment: ${assignment || "unassigned"}.`;
 
       document.getElementById("editStaffId").value = s.id;
       document.getElementById("editStaffName").value = s.name;
       document.getElementById("editStaffClock").value = s.clock;
       document.getElementById("editStaffRole").value = s.role;
       document.getElementById("editStaffArea").value = s.area;
+      document.getElementById("editStaffStatus").value = s.status || "Standard";
+
+      document.getElementById("attendanceStaffId").value = s.id;
+      document.getElementById("attendanceScheduled").value = team?.startTime || "";
+      document.getElementById("attendanceActual").value = team?.arrivalTime || "";
+      document.getElementById("attendanceNote").value = "";
 
       const notes = state.conductNotes.filter(n => n.staffId === id).slice(0, 8);
-      const box = document.getElementById("profileMentions");
+      const mentionBox = document.getElementById("profileMentions");
 
       if (!notes.length) {
-        box.innerHTML = `<p class="small">No mentions logged yet.</p>`;
+        mentionBox.innerHTML = `<p class="small">No mentions logged yet.</p>`;
       } else {
-        box.innerHTML = notes.map(n => `
+        mentionBox.innerHTML = notes.map(n => `
           <div class="row">
             <div>
               <h4>${n.type}</h4>
@@ -3018,8 +3644,29 @@
         `).join("");
       }
 
+      renderProfileAttendance(id);
       renderPermissions();
       document.getElementById("staffProfilePanel").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function renderProfileAttendance(id) {
+      const box = document.getElementById("profileAttendance");
+      const logs = state.attendanceLogs.filter(l => l.staffId === id).slice(0, 10);
+
+      if (!logs.length) {
+        box.innerHTML = `<p class="small">No attendance logs yet.</p>`;
+        return;
+      }
+
+      box.innerHTML = logs.map(l => `
+        <div class="row">
+          <div>
+            <h4>${formatDate(l.date)} · ${l.lateMinutes > 0 ? `${l.lateMinutes}m late` : "On time"}</h4>
+            <p>Scheduled ${l.scheduled || "-"} · Actual ${l.actual || "-"} · ${l.note || "No note"}</p>
+          </div>
+          <span class="pill ${l.lateMinutes > 0 ? "red" : "green"}">${l.lateMinutes > 0 ? "Late" : "On time"}</span>
+        </div>
+      `).join("");
     }
 
     function closeStaffProfile() {
@@ -3037,6 +3684,7 @@
       staff.clock = document.getElementById("editStaffClock").value.trim() || staff.clock;
       staff.role = document.getElementById("editStaffRole").value;
       staff.area = document.getElementById("editStaffArea").value;
+      staff.status = document.getElementById("editStaffStatus").value;
 
       saveState();
       renderAll();
@@ -3044,17 +3692,58 @@
       toast("Staff updated");
     }
 
+    function saveAttendanceLog() {
+      if (!hasManagerAccess()) return toast("Manager/Admin only");
+
+      const staffId = document.getElementById("attendanceStaffId").value;
+      const staff = getStaff(staffId);
+      const scheduled = document.getElementById("attendanceScheduled").value;
+      const actual = document.getElementById("attendanceActual").value;
+      const note = document.getElementById("attendanceNote").value.trim();
+
+      if (!scheduled || !actual) return toast("Add scheduled and actual time");
+
+      const late = Math.max(0, minutesBetween(scheduled, actual));
+
+      state.attendanceLogs.unshift({
+        id: makeId(),
+        staffId,
+        staffName: staff?.name || "Unknown",
+        date: selectedDate,
+        scheduled,
+        actual,
+        lateMinutes: late,
+        note: note || (late > 0 ? `${late} minute${late === 1 ? "" : "s"} late` : "On time"),
+        by: currentUser()?.name || "Unknown",
+        source: "Manual",
+        time: nowTime()
+      });
+
+      const team = dayTeam().find(t => t.staffId === staffId);
+      if (team) {
+        team.startTime = scheduled;
+        team.arrivalTime = actual;
+      }
+
+      saveState();
+      renderAll();
+      openStaffProfile(staffId);
+      toast("Attendance saved");
+    }
+
     function getStaffStats(id) {
       const notes = state.conductNotes.filter(n => n.staffId === id);
       const breaks = state.breakHistory.filter(b => b.staffId === id);
+      const attendance = state.attendanceLogs.filter(l => l.staffId === id);
 
       const good = notes.filter(n => n.type === "Shout-out").length;
       const bad = notes.filter(n => n.type === "Conduct issue" || n.type === "Service issue").length;
       const totalBreaks = breaks.length;
       const avgBreak = breaks.length ? Math.round(breaks.reduce((sum, b) => sum + b.duration, 0) / breaks.length) : 0;
       const longestBreak = breaks.length ? Math.max(...breaks.map(b => b.duration)) : 0;
+      const lateCount = attendance.filter(l => l.lateMinutes > 0).length;
 
-      return { good, bad, totalBreaks, avgBreak, longestBreak };
+      return { good, bad, totalBreaks, avgBreak, longestBreak, lateCount };
     }
 
     function renderBreakPlannerTable() {
@@ -3502,10 +4191,11 @@
       const done = all.filter(k => dayHandovers()[k]).length;
       const urgent = getUrgentItems().length;
       const missingBreaks = getPeopleNoBreakToday().length;
+      const openTasks = dayTasks().filter(t => taskStatus(t) !== "Complete").length;
 
-      if (done < all.length || urgent > 0 || missingBreaks > 0) {
+      if (done < all.length || urgent > 0 || missingBreaks > 0 || openTasks > 0) {
         const proceed = confirm(
-          `Sign-off check:\n\n${done}/${all.length} handover sections complete\n${urgent} urgent/open actions\n${missingBreaks} team members without a break logged\n\nSign off anyway?`
+          `Sign-off check:\n\n${done}/${all.length} handover sections complete\n${urgent} urgent actions\n${openTasks} open tasks\n${missingBreaks} team members without a break logged\n\nSign off anyway?`
         );
         if (!proceed) return;
       }
@@ -3535,10 +4225,26 @@
       const breaks = getTodayBreaks();
       const over35 = getTodayOver35();
       const deployment = getDeploymentSummary();
+      const pressures = dayPressure();
+      const openTasks = dayTasks().filter(t => taskStatus(t) !== "Complete");
 
       let text = `ShiftFlow Summary — ${formatDate(selectedDate)}\n\n`;
 
-      text += `TEAM DEPLOYMENT\n`;
+      text += `LIVE AREA PRESSURE\n`;
+      Object.keys(pressures).forEach(area => {
+        text += `${area}: ${pressures[area].level} — ${pressures[area].note} — updated by ${pressures[area].updatedBy} at ${pressures[area].updatedAt}\n`;
+      });
+
+      text += `\nOPEN TASKS\n`;
+      if (!openTasks.length) {
+        text += `No open tasks.\n`;
+      } else {
+        openTasks.forEach(t => {
+          text += `- ${t.priority}: ${t.text} | Owner: ${t.owner || "Unassigned"} | Status: ${taskStatus(t)}\n`;
+        });
+      }
+
+      text += `\nTEAM DEPLOYMENT\n`;
       if (deployment.length) {
         deployment.forEach(d => text += `${d.area} — ${d.zone}: ${d.names}\n`);
       } else {
@@ -3603,7 +4309,7 @@
       document.getElementById("rolePill").innerText = role;
       document.getElementById("roleText").innerText = `${role} Access · ${currentUser()?.name || ""}`;
 
-      localStorage.setItem("shiftflow_v5_settings", JSON.stringify({ theme, accent }));
+      localStorage.setItem("shiftflow_v6_settings", JSON.stringify({ theme, accent }));
       saveState();
       renderPermissions();
 
@@ -3640,7 +4346,9 @@
         conductNotes: [],
         incidents: [],
         equipmentLogs: [],
-        audits: []
+        audits: [],
+        attendanceLogs: [],
+        pressures: {}
       };
 
       selectedDate = todayISO();
@@ -3653,3 +4361,4 @@
   </script>
 </body>
 </html>
+    
