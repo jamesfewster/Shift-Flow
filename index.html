@@ -1367,12 +1367,12 @@
     }
 
     .summary-output {
-      background: #111827;
-      color: white;
-      padding: 14px;
-      border-radius: var(--r-lg);
+      background: transparent;
+      color: var(--text);
+      padding: 0;
+      border-radius: 0;
       font-size: var(--font-sm);
-      line-height: 1.45;
+      line-height: 1.4;
       margin-bottom: 12px;
     }
 
@@ -1398,6 +1398,152 @@
     .summary-output li {
       margin: 3px 0;
     }
+
+    .summary-hero {
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.84), rgba(248,250,252,0.72)),
+        var(--surface);
+      border-radius: 18px;
+      padding: 13px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    body.dark .summary-hero {
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.045), rgba(255,255,255,0.018)),
+        var(--surface);
+    }
+
+    .summary-hero-top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: start;
+      margin-bottom: 10px;
+    }
+
+    .summary-hero h3 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .summary-hero p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 10.5px;
+      font-weight: 750;
+    }
+
+    .summary-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .summary-kpi {
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      border-radius: 12px;
+      padding: 8px 6px;
+      text-align: center;
+    }
+
+    .summary-kpi strong {
+      display: block;
+      font-size: 16px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .summary-kpi span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 850;
+    }
+
+    .summary-section-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 9px;
+    }
+
+    .summary-panel {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 11px;
+      box-shadow: var(--shadow);
+    }
+
+    .summary-panel h4 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      letter-spacing: -0.01em;
+    }
+
+    .summary-line {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: start;
+      padding: 8px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .summary-line:first-of-type {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .summary-line h5 {
+      margin: 0;
+      font-size: 11.5px;
+      font-weight: 850;
+    }
+
+    .summary-line p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .summary-pressure-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
+    }
+
+    .summary-pressure {
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 9px 7px;
+      background: var(--surface-2);
+      min-width: 0;
+    }
+
+    .summary-pressure strong {
+      display: block;
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+
+    .summary-pressure span {
+      display: block;
+      color: var(--muted);
+      font-size: 9.5px;
+      font-weight: 750;
+      line-height: 1.25;
+    }
+
+    .summary-pressure.green { border-color: rgba(21, 128, 61, 0.24); background: var(--green-bg); }
+    .summary-pressure.amber { border-color: rgba(180, 83, 9, 0.24); background: var(--amber-bg); }
+    .summary-pressure.red { border-color: rgba(185, 28, 28, 0.24); background: var(--red-bg); }
 
     .task-card,
     .audit-card,
@@ -2601,7 +2747,7 @@ textarea {
 
       <div class="section-head">
         <div>
-          <h2 class="section-title">Area status</h2>
+          <h2 class="section-title">Handover sections</h2>
           <p class="section-caption">Tap an area to open its handover sections.</p>
         </div>
       </div>
@@ -2660,21 +2806,6 @@ textarea {
           <div class="card compact-card">
             <h3 id="wizardSectionName" class="section-title">Section</h3>
             <p id="wizardSectionDesc" class="section-caption">Complete the handover questions.</p>
-
-            <label>Area status</label>
-            <div class="three-col">
-              <button class="btn-ghost status-btn selected" onclick="setWizardStatus('Green', this)">Green</button>
-              <button class="btn-ghost status-btn" onclick="setWizardStatus('Amber', this)">Amber</button>
-              <button class="btn-ghost status-btn" onclick="setWizardStatus('Red', this)">Red</button>
-            </div>
-
-            <label>Priority</label>
-            <select id="wizardPriority" onchange="saveDraft()">
-              <option>Low</option>
-              <option selected>Medium</option>
-              <option>High</option>
-              <option>Urgent</option>
-            </select>
 
             <label>Submitted by</label>
             <input type="hidden" id="wizardSubmittedById" />
@@ -2933,15 +3064,21 @@ textarea {
 
         <div id="rotaImportPanel" class="rota-import-panel">
           <p class="section-caption">Take a photo of the rota or paste rows from Excel. ShiftFlow will match names against the staff database before importing.</p>
+          <div class="attention-card none">
+            <h3>Photo tips</h3>
+            <p>Use bright light, keep the rota flat, include the name and start-time columns, and crop out anything unrelated.</p>
+          </div>
           <input id="rotaPhotoInput" type="file" accept="image/*" capture="environment" class="hidden" onchange="scanRotaPhoto(this.files[0])" />
           <div class="rota-import-actions">
             <button class="btn-secondary" onclick="document.getElementById('rotaPhotoInput').click()">Scan photo</button>
             <button class="btn-secondary" onclick="parseRotaPaste()">Read pasted rows</button>
           </div>
+          <button class="btn-secondary" onclick="clearRotaImport()">Clear scan results</button>
           <textarea id="rotaPasteText" placeholder="Paste rows like: Alex Kearns 09:00 17:00"></textarea>
           <p id="rotaImportStatus" class="small">No rota loaded yet.</p>
           <div id="rotaReviewList" class="rota-review-list"></div>
           <button id="rotaImportButton" class="btn-primary hidden" onclick="importReviewedRota()">Add matched staff to today</button>
+          <div id="rotaHistoryPreview"></div>
         </div>
       </div>
 
@@ -3624,6 +3761,7 @@ Ella Brown"
       audits: [],
       attendanceLogs: [],
       pressures: {},
+      rotaImports: [],
       auditTrail: [],
       dismissedBreakAlerts: {}
     };
@@ -3763,6 +3901,7 @@ Ella Brown"
         audits: saved.audits || [],
         attendanceLogs: saved.attendanceLogs || [],
         pressures: saved.pressures || {},
+        rotaImports: saved.rotaImports || [],
         auditTrail: saved.auditTrail || [],
         dismissedBreakAlerts: saved.dismissedBreakAlerts || {}
       };
@@ -4666,15 +4805,11 @@ Ella Brown"
           return h && (h.status === "Red" || h.priority === "Urgent" || h.actionRequired === "Action required");
         }).length;
 
-        const pressure = dayPressure()[main.pressureName];
-        const colour = pressure?.level === "Red" ? "red" : pressure?.level === "Amber" ? "amber" : "green";
-        const dot = pressure?.level === "Red" ? "traffic-red" : pressure?.level === "Amber" ? "traffic-amber" : "traffic-green";
-
         box.innerHTML += `
-          <button class="status-card ${colour}" onclick="openWizard('${mainKey}')">
-            <h4><span class="traffic-dot ${dot}"></span>${safeHTML(main.name)}</h4>
+          <button class="status-card" onclick="openWizard('${mainKey}')">
+            <h4>${safeHTML(main.name)}</h4>
             <p>${done}/${keys.length} sections complete · ${urgent} urgent/action item${urgent === 1 ? "" : "s"}</p>
-            <p>Pressure: ${safeHTML(pressure?.level || "Green")} · ${safeHTML(pressure?.note || "Under control")}</p>
+            <p>Open this area to complete structured handover notes.</p>
           </button>
         `;
       });
@@ -4932,7 +5067,6 @@ Ella Brown"
       document.getElementById("wizardSectionName").innerText = section.name;
       document.getElementById("wizardSectionDesc").innerText = section.desc;
 
-      document.getElementById("wizardPriority").value = data.priority || "Medium";
       document.getElementById("wizardActionRequired").value = data.actionRequired || "No action needed";
       document.getElementById("wizardActionText").value = data.actionText || "";
       document.getElementById("wizardActionOwner").value = data.actionOwner || "";
@@ -4961,7 +5095,6 @@ Ella Brown"
       });
 
       toggleWizardAction();
-      setTimeout(updateWizardStatusButtons, 0);
     }
 
     function quickFill(id, text) {
@@ -5010,7 +5143,7 @@ Ella Brown"
         sectionKey: wizard.section,
         sectionName: section.name,
         status: wizard.status,
-        priority: document.getElementById("wizardPriority").value,
+        priority: "Medium",
         submittedById: submitterId,
         submittedByName: submitter?.name || "Unknown",
         actionRequired: document.getElementById("wizardActionRequired").value,
@@ -5050,9 +5183,9 @@ Ella Brown"
         <div class="list-row">
           <div>
             <h4>${safeHTML(data.mainName)} — ${safeHTML(data.sectionName)}</h4>
-            <p>${safeHTML(data.status)} · ${safeHTML(data.priority)} · Submitted by ${safeHTML(data.submittedByName)}</p>
+            <p>Submitted by ${safeHTML(data.submittedByName)}</p>
           </div>
-          <span class="pill ${data.status === "Red" ? "red" : data.status === "Amber" ? "amber" : "green"}">${safeHTML(data.status)}</span>
+          <span class="pill green">Ready</span>
         </div>
 
         ${data.actionRequired === "Action required" ? `
@@ -5731,6 +5864,7 @@ Ella Brown"
     function toggleRotaImport() {
       const panel = document.getElementById("rotaImportPanel");
       panel?.classList.toggle("open");
+      renderRotaHistory();
     }
 
     function setRotaImportStatus(text) {
@@ -5791,18 +5925,39 @@ Ella Brown"
       buildRotaReview(text);
     }
 
+    function clearRotaImport() {
+      rotaImportRows = [];
+      const paste = document.getElementById("rotaPasteText");
+      const photo = document.getElementById("rotaPhotoInput");
+      const list = document.getElementById("rotaReviewList");
+      const button = document.getElementById("rotaImportButton");
+
+      if (paste) paste.value = "";
+      if (photo) photo.value = "";
+      if (list) list.innerHTML = "";
+      button?.classList.add("hidden");
+
+      setRotaImportStatus("Scan results cleared.");
+      toast("Rota scan cleared");
+    }
+
     function buildRotaReview(text) {
       const parsed = parseRotaText(text);
       rotaImportRows = parsed.map(row => {
         const match = findBestStaffMatch(row.name);
+        const confirmed = (match?.confidence || 0) >= 0.9;
+
         return {
           id: makeId(),
           raw: row.raw,
           name: row.name,
           startTime: row.startTime,
           finishTime: row.finishTime,
+          areaKey: row.areaKey || "",
+          areaName: row.areaName || "",
           staffId: match?.staff?.id || "",
           confidence: match?.confidence || 0,
+          confirmed,
           matchLabel: match ? match.label : "No match"
         };
       });
@@ -5813,12 +5968,21 @@ Ella Brown"
     function parseRotaText(text) {
       const rows = [];
       const timePattern = /(?:\b|^)([01]?\d|2[0-3])(?:[:.]?([0-5]\d))\b/g;
+      let currentArea = null;
 
       String(text || "")
         .split(/\n+/)
         .map(line => line.replace(/\s+/g, " ").trim())
         .filter(Boolean)
         .forEach(line => {
+          const areaFromHeader = detectRotaArea(line);
+          if (areaFromHeader && !timePattern.test(line)) {
+            currentArea = areaFromHeader;
+            timePattern.lastIndex = 0;
+            return;
+          }
+          timePattern.lastIndex = 0;
+
           const times = [...line.matchAll(timePattern)]
             .map(match => ({
               raw: match[0],
@@ -5829,11 +5993,12 @@ Ella Brown"
 
           if (!times.length) return;
 
+          const lineArea = detectRotaArea(line) || currentArea;
           const firstTime = times[0];
           const name = line
             .slice(0, firstTime.index)
             .replace(/[-–—|,]+$/g, "")
-            .replace(/\b(name|staff|start|finish|end|time)\b/gi, "")
+            .replace(/\b(name|staff|start|finish|end|time|lobby|backlot|hogwarts|table)\b/gi, "")
             .trim();
 
           if (!name || name.length < 2) return;
@@ -5842,11 +6007,21 @@ Ella Brown"
             raw: line,
             name,
             startTime: firstTime.value,
-            finishTime: times[1]?.value || ""
+            finishTime: times[1]?.value || "",
+            areaKey: lineArea?.key || "",
+            areaName: lineArea?.name || ""
           });
         });
 
       return rows;
+    }
+
+    function detectRotaArea(text) {
+      const value = String(text || "").toLowerCase();
+      if (value.includes("backlot")) return { key: "backlot", name: "Backlot" };
+      if (value.includes("hogwarts")) return { key: "hogwarts", name: "Hogwarts Table" };
+      if (value.includes("lobby")) return { key: "lobby", name: "Lobby" };
+      return null;
     }
 
     function normalizeRotaTime(hour, minute) {
@@ -5899,7 +6074,7 @@ Ella Brown"
 
       return {
         ...best,
-        label: best.confidence >= 0.9 ? "Exact/strong match" : best.confidence >= 0.68 ? "Likely match" : "Needs check"
+        label: best.confidence >= 0.9 ? "Ready" : best.confidence >= 0.68 ? "Confirm match" : "Needs check"
       };
     }
 
@@ -5940,17 +6115,17 @@ Ella Brown"
         return;
       }
 
-      const matched = rotaImportRows.filter(row => row.staffId && row.startTime).length;
-      const needsCheck = rotaImportRows.length - matched;
+      const ready = rotaImportRows.filter(row => row.staffId && row.startTime && row.confirmed).length;
+      const needsCheck = rotaImportRows.length - ready;
 
-      setRotaImportStatus(`${matched} matched · ${needsCheck} need checking`);
-      button.classList.toggle("hidden", matched === 0);
+      setRotaImportStatus(`${ready} ready · ${needsCheck} need checking`);
+      button.classList.toggle("hidden", ready === 0);
 
       box.innerHTML = rotaImportRows.map((row, index) => {
         const staff = row.staffId ? getStaff(row.staffId) : null;
-        const pillClass = row.staffId
-          ? row.confidence >= 0.68 ? "green" : "amber"
-          : "red";
+        const duplicate = staff && dayTeam().some(t => t.staffId === staff.id);
+        const pillClass = row.confirmed ? "green" : staff ? "amber" : "red";
+        const matchText = duplicate ? "Already on today" : row.confirmed ? "Ready" : row.matchLabel;
 
         return `
           <div class="rota-row">
@@ -5959,12 +6134,16 @@ Ella Brown"
                 <h4>${staff ? safeHTML(staff.name) : safeHTML(row.name)}</h4>
                 <p>Read as: ${safeHTML(row.name)} · ${safeHTML(row.raw)}</p>
                 <p>${staff ? `Matched to ${safeHTML(staff.clock)} · ${safeHTML(staff.role)}` : "No database match yet"}</p>
+                ${row.areaName ? `<p>Detected area: ${safeHTML(row.areaName)} · will start in Floating</p>` : ""}
               </div>
-              <span class="pill ${pillClass}">${safeHTML(row.matchLabel)}</span>
+              <span class="pill ${pillClass}">${safeHTML(matchText)}</span>
             </div>
             <div class="rota-row-actions">
               <input type="time" value="${safeHTML(row.startTime)}" onchange="updateRotaStart(${index}, this.value)" />
-              <button class="btn-small light" onclick="chooseRotaMatch(${index})">${staff ? "Change" : "Choose"}</button>
+              <div class="row-actions">
+                ${staff && !row.confirmed ? `<button class="btn-small" onclick="confirmRotaMatch(${index})">Confirm</button>` : ""}
+                <button class="btn-small light" onclick="chooseRotaMatch(${index})">${staff ? "Change" : "Choose"}</button>
+              </div>
             </div>
           </div>
         `;
@@ -5982,20 +6161,32 @@ Ella Brown"
         if (!row) return;
         row.staffId = staffId;
         row.confidence = 1;
+        row.confirmed = true;
         row.matchLabel = "Confirmed";
         renderRotaReview();
       });
     }
 
+    function confirmRotaMatch(index) {
+      const row = rotaImportRows[index];
+      if (!row || !row.staffId) return;
+      row.confirmed = true;
+      row.confidence = Math.max(row.confidence, 0.9);
+      row.matchLabel = "Confirmed";
+      renderRotaReview();
+    }
+
     function importReviewedRota() {
-      const rows = rotaImportRows.filter(row => row.staffId && row.startTime);
+      const rows = rotaImportRows.filter(row => row.staffId && row.startTime && row.confirmed);
       if (!rows.length) return toast("No matched rows to import");
 
       const team = dayTeam();
       let count = 0;
+      const imported = [];
 
       rows.forEach(row => {
         const existing = team.find(t => t.staffId === row.staffId);
+        const staff = getStaff(row.staffId);
 
         if (existing) {
           existing.startTime = row.startTime;
@@ -6010,19 +6201,66 @@ Ella Brown"
           });
         }
 
+        if (row.areaKey) {
+          const board = dayBoard(row.areaKey);
+          Object.keys(board).forEach(zone => {
+            board[zone] = (board[zone] || []).filter(id => id !== row.staffId);
+          });
+          if (!board.Floating) board.Floating = [];
+          if (!board.Floating.includes(row.staffId)) board.Floating.push(row.staffId);
+        }
+
+        imported.push({
+          staffId: row.staffId,
+          name: staff?.name || row.name,
+          startTime: row.startTime,
+          areaName: row.areaName || ""
+        });
         count++;
       });
 
       team.sort((a, b) => a.startTime.localeCompare(b.startTime));
       logAction("Rota import", `${count} staff imported from rota`);
+      state.rotaImports.unshift({
+        id: makeId(),
+        date: selectedDate,
+        time: nowTime(),
+        by: currentUser()?.name || "Unknown",
+        count,
+        imported
+      });
+      state.rotaImports = state.rotaImports.slice(0, 10);
       rotaImportRows = [];
       document.getElementById("rotaPasteText").value = "";
       document.getElementById("rotaReviewList").innerHTML = "";
       document.getElementById("rotaImportButton").classList.add("hidden");
       setRotaImportStatus("Rota imported.");
+      renderRotaHistory();
       saveState();
       renderAll();
       toast(`${count} staff imported`);
+    }
+
+    function renderRotaHistory() {
+      const box = document.getElementById("rotaHistoryPreview");
+      if (!box) return;
+
+      const latest = (state.rotaImports || []).find(item => item.date === selectedDate) || (state.rotaImports || [])[0];
+
+      if (!latest) {
+        box.innerHTML = "";
+        return;
+      }
+
+      box.innerHTML = `
+        <div class="list-row" style="margin-top:10px;">
+          <div>
+            <h4>Last rota import</h4>
+            <p>${formatDate(latest.date)} at ${safeHTML(latest.time)} · ${latest.count} staff · ${safeHTML(latest.by)}</p>
+          </div>
+          <span class="pill blue">History</span>
+        </div>
+      `;
     }
 
     function addToTodayTeam() {
@@ -7569,7 +7807,23 @@ Ella Brown"
         </div>
       `).join("");
     }
-        function renderSummary() {
+    function summaryLine(title, detail, pill = "", pillClass = "") {
+      return `
+        <div class="summary-line">
+          <div>
+            <h5>${safeHTML(title)}</h5>
+            <p>${safeHTML(detail)}</p>
+          </div>
+          ${pill ? `<span class="pill ${pillClass}">${safeHTML(pill)}</span>` : ""}
+        </div>
+      `;
+    }
+
+    function summaryEmpty(text) {
+      return `<div class="empty-state">${safeHTML(text)}</div>`;
+    }
+
+    function renderSummary() {
       const box = document.getElementById("summaryContent");
       if (!box) return;
 
@@ -7587,73 +7841,105 @@ Ella Brown"
       const openTasks = dayTasks().filter(t => taskStatus(t) !== "Complete");
       const breakQueue = getBreakQueue();
       const boardWarnings = getBoardCoverageWarnings();
+      const team = dayTeam();
+      const signoff = state.signoffs[selectedDate];
+      const attentionCount = urgent.length + boardWarnings.length + over35.length + activeBreaks.filter(b => b.minutes >= 35).length;
+      const completionTotal = getAllSectionKeys().length;
+      const completionPct = completionTotal ? Math.round((handovers.length / completionTotal) * 100) : 0;
+      const nextBreak = breakQueue[0];
 
       box.innerHTML = `
-        <h4>Live area pressure</h4>
-        <ul>
-          ${Object.keys(pressures).map(area => `
-            <li><strong>${safeHTML(area)}:</strong> ${safeHTML(pressures[area].level)} · ${safeHTML(pressures[area].note)}</li>
-          `).join("")}
-        </ul>
+        <div class="summary-hero">
+          <div class="summary-hero-top">
+            <div>
+              <h3>${formatDate(selectedDate)} control summary</h3>
+              <p>${team.length} planned staff · ${completionPct}% handover complete · ${signoff ? `Signed off by ${safeHTML(signoff.by)}` : "Not signed off"}</p>
+            </div>
+            <span class="pill ${attentionCount ? "red" : "green"}">${attentionCount ? `${attentionCount} watch` : "Stable"}</span>
+          </div>
+          <div class="summary-kpi-grid">
+            <div class="summary-kpi"><strong>${team.length}</strong><span>Team</span></div>
+            <div class="summary-kpi"><strong>${openTasks.length}</strong><span>Tasks</span></div>
+            <div class="summary-kpi"><strong>${activeBreaks.length}</strong><span>Breaks</span></div>
+            <div class="summary-kpi"><strong>${boardWarnings.length}</strong><span>Coverage</span></div>
+          </div>
+        </div>
 
-        <h4>Attention</h4>
-        ${urgent.length || boardWarnings.length ? `
-          <ul>
-            ${urgent.slice(0, 8).map(i => `<li><strong>${safeHTML(i.title)}:</strong> ${safeHTML(i.detail)}</li>`).join("")}
-            ${boardWarnings.slice(0, 5).map(w => `<li><strong>Coverage:</strong> ${safeHTML(w.message)}</li>`).join("")}
-          </ul>
-        ` : `<p>No urgent actions.</p>`}
+        <div class="summary-section-grid">
+          <div class="summary-panel">
+            <h4>Live Area Pressure</h4>
+            <div class="summary-pressure-grid">
+              ${Object.keys(pressures).map(area => {
+                const level = pressures[area].level;
+                const colour = level === "Red" ? "red" : level === "Amber" ? "amber" : "green";
+                return `
+                  <div class="summary-pressure ${colour}">
+                    <strong>${safeHTML(area)}</strong>
+                    <span>${safeHTML(level)} · ${safeHTML(pressures[area].note || "No note")}</span>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          </div>
 
-        <h4>Break control</h4>
-        <ul>
-          <li><strong>Completed:</strong> ${completedBreaks.length}</li>
-          <li><strong>Active:</strong> ${activeBreaks.length}</li>
-          <li><strong>Over 35 / late:</strong> ${over35.length + activeBreaks.filter(b => b.minutes >= 35).length}</li>
-          <li><strong>Next break:</strong> ${breakQueue[0] ? `${safeHTML(breakQueue[0].staffName)} · ${safeHTML(breakQueue[0].label)}` : "No pending breaks"}</li>
-        </ul>
+          <div class="summary-panel">
+            <h4>Attention</h4>
+            ${urgent.length || boardWarnings.length
+              ? `
+                ${urgent.slice(0, 6).map(i => summaryLine(i.title, i.detail, "Action", "red")).join("")}
+              `
+              : summaryEmpty("No urgent actions or coverage warnings.")}
+          </div>
 
-        ${activeBreaks.length ? `
-          <h4>Currently on break</h4>
-          <ul>${activeBreaks.map(b => `<li>${safeHTML(b.staffName)} — ${b.minutes} mins so far</li>`).join("")}</ul>
-        ` : ""}
+          <div class="summary-panel">
+            <h4>Break Control</h4>
+            ${summaryLine("Completed breaks", `${completedBreaks.length} logged today`, "Done", "green")}
+            ${summaryLine("Active breaks", activeBreaks.length ? activeBreaks.map(b => `${b.staffName} ${b.minutes}m`).join(", ") : "Nobody currently on break", `${activeBreaks.length}`, activeBreaks.length ? "blue" : "")}
+            ${summaryLine("Next break", nextBreak ? `${nextBreak.staffName} · ${nextBreak.label}` : "No pending breaks", nextBreak ? "Next" : "Clear", nextBreak ? "amber" : "green")}
+            ${noBreak.length ? summaryLine("No break logged", noBreak.slice(0, 5).map(s => `${s.name} ${s.breakTime || ""}`).join(", "), `${noBreak.length}`, "amber") : ""}
+          </div>
 
-        ${noBreak.length ? `
-          <h4>No break logged yet</h4>
-          <ul>${noBreak.map(s => `<li>${safeHTML(s.name)} — planned ${safeHTML(s.breakTime || "not planned")}</li>`).join("")}</ul>
-        ` : ""}
+          <div class="summary-panel">
+            <h4>Open Tasks</h4>
+            ${openTasks.length
+              ? openTasks.slice(0, 8).map(t => summaryLine(t.text, `Owner: ${t.owner || "Unassigned"} · ${taskStatus(t)}`, t.priority || "Task", t.priority === "Urgent" ? "red" : t.priority === "High" ? "amber" : "")).join("")
+              : summaryEmpty("No open tasks.")}
+          </div>
 
-        <h4>Open tasks</h4>
-        ${openTasks.length ? `
-          <ul>${openTasks.map(t => `<li><strong>${safeHTML(t.priority)}:</strong> ${safeHTML(t.text)} · Owner: ${safeHTML(t.owner || "Unassigned")} · ${safeHTML(taskStatus(t))}</li>`).join("")}</ul>
-        ` : `<p>No open tasks.</p>`}
+          <div class="summary-panel">
+            <h4>Team Deployment</h4>
+            ${deployment.length
+              ? deployment.slice(0, 10).map(d => summaryLine(`${d.area} — ${d.zone}`, d.names, "Board", "blue")).join("")
+              : summaryEmpty("No board deployment saved yet.")}
+          </div>
 
-        <h4>Team deployment</h4>
-        ${deployment.length ? `
-          <ul>${deployment.map(d => `<li><strong>${safeHTML(d.area)} — ${safeHTML(d.zone)}:</strong> ${safeHTML(d.names)}</li>`).join("")}</ul>
-        ` : `<p>No board deployment saved yet.</p>`}
+          <div class="summary-panel">
+            <h4>Handover Notes</h4>
+            ${handovers.length
+              ? handovers.map(h => summaryLine(`${h.mainName} — ${h.sectionName}`, getMainNote(h), "Submitted", "green")).join("")
+              : summaryEmpty("No handovers submitted yet.")}
+          </div>
 
-        <h4>Area handover</h4>
-        ${handovers.length ? `
-          <ul>${handovers.map(h => `<li><strong>${safeHTML(h.mainName)} — ${safeHTML(h.sectionName)}:</strong> ${safeHTML(h.status)} · ${safeHTML(h.priority)} — ${safeHTML(getMainNote(h))}</li>`).join("")}</ul>
-        ` : `<p>No handovers submitted yet.</p>`}
+          <div class="summary-panel">
+            <h4>Checks, Incidents and Equipment</h4>
+            ${auditsToday.length
+              ? auditsToday.map(a => summaryLine(`Audit: ${a.area}`, `${a.score}% · ${a.questions.filter(q => q.result !== "Pass").length} issue(s)`, "Audit", a.score < 80 ? "amber" : "green")).join("")
+              : ""}
+            ${incidentsToday.length
+              ? incidentsToday.map(i => summaryLine(`${i.type} · ${i.area}`, i.details, "Incident", "red")).join("")
+              : ""}
+            ${equipmentOpen.length
+              ? equipmentOpen.slice(0, 8).map(e => summaryLine(e.name, `${e.area} · ${e.status} · ${e.notes || "No notes"}`, "Equipment", "amber")).join("")
+              : !auditsToday.length && !incidentsToday.length ? summaryEmpty("No audits, incidents or open equipment issues.") : ""}
+          </div>
 
-        <h4>Audits today</h4>
-        ${auditsToday.length ? `
-          <ul>${auditsToday.map(a => `<li><strong>${safeHTML(a.area)}:</strong> ${a.score}% · ${a.questions.filter(q => q.result !== "Pass").length} issue(s)</li>`).join("")}</ul>
-        ` : `<p>No audits submitted today.</p>`}
-
-        <h4>Incidents today</h4>
-        ${incidentsToday.length ? `
-          <ul>${incidentsToday.map(i => `<li><strong>${safeHTML(i.type)} · ${safeHTML(i.area)}:</strong> ${safeHTML(i.details)}</li>`).join("")}</ul>
-        ` : `<p>No incidents logged today.</p>`}
-
-        <h4>Open equipment</h4>
-        ${equipmentOpen.length ? `
-          <ul>${equipmentOpen.slice(0, 8).map(e => `<li><strong>${safeHTML(e.name)}:</strong> ${safeHTML(e.area)} · ${safeHTML(e.status)} · ${safeHTML(e.notes || "No notes")}</li>`).join("")}</ul>
-        ` : `<p>No open equipment issues.</p>`}
-
-        <h4>Final sign-off</h4>
-        <p>${state.signoffs[selectedDate] ? `${safeHTML(state.signoffs[selectedDate].by)} at ${safeHTML(state.signoffs[selectedDate].time)}` : "Not signed off yet."}</p>
+          <div class="summary-panel">
+            <h4>Final Sign-Off</h4>
+            ${signoff
+              ? summaryLine("Signed off", `${signoff.by} at ${signoff.time}`, "Complete", "green")
+              : summaryLine("Not signed off", "Final sign-off is still open for this day.", "Open", "amber")}
+          </div>
+        </div>
       `;
     }
 
